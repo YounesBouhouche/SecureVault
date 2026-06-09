@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import com.younesb.securevault.core.presentation.theme.AppTheme
 import com.younesb.securevault.core.presentation.theme.SetSystemBarColors
 import com.younesb.securevault.core.presentation.theme.ThemeViewModel
+import com.younesb.securevault.features.navigation.NavigationHost
 import org.koin.compose.viewmodel.koinViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 colorTheme = colorTheme,
                 dynamicColors = dynamicColors
             ) {
-
+                NavigationHost()
             }
         }
     }

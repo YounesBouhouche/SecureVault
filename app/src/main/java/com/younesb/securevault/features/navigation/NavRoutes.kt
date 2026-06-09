@@ -1,0 +1,9 @@
+package com.younesb.securevault.features.navigation
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class NavRoutes {
+    @Serializable
+    data object Auth: NavRoutes()
+}
