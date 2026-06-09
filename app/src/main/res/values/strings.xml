@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SecureVault</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="red">Red</string>
+    <string name="orange">Orange</string>
+    <string name="purple">Purple</string>
+    <string name="follow_system">Follow system</string>
+    <string name="english">English</string>
+    <string name="french">French</string>
+    <string name="arabic">Arabic</string>
+    <string name="light">Light</string>
+    <string name="default_theme">Default Theme</string>
+    <string name="dark">Dark</string>
+</resources>
