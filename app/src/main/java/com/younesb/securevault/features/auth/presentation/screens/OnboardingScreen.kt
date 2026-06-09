@@ -1,0 +1,150 @@
+package com.younesb.securevault.features.auth.presentation.screens
+
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.filled.BrightnessAuto
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.younesb.securevault.R
+import com.younesb.securevault.core.domain.models.preferences.Theme
+import com.younesb.securevault.core.presentation.components.ExpressiveButton
+import com.younesb.securevault.features.auth.presentation.components.AnimatedAppLogo
+import org.koin.compose.viewmodel.koinViewModel
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun OnboardingScreen(
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    modifier: Modifier = Modifier,
+    onSetup: () -> Unit,
+) {
+    val onboardingViewModel = koinViewModel<OnboardingViewModel>()
+    val theme by onboardingViewModel.theme.collectAsState()
+    Column(
+        modifier = modifier
+            .systemBarsPadding()
+            .padding(28.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AnimatedAppLogo()
+        with(sharedTransitionScope) {
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                shape = MaterialTheme.shapes.extraExtraLarge,
+                modifier = Modifier.sharedBounds(
+                    sharedContentState = sharedTransitionScope
+                        .rememberSharedContentState(key = "onboarding-setup"),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(40.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.welcome_to),
+                            style = MaterialTheme.typography.headlineMedium,
+                            textAlign = TextAlign.Center,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 10.sp,
+                                maxFontSize = 100.sp
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = stringResource(R.string.app_name),
+                            style = MaterialTheme.typography.headlineLarge,
+                            textAlign = TextAlign.Center,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 10.sp,
+                                maxFontSize = 100.sp
+                            ),
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        AnimatedContent(theme) {
+                            ExpressiveButton(
+                                text = null,
+                                size = ButtonDefaults.MediumContainerHeight,
+                                icon = when(it) {
+                                    Theme.SYSTEM -> Icons.Default.BrightnessAuto
+                                    Theme.LIGHT -> Icons.Default.LightMode
+                                    Theme.DARK -> Icons.Default.DarkMode
+                                },
+                                colors = ButtonDefaults.filledTonalButtonColors()
+                            ) {
+                                onboardingViewModel.setTheme(
+                                    when(it) {
+                                        Theme.SYSTEM -> Theme.LIGHT
+                                        Theme.LIGHT -> Theme.DARK
+                                        Theme.DARK -> Theme.SYSTEM
+                                    }
+                                )
+                            }
+                        }
+                        ExpressiveButton(
+                            modifier = Modifier.weight(1f),
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.get_started),
+                                    softWrap = false,
+                                    autoSize = TextAutoSize.StepBased(
+                                        minFontSize = 10.sp,
+                                        maxFontSize = 40.sp
+                                    ),
+                                )
+                            },
+                            size = ButtonDefaults.MediumContainerHeight,
+                            icon = Icons.AutoMirrored.Filled.ArrowForward,
+                            onClick = onSetup
+                        )
+                    }
+                }
+            }
+        }
+    }
+}

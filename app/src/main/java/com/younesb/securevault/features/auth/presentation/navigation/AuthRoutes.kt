@@ -6,4 +6,10 @@ import kotlinx.serialization.Serializable
 sealed class AuthRoutes {
     @Serializable
     data object Onboarding: AuthRoutes()
+    @Serializable
+    data object Setup: AuthRoutes()
+    @Serializable
+    data object SetupPin: AuthRoutes()
+    @Serializable
+    data object FinishSetup: AuthRoutes()
 }
