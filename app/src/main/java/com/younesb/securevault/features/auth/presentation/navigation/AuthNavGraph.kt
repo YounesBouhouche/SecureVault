@@ -40,7 +40,13 @@ fun NavGraphBuilder.authNavGraph(
             SetupFinishedScreen(
                 sharedTransitionScope,
                 this,
-            )
+            ) {
+                navController.navigate(NavRoutes.Main) {
+                    popUpTo(NavRoutes.Auth) {
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 }

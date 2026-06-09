@@ -22,6 +22,7 @@ import com.younesb.securevault.core.presentation.theme.ThemeViewModel
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.auth.presentation.util.CollectEvents
 import com.younesb.securevault.features.auth.presentation.util.Event
+import com.younesb.securevault.features.navigation.NavRoutes
 import com.younesb.securevault.features.navigation.NavigationHost
 import org.koin.android.ext.android.inject
 import org.koin.compose.viewmodel.koinViewModel
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                             it.description,
                         )
                     }
-                    is Event.Navigate -> {
+                    is Event.AuthNavigate -> {
                         navController.navigate(it.route) {
                             launchSingleTop = true
                             popUpTo(it.route) { inclusive = true }
@@ -66,6 +67,11 @@ class MainActivity : AppCompatActivity() {
                                 )
                             }
                             enrollLauncher.launch(enrollIntent)
+                        }
+                    }
+                    is Event.Navigate -> navController.navigate(it.route)  {
+                        popUpTo(NavRoutes.Auth) {
+                            inclusive = true
                         }
                     }
                 }

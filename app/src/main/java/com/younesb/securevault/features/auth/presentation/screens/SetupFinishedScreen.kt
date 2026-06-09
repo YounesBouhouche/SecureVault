@@ -36,6 +36,7 @@ fun SetupFinishedScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = { }
 ) {
     Column(
         modifier = modifier
@@ -100,8 +101,8 @@ fun SetupFinishedScreen(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.open_my_vault),
                         size = ButtonDefaults.LargeContainerHeight,
-                    ) {
-                    }
+                        onClick = onClick
+                    )
                 }
             }
         }

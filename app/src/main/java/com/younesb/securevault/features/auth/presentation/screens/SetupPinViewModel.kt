@@ -2,19 +2,18 @@ package com.younesb.securevault.features.auth.presentation.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
-import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.auth.presentation.util.Event
 import com.younesb.securevault.features.auth.presentation.util.EventBus
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 
-class SetupPinViewModel : ViewModel() {
+class SetupPinViewModel(
+    val authRepository: AuthRepository
+) : ViewModel() {
     private val _pin = MutableStateFlow("")
     private val _repeatPin = MutableStateFlow<String?>(null)
     val pin = _pin.asStateFlow()
@@ -30,8 +29,10 @@ class SetupPinViewModel : ViewModel() {
                 if (it.length == 6) {
                     if (it == _pin.value)
                         viewModelScope.launch {
+                            authRepository.updateSetupCredentialsPin(it)
+                            authRepository.saveCredentials()
                             EventBus.sendEvent(
-                                Event.Navigate(AuthRoutes.FinishSetup)
+                                Event.AuthNavigate(AuthRoutes.FinishSetup)
                             )
                         }
                     else {

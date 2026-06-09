@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.features.auth.presentation.navigation.authNavGraph
+import com.younesb.securevault.features.main.presentation.navigation.mainNavGraph
 
 @Composable
 fun NavigationHost(
@@ -21,6 +22,10 @@ fun NavigationHost(
             modifier = modifier
         ) {
             authNavGraph(
+                navController = navController,
+                sharedTransitionScope = this@SharedTransitionLayout,
+            )
+            mainNavGraph(
                 navController = navController,
                 sharedTransitionScope = this@SharedTransitionLayout,
             )
