@@ -12,4 +12,25 @@
     <string name="light">Light</string>
     <string name="default_theme">Default Theme</string>
     <string name="dark">Dark</string>
+    <string name="learn_more">Learn More</string>
+    <string name="get_started">Get Started</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="let_s_set_up_your_vault">Let\'s set up your vault</string>
+    <string name="add_a_pin_code">Add a PIN code</string>
+    <string name="setup_complete">Setup complete!</string>
+    <string name="open_my_vault">Open my vault</string>
+    <string name="repeat_your_pin">Repeat your PIN</string>
+    <string name="pins_do_not_match">PINs do not match</string>
+    <string name="enter_your_pin">Enter your PIN</string>
+    <string name="wrong_pin_try_again">Wrong PIN, try again!</string>
+    <string name="authentict">Authenticate</string>
+    <string name="authenticate">Authenticate</string>
+    <plurals name="remaining_attempts">
+        <item quantity="one">%d attempt remaining</item>
+        <item quantity="other">%d attempts remaining</item>
+    </plurals>
+    <string name="vault_locked">Vault is locked</string>
+    <string name="too_many_failed_attempts">Too many failed attempts !</string>
+    <string name="try_again_after">try again after</string>
+    <string name="reset_app">Reset App</string>
 </resources>
