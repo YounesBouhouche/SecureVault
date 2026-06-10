@@ -1,7 +1,9 @@
 package com.younesb.securevault.core.data.util
 
+import com.younesb.securevault.core.data.datastore.AuthAttemptsDataStore
 import com.younesb.securevault.core.data.datastore.CredentialsDataStore
 import com.younesb.securevault.core.data.models.Credentials
+import com.younesb.securevault.core.domain.repositories.PreferencesRepository
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.auth.presentation.util.Event
 import com.younesb.securevault.features.auth.presentation.util.EventBus
@@ -10,7 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 
 class AuthManager(
-    val dataStore: CredentialsDataStore,
+    val credentialsDataStore: CredentialsDataStore,
+    val authAttemptsDataStore: AuthAttemptsDataStore,
+    val preferencesRepository: PreferencesRepository,
     biometricManager: BiometricPromptManager
 ) {
     private var _state: MutableStateFlow<AuthState?> = MutableStateFlow(null)
@@ -25,15 +29,18 @@ class AuthManager(
         data object Authenticated : AuthState
         data object LockedOut : AuthState
 
-        data object AttemptsExceeded : AuthState
+        data class AttemptsExceeded(val timeOut: Long): AuthState
     }
 
     suspend fun checkAuthState(): AuthState? {
-        if (_state.value == null)
+        authAttemptsDataStore.safeResetAttempts()
             _state.value =
                 when {
-                    dataStore.getCredentials() == null -> AuthState.NoCredentials
-                    dataStore.getCredentials()?.biometricEnabled == true -> AuthState.RequiresBiometric
+                    authAttemptsDataStore.isLocked() ->
+                        AuthState.AttemptsExceeded(authAttemptsDataStore.getLockTimeOut())
+                    credentialsDataStore.getCredentials() == null -> AuthState.NoCredentials
+                    credentialsDataStore.getCredentials()?.biometricEnabled == true ->
+                        AuthState.RequiresBiometric
                     else -> AuthState.RequiresPin(MAX_ATTEMPTS - _attempts)
                 }
         return _state.value
@@ -43,27 +50,32 @@ class AuthManager(
         if (_state.value == null) checkAuthState()
         return when (_state.value) {
             AuthState.Authenticated -> true
-            AuthState.AttemptsExceeded,
+            is AuthState.AttemptsExceeded -> false
             AuthState.RequiresBiometric -> {
                 EventBus.sendEvent(Event.ShowBiometricPrompt("SecureVault", "Biometrics required"))
                 val result = resultChannel.first() is
                         BiometricPromptManager.BiometricResult.AuthenticationSuccess
                 _state.value =
-                    if (result) AuthState.Authenticated
+                    if (result) {
+                        authAttemptsDataStore.updateState(0)
+                        AuthState.Authenticated
+                    }
                     else AuthState.RequiresPin(MAX_ATTEMPTS - _attempts)
                 result
             }
             is AuthState.RequiresPin -> {
                 if (inputPin == null) return false
-                if (dataStore.authenticate(inputPin, false)) {
+                if (credentialsDataStore.authenticate(inputPin, false)) {
                     _state.value = AuthState.Authenticated
+                    authAttemptsDataStore.updateState(0)
                     true
                 } else  {
                     _attempts++
-                    if (_attempts >= MAX_ATTEMPTS) {
-                        _state.value = AuthState.AttemptsExceeded
+                    authAttemptsDataStore.updateState(_attempts)
+                    _state.value = if (authAttemptsDataStore.isLocked()) {
+                        AuthState.AttemptsExceeded(authAttemptsDataStore.getLockTimeOut())
                     } else {
-                        _state.value = AuthState.RequiresPin(MAX_ATTEMPTS - _attempts)
+                        AuthState.RequiresPin(MAX_ATTEMPTS - _attempts)
                     }
                     false
                 }
@@ -76,7 +88,7 @@ class AuthManager(
         return when(state.value) {
             AuthState.Authenticated, AuthState.NoCredentials -> {
                 if (state.value == null) _state.value = AuthState.Authenticated
-                dataStore.updateCredentials(Credentials(biometricEnabled, pin))
+                credentialsDataStore.updateCredentials(Credentials(biometricEnabled, pin))
                 true
             }
             else -> false
@@ -85,6 +97,11 @@ class AuthManager(
 
     fun lock() {
         _state.value = AuthState.LockedOut
+    }
+
+    suspend fun unlock() {
+        _state.value = null
+        checkAuthState()
     }
 
     companion object {

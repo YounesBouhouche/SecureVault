@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.dataStore
 import com.younesb.securevault.core.data.models.Credentials
 import com.younesb.securevault.core.util.crypto.Crypto
-import com.younesb.securevault.core.util.crypto.CryptoSerializer
+import com.younesb.securevault.core.util.crypto.CredentialsCryptoSerializer
 import com.younesb.securevault.core.util.crypto.Signer
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -13,7 +13,7 @@ class CredentialsDataStore(
     private val context: Context,
     crypto: Crypto
 ) {
-    private val serializer = CryptoSerializer(null, crypto)
+    private val serializer = CredentialsCryptoSerializer(null, crypto)
     private val Context.credentialsDataStore by dataStore(
         fileName = "credentials",
         serializer = serializer

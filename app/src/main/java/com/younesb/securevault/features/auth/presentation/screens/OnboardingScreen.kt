@@ -20,13 +20,13 @@ import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.LockReset
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +43,8 @@ import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.presentation.components.ExpressiveButton
 import com.younesb.securevault.features.auth.presentation.components.AnimatedAppLogo
+import com.younesb.securevault.features.auth.presentation.components.AnimatedCounter
+import com.younesb.securevault.features.auth.presentation.components.CounterAnimationDirection
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -56,6 +58,8 @@ fun OnboardingScreen(
     val onboardingViewModel = koinViewModel<OnboardingViewModel>()
     val authState by onboardingViewModel.authState.collectAsState()
     val theme by onboardingViewModel.theme.collectAsState()
+    val remainingTime by onboardingViewModel.remainingTime.collectAsState()
+
     val containerColor by animateColorAsState(
         if (authState is AuthManager.AuthState.AttemptsExceeded)
             MaterialTheme.colorScheme.errorContainer
@@ -121,7 +125,7 @@ fun OnboardingScreen(
                     }
                     AnimatedContent(authState) { state ->
                         when(state) {
-                            AuthManager.AuthState.AttemptsExceeded -> {
+                            is AuthManager.AuthState.AttemptsExceeded -> {
                                 Column(
                                     Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                                     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -152,13 +156,18 @@ fun OnboardingScreen(
                                         modifier = Modifier.fillMaxWidth(),
                                         color = MaterialTheme.colorScheme.error
                                     )
-                                    Text(
-                                        text = "00",
-                                        style = MaterialTheme.typography.headlineLarge,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.fillMaxWidth(),
-                                        color = MaterialTheme.colorScheme.error
-                                    )
+                                    ProvideTextStyle(
+                                        MaterialTheme.typography.headlineMedium.copy(
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    ) {
+                                        AnimatedCounter(
+                                            counter = "$remainingTime",
+                                            digits = 2,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            direction = CounterAnimationDirection.Down
+                                        )
+                                    }
                                     ExpressiveButton(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = stringResource(R.string.reset_app),
@@ -170,25 +179,6 @@ fun OnboardingScreen(
                                         )
                                     ) {
                                     }
-                                }
-                            }
-                            AuthManager.AuthState.LockedOut -> {
-                                ExpressiveButton(
-                                    modifier = Modifier.weight(1f),
-                                    text = {
-                                        Text(
-                                            text = stringResource(R.string.authenticate),
-                                            softWrap = false,
-                                            autoSize = TextAutoSize.StepBased(
-                                                minFontSize = 10.sp,
-                                                maxFontSize = 40.sp
-                                            ),
-                                        )
-                                    },
-                                    size = ButtonDefaults.MediumContainerHeight,
-                                    icon = Icons.AutoMirrored.Filled.ArrowForward,
-                                ) {
-                                    onboardingViewModel.authenticateWithBiometrics()
                                 }
                             }
                             AuthManager.AuthState.NoCredentials -> {
@@ -237,7 +227,25 @@ fun OnboardingScreen(
                             null -> {
                                 LinearProgressIndicator(Modifier.fillMaxWidth())
                             }
-                            else -> {}
+                            else -> {
+                                ExpressiveButton(
+                                    modifier = Modifier.weight(1f),
+                                    text = {
+                                        Text(
+                                            text = stringResource(R.string.authenticate),
+                                            softWrap = false,
+                                            autoSize = TextAutoSize.StepBased(
+                                                minFontSize = 10.sp,
+                                                maxFontSize = 40.sp
+                                            ),
+                                        )
+                                    },
+                                    size = ButtonDefaults.MediumContainerHeight,
+                                    icon = Icons.AutoMirrored.Filled.ArrowForward,
+                                ) {
+                                    onboardingViewModel.authenticateWithBiometrics()
+                                }
+                            }
                         }
                     }
 

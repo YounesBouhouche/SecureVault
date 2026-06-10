@@ -1,5 +1,6 @@
 package com.younesb.securevault.di
 
+import com.younesb.securevault.core.data.datastore.AuthAttemptsDataStore
 import com.younesb.securevault.core.data.datastore.CredentialsDataStore
 import com.younesb.securevault.core.data.repositories.AuthRepositoryImpl
 import com.younesb.securevault.core.data.util.AuthManager
@@ -15,6 +16,7 @@ import org.koin.dsl.module
 
 val authModule = module {
     singleOf(::CredentialsDataStore)
+    singleOf(::AuthAttemptsDataStore)
     singleOf(::AuthManager)
     single<AuthRepository> { AuthRepositoryImpl(get()) }
     singleOf(::BiometricPromptManager)

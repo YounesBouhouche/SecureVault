@@ -1,21 +1,20 @@
 package com.younesb.securevault.core.util.crypto
 
 import androidx.datastore.core.Serializer
-import com.younesb.securevault.core.data.models.Credentials
+import com.younesb.securevault.core.data.models.AttemptsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
-import java.security.MessageDigest
 import java.util.Base64
 
 
-class CryptoSerializer(
-    override val defaultValue: Credentials?,
+class AttemptsCryptoSerializer(
+    override val defaultValue: AttemptsState,
     val crypto: Crypto
-): Serializer<Credentials?> {
-    override suspend fun readFrom(input: InputStream): Credentials? {
+): Serializer<AttemptsState> {
+    override suspend fun readFrom(input: InputStream): AttemptsState {
         val cipherBytes = withContext(Dispatchers.IO) {
             input.use { it.readBytes() }
         }
@@ -25,10 +24,8 @@ class CryptoSerializer(
         return Json.decodeFromString(plain)
     }
 
-    override suspend fun writeTo(t: Credentials?, output: OutputStream) {
-        val plain = Json.encodeToString(t?.let {
-            it.copy(pin = Signer.hashString(it.pin))
-        })
+    override suspend fun writeTo(t: AttemptsState, output: OutputStream) {
+        val plain = Json.encodeToString(t)
         val plainBytes = plain.toByteArray()
         val cipher = crypto.encrypt(plainBytes)
         val cipherBase64 = Base64.getEncoder().encode(cipher)

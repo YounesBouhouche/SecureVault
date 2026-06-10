@@ -7,11 +7,15 @@ import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.core.domain.repositories.PreferencesRepository
+import com.younesb.securevault.core.util.Task
 import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
 import com.younesb.securevault.features.auth.presentation.util.Event
 import com.younesb.securevault.features.auth.presentation.util.EventBus
 import com.younesb.securevault.features.navigation.NavRoutes
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -25,7 +29,37 @@ class OnboardingViewModel(
         SharingStarted.WhileSubscribed(5_000),
         SettingsPreference.ThemeMode.defaultValue
     )
-    val authState = authRepository.observeAuthState()
+
+    private val _remainingTime = MutableStateFlow(0L)
+    val remainingTime = _remainingTime.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        0L
+    )
+
+    private val task = Task()
+
+    private val _authState = authRepository.observeAuthState().onEach { state ->
+        if (state is AuthManager.AuthState.AttemptsExceeded) {
+            task.stop()
+            task.startRepeating(1000) {
+                _remainingTime.value = ((state.timeOut - System.currentTimeMillis()) / 1000).also {
+                    if (it < 0) {
+                        authRepository.checkAuthState()
+                        task.stop()
+                    }
+                }.coerceIn(0, null)
+            }
+        } else {
+            task.stop()
+            _remainingTime.value = 0L
+        }
+    }
+    val authState = _authState.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
 
     init {
         viewModelScope.launch {
@@ -42,7 +76,7 @@ class OnboardingViewModel(
         viewModelScope.launch {
             if (authRepository.authenticate(null))
                 EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
-            else if (authState.value is AuthManager.AuthState.RequiresPin)
+            else if (_authState.first() is AuthManager.AuthState.RequiresPin)
                 EventBus.sendEvent(Event.AuthNavigate(AuthRoutes.EnterPin))
         }
     }
