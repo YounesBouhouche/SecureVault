@@ -25,9 +25,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -39,13 +42,18 @@ fun PinTextRow(
     modifier: Modifier = Modifier,
     loadingAnimation: Boolean = false,
 ) {
+    val alpha by remember(loadingAnimation) {
+        derivedStateOf {
+            if (loadingAnimation) 0.5f else 1f
+        }
+    }
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
         shape = MaterialTheme.shapes.extraLargeIncreased,
         modifier = modifier
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp).alpha(alpha),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             repeat(6) { index ->

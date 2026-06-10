@@ -65,11 +65,6 @@ fun AuthPinScreen(
     val wrongPin by authPinViewModel.wrongPin.collectAsState()
     val remainingAttempts by authPinViewModel.remainingAttempts.collectAsState()
     val loading by authPinViewModel.loading.collectAsState()
-    val alpha by remember(loading) {
-        derivedStateOf {
-            if (loading) 0.5f else 1f
-        }
-    }
     val textRes by remember {
         derivedStateOf {
             if (wrongPin) R.string.wrong_pin_try_again
@@ -94,7 +89,7 @@ fun AuthPinScreen(
         )
         PinTextRow(
             pin = pin,
-            modifier = Modifier.fillMaxWidth().alpha(alpha),
+            modifier = Modifier.fillMaxWidth(),
             loadingAnimation = loading
         )
         with(sharedTransitionScope) {

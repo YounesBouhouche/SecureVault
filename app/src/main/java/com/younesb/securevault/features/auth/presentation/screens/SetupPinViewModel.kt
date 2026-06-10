@@ -22,22 +22,27 @@ class SetupPinViewModel(
     private val _repeatPinMismatch = MutableStateFlow(false)
     val repeatPinMismatch = _repeatPinMismatch.asStateFlow()
 
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
+
     fun addDigit(digit: Int) {
         _repeatPinMismatch.value = false
         if (_repeatPin.value != null) {
             _repeatPin.updateAndGet { (it ?: "") + digit }?.let {
                 if (it.length == 6) {
-                    if (it == _pin.value)
-                        viewModelScope.launch {
+                    viewModelScope.launch {
+                        _loading.value = true
+                        if (it == _pin.value) {
                             authRepository.updateSetupCredentialsPin(it)
                             authRepository.saveCredentials()
                             EventBus.sendEvent(
                                 Event.AuthNavigate(AuthRoutes.FinishSetup)
                             )
+                        } else {
+                            _repeatPinMismatch.value = true
+                            _repeatPin.value = ""
                         }
-                    else {
-                        _repeatPinMismatch.value = true
-                        _repeatPin.value = ""
+                        _loading.value = false
                     }
                 }
             }

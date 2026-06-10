@@ -65,6 +65,7 @@ fun SetupPinScreen(
     val pin by setupPinViewModel.pin.collectAsState()
     val repeatPin by setupPinViewModel.repeatPin.collectAsState()
     val repeatPinMismatch by setupPinViewModel.repeatPinMismatch.collectAsState()
+    val loading by setupPinViewModel.loading.collectAsState()
     val textRes by remember {
         derivedStateOf {
             when {
@@ -104,6 +105,7 @@ fun SetupPinScreen(
                 if (it) {
                     PinTextRow(
                         pin = pin,
+                        loadingAnimation = loading,
                         modifier = Modifier
                             .fillMaxWidth()
                             .sharedBounds(
@@ -116,6 +118,7 @@ fun SetupPinScreen(
                 } else {
                     PinTextRow(
                         pin = repeatPin ?: "",
+                        loadingAnimation = loading,
                         modifier = Modifier
                             .fillMaxWidth()
                             .sharedBounds(
