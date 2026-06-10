@@ -224,22 +224,14 @@ fun OnboardingScreen(
                                     )
                                 }
                             }
-                            null -> {
+                            null,
+                            AuthManager.AuthState.Authenticated -> {
                                 LinearProgressIndicator(Modifier.fillMaxWidth())
                             }
                             else -> {
                                 ExpressiveButton(
                                     modifier = Modifier.weight(1f),
-                                    text = {
-                                        Text(
-                                            text = stringResource(R.string.authenticate),
-                                            softWrap = false,
-                                            autoSize = TextAutoSize.StepBased(
-                                                minFontSize = 10.sp,
-                                                maxFontSize = 40.sp
-                                            ),
-                                        )
-                                    },
+                                    text = stringResource(R.string.authenticate),
                                     size = ButtonDefaults.MediumContainerHeight,
                                     icon = Icons.AutoMirrored.Filled.ArrowForward,
                                 ) {
