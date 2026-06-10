@@ -7,13 +7,11 @@ import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.core.domain.repositories.PreferencesRepository
-import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
+import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
 import com.younesb.securevault.features.auth.presentation.util.Event
 import com.younesb.securevault.features.auth.presentation.util.EventBus
-import com.younesb.securevault.features.main.presentation.navigation.MainRoutes
 import com.younesb.securevault.features.navigation.NavRoutes
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -31,23 +29,22 @@ class OnboardingViewModel(
 
     init {
         viewModelScope.launch {
-            launch {
-                val state = authRepository.checkAuthState()
-                println("Auth state: $state")
-                when(state) {
-                    AuthManager.AuthState.RequiresBiometric ->
-                        authRepository.authenticate(null)
-                    else -> Unit
-                }
+            val state = authRepository.checkAuthState()
+            println("Auth state: $state")
+            when(state) {
+                AuthManager.AuthState.RequiresBiometric -> authenticateWithBiometrics()
+                AuthManager.AuthState.Authenticated -> EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
+                else -> Unit
             }
-            launch {
-                authState.collectLatest {
-                    println("Auth state changed: $it")
-                    if (it is AuthManager.AuthState.Authenticated) {
-                        EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
-                    }
-                }
-            }
+        }
+    }
+
+    fun authenticateWithBiometrics() {
+        viewModelScope.launch {
+            if (authRepository.authenticate(null))
+                EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
+            else if (authState.value == AuthManager.AuthState.RequiresPin)
+                EventBus.sendEvent(Event.AuthNavigate(AuthRoutes.EnterPin))
         }
     }
 

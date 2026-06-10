@@ -24,8 +24,8 @@ class CredentialsDataStore(
     }
 
     suspend fun authenticate(inputPin: String, biometricsPassed: Boolean): Boolean {
-        if (biometricsPassed) return true
         val credentials = context.credentialsDataStore.data.first() ?: return false
+        if (credentials.biometricEnabled) return biometricsPassed
         val pinMatches = credentials.pin == inputPin
         return pinMatches
     }

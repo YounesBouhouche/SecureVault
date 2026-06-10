@@ -12,4 +12,6 @@ sealed class AuthRoutes {
     data object SetupPin: AuthRoutes()
     @Serializable
     data object FinishSetup: AuthRoutes()
+    @Serializable
+    data object EnterPin: AuthRoutes()
 }

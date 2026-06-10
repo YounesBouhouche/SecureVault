@@ -13,12 +13,12 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.younesb.securevault.R
+import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.presentation.components.ExpressiveButton
 import com.younesb.securevault.features.auth.presentation.components.AnimatedAppLogo
@@ -46,6 +47,7 @@ fun OnboardingScreen(
     onSetup: () -> Unit,
 ) {
     val onboardingViewModel = koinViewModel<OnboardingViewModel>()
+    val authState by onboardingViewModel.authState.collectAsState()
     val theme by onboardingViewModel.theme.collectAsState()
     Column(
         modifier = modifier
@@ -102,47 +104,78 @@ fun OnboardingScreen(
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        AnimatedContent(theme) {
-                            ExpressiveButton(
-                                text = null,
-                                size = ButtonDefaults.MediumContainerHeight,
-                                icon = when(it) {
-                                    Theme.SYSTEM -> Icons.Default.BrightnessAuto
-                                    Theme.LIGHT -> Icons.Default.LightMode
-                                    Theme.DARK -> Icons.Default.DarkMode
-                                },
-                                colors = ButtonDefaults.filledTonalButtonColors()
-                            ) {
-                                onboardingViewModel.setTheme(
-                                    when(it) {
-                                        Theme.SYSTEM -> Theme.LIGHT
-                                        Theme.LIGHT -> Theme.DARK
-                                        Theme.DARK -> Theme.SYSTEM
-                                    }
-                                )
+                    AnimatedContent(authState) {
+                        when(it) {
+                            AuthManager.AuthState.AttemptsExceeded -> TODO()
+                            AuthManager.AuthState.LockedOut -> {
+                                ExpressiveButton(
+                                    modifier = Modifier.weight(1f),
+                                    text = {
+                                        Text(
+                                            text = stringResource(R.string.authenticate),
+                                            softWrap = false,
+                                            autoSize = TextAutoSize.StepBased(
+                                                minFontSize = 10.sp,
+                                                maxFontSize = 40.sp
+                                            ),
+                                        )
+                                    },
+                                    size = ButtonDefaults.MediumContainerHeight,
+                                    icon = Icons.AutoMirrored.Filled.ArrowForward,
+                                ) {
+                                    onboardingViewModel.authenticateWithBiometrics()
+                                }
                             }
+                            AuthManager.AuthState.NoCredentials -> {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    AnimatedContent(theme) {
+                                        ExpressiveButton(
+                                            text = null,
+                                            size = ButtonDefaults.MediumContainerHeight,
+                                            icon = when(it) {
+                                                Theme.SYSTEM -> Icons.Default.BrightnessAuto
+                                                Theme.LIGHT -> Icons.Default.LightMode
+                                                Theme.DARK -> Icons.Default.DarkMode
+                                            },
+                                            colors = ButtonDefaults.filledTonalButtonColors()
+                                        ) {
+                                            onboardingViewModel.setTheme(
+                                                when(it) {
+                                                    Theme.SYSTEM -> Theme.LIGHT
+                                                    Theme.LIGHT -> Theme.DARK
+                                                    Theme.DARK -> Theme.SYSTEM
+                                                }
+                                            )
+                                        }
+                                    }
+                                    ExpressiveButton(
+                                        modifier = Modifier.weight(1f),
+                                        text = {
+                                            Text(
+                                                text = stringResource(R.string.get_started),
+                                                softWrap = false,
+                                                autoSize = TextAutoSize.StepBased(
+                                                    minFontSize = 10.sp,
+                                                    maxFontSize = 40.sp
+                                                ),
+                                            )
+                                        },
+                                        size = ButtonDefaults.MediumContainerHeight,
+                                        icon = Icons.AutoMirrored.Filled.ArrowForward,
+                                        onClick = onSetup
+                                    )
+                                }
+                            }
+                            null -> {
+                                LinearProgressIndicator(Modifier.fillMaxWidth())
+                            }
+                            else -> {}
                         }
-                        ExpressiveButton(
-                            modifier = Modifier.weight(1f),
-                            text = {
-                                Text(
-                                    text = stringResource(R.string.get_started),
-                                    softWrap = false,
-                                    autoSize = TextAutoSize.StepBased(
-                                        minFontSize = 10.sp,
-                                        maxFontSize = 40.sp
-                                    ),
-                                )
-                            },
-                            size = ButtonDefaults.MediumContainerHeight,
-                            icon = Icons.AutoMirrored.Filled.ArrowForward,
-                            onClick = onSetup
-                        )
                     }
+
                 }
             }
         }

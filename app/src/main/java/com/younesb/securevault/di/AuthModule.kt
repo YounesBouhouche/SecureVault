@@ -4,6 +4,7 @@ import com.younesb.securevault.core.data.datastore.CredentialsDataStore
 import com.younesb.securevault.core.data.repositories.AuthRepositoryImpl
 import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.repositories.AuthRepository
+import com.younesb.securevault.features.auth.presentation.screens.AuthPinViewModel
 import com.younesb.securevault.features.auth.presentation.screens.OnboardingViewModel
 import com.younesb.securevault.features.auth.presentation.screens.SetupPinViewModel
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
@@ -20,4 +21,5 @@ val authModule = module {
     viewModelOf(::OnboardingViewModel)
     viewModelOf(::SetupViewModel)
     viewModelOf(::SetupPinViewModel)
+    viewModelOf(::AuthPinViewModel)
 }

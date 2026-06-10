@@ -1,6 +1,5 @@
 package com.younesb.securevault.core.domain.repositories
 
-import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.data.util.AuthManager.AuthState
 import kotlinx.coroutines.flow.StateFlow
 

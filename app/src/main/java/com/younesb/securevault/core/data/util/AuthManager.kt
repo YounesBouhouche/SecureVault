@@ -42,38 +42,30 @@ class AuthManager(
 
     suspend fun authenticate(inputPin: String?): Boolean {
         if (_state.value == null) checkAuthState()
-        when (_state.value) {
-            AuthState.Authenticated -> return true
+        return when (_state.value) {
+            AuthState.Authenticated -> true
             AuthState.AttemptsExceeded,
-            AuthState.LockedOut,
-            AuthState.NoCredentials -> return false
-
-            else -> {
-                val biometricsPassed = if (_state.value is AuthState.RequiresBiometric) {
-                    EventBus.sendEvent(Event.ShowBiometricPrompt("SecureVault", "Biometrics required"))
-                    val result = resultChannel.first() is
-                            BiometricPromptManager.BiometricResult.AuthenticationSuccess
-                    println("Biometric result: $result")
-                    if (result) {
-                        _state.value = AuthState.Authenticated
-                        return true
-                    }
-                    _state.value = AuthState.RequiresPin
-                    false
-                } else true
+            AuthState.RequiresBiometric -> {
+                EventBus.sendEvent(Event.ShowBiometricPrompt("SecureVault", "Biometrics required"))
+                val result = resultChannel.first() is
+                        BiometricPromptManager.BiometricResult.AuthenticationSuccess
+                _state.value = if (result) AuthState.Authenticated else AuthState.RequiresPin
+                result
+            }
+            AuthState.RequiresPin -> {
                 if (inputPin == null) return false
-                val passed = dataStore.authenticate(inputPin, biometricsPassed)
-                return if (passed) {
+                if (dataStore.authenticate(inputPin, false)) {
                     _state.value = AuthState.Authenticated
                     true
                 } else  {
                     _attempts++
                     if (_attempts >= MAX_ATTEMPTS) {
-                        _state.value = AuthState.LockedOut
+                        _state.value = AuthState.AttemptsExceeded
                     }
                     false
                 }
             }
+            else -> false
         }
     }
 

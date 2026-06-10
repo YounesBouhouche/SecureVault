@@ -21,4 +21,8 @@
     <string name="open_my_vault">Open my vault</string>
     <string name="repeat_your_pin">Repeat your PIN</string>
     <string name="pins_do_not_match">PINs do not match</string>
+    <string name="enter_your_pin">Enter your PIN</string>
+    <string name="wrong_pin_try_again">Wrong PIN, try again!</string>
+    <string name="authentict">Authenticate</string>
+    <string name="authenticate">Authenticate</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.younesb.securevault.features.auth.presentation.screens.AuthPinScreen
 import com.younesb.securevault.features.auth.presentation.screens.OnboardingScreen
 import com.younesb.securevault.features.auth.presentation.screens.SetupFinishedScreen
 import com.younesb.securevault.features.auth.presentation.screens.SetupPinScreen
@@ -47,6 +48,12 @@ fun NavGraphBuilder.authNavGraph(
                     }
                 }
             }
+        }
+        composable<AuthRoutes.EnterPin> {
+            AuthPinScreen(
+                sharedTransitionScope,
+                this,
+            )
         }
     }
 }
