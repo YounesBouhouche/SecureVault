@@ -32,7 +32,7 @@ class CredentialsDataStore(
     }
 
     suspend fun clearCredentials() {
-        context.credentialsDataStore.updateData { Credentials() }
+        context.credentialsDataStore.updateData { null }
     }
 
     suspend fun getCredentials(): Credentials? {

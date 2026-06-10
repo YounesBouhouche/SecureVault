@@ -1,14 +1,17 @@
 package com.younesb.securevault.features.auth.presentation.screens
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
@@ -16,8 +19,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.LockReset
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -49,6 +56,12 @@ fun OnboardingScreen(
     val onboardingViewModel = koinViewModel<OnboardingViewModel>()
     val authState by onboardingViewModel.authState.collectAsState()
     val theme by onboardingViewModel.theme.collectAsState()
+    val containerColor by animateColorAsState(
+        if (authState is AuthManager.AuthState.AttemptsExceeded)
+            MaterialTheme.colorScheme.errorContainer
+        else
+            MaterialTheme.colorScheme.surfaceContainer
+    )
     Column(
         modifier = modifier
             .systemBarsPadding()
@@ -60,7 +73,7 @@ fun OnboardingScreen(
         AnimatedAppLogo()
         with(sharedTransitionScope) {
             Surface(
-                color = MaterialTheme.colorScheme.surfaceContainer,
+                color = containerColor,
                 shape = MaterialTheme.shapes.extraExtraLarge,
                 modifier = Modifier.sharedBounds(
                     sharedContentState = sharedTransitionScope
@@ -76,37 +89,89 @@ fun OnboardingScreen(
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.welcome_to),
-                            style = MaterialTheme.typography.headlineMedium,
-                            textAlign = TextAlign.Center,
-                            softWrap = false,
-                            autoSize = TextAutoSize.StepBased(
-                                minFontSize = 10.sp,
-                                maxFontSize = 100.sp
-                            ),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = stringResource(R.string.app_name),
-                            style = MaterialTheme.typography.headlineLarge,
-                            textAlign = TextAlign.Center,
-                            softWrap = false,
-                            autoSize = TextAutoSize.StepBased(
-                                minFontSize = 10.sp,
-                                maxFontSize = 100.sp
-                            ),
-                            modifier = Modifier.fillMaxWidth(),
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                    AnimatedVisibility(authState !is AuthManager.AuthState.AttemptsExceeded) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.welcome_to),
+                                style = MaterialTheme.typography.headlineMedium,
+                                textAlign = TextAlign.Center,
+                                softWrap = false,
+                                autoSize = TextAutoSize.StepBased(
+                                    minFontSize = 10.sp,
+                                    maxFontSize = 100.sp
+                                ),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = stringResource(R.string.app_name),
+                                style = MaterialTheme.typography.headlineLarge,
+                                textAlign = TextAlign.Center,
+                                softWrap = false,
+                                autoSize = TextAutoSize.StepBased(
+                                    minFontSize = 10.sp,
+                                    maxFontSize = 100.sp
+                                ),
+                                modifier = Modifier.fillMaxWidth(),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
-                    AnimatedContent(authState) {
-                        when(it) {
-                            AuthManager.AuthState.AttemptsExceeded -> TODO()
+                    AnimatedContent(authState) { state ->
+                        when(state) {
+                            AuthManager.AuthState.AttemptsExceeded -> {
+                                Column(
+                                    Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(
+                                        Icons.Rounded.Warning,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.size(64.dp)
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.too_many_failed_attempts),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center,
+                                        softWrap = false,
+                                        autoSize = TextAutoSize.StepBased(
+                                            minFontSize = 10.sp,
+                                            maxFontSize = 40.sp
+                                        ),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.try_again_after),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    Text(
+                                        text = "00",
+                                        style = MaterialTheme.typography.headlineLarge,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    ExpressiveButton(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        text = stringResource(R.string.reset_app),
+                                        size = ButtonDefaults.MediumContainerHeight,
+                                        icon = Icons.Default.LockReset,
+                                        colors = ButtonDefaults.filledTonalButtonColors(
+                                            containerColor = MaterialTheme.colorScheme.onErrorContainer,
+                                            contentColor = MaterialTheme.colorScheme.onError
+                                        )
+                                    ) {
+                                    }
+                                }
+                            }
                             AuthManager.AuthState.LockedOut -> {
                                 ExpressiveButton(
                                     modifier = Modifier.weight(1f),

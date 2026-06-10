@@ -21,7 +21,7 @@ class AuthManager(
     sealed interface AuthState {
         data object NoCredentials : AuthState
         data object RequiresBiometric : AuthState
-        data object RequiresPin : AuthState
+        data class RequiresPin(val remainingAttempts: Int) : AuthState
         data object Authenticated : AuthState
         data object LockedOut : AuthState
 
@@ -29,13 +29,12 @@ class AuthManager(
     }
 
     suspend fun checkAuthState(): AuthState? {
-        println("Credentials: ${dataStore.getCredentials()}")
-        if (_state.value != AuthState.Authenticated)
+        if (_state.value == null)
             _state.value =
                 when {
                     dataStore.getCredentials() == null -> AuthState.NoCredentials
                     dataStore.getCredentials()?.biometricEnabled == true -> AuthState.RequiresBiometric
-                    else -> AuthState.RequiresPin
+                    else -> AuthState.RequiresPin(MAX_ATTEMPTS - _attempts)
                 }
         return _state.value
     }
@@ -49,10 +48,12 @@ class AuthManager(
                 EventBus.sendEvent(Event.ShowBiometricPrompt("SecureVault", "Biometrics required"))
                 val result = resultChannel.first() is
                         BiometricPromptManager.BiometricResult.AuthenticationSuccess
-                _state.value = if (result) AuthState.Authenticated else AuthState.RequiresPin
+                _state.value =
+                    if (result) AuthState.Authenticated
+                    else AuthState.RequiresPin(MAX_ATTEMPTS - _attempts)
                 result
             }
-            AuthState.RequiresPin -> {
+            is AuthState.RequiresPin -> {
                 if (inputPin == null) return false
                 if (dataStore.authenticate(inputPin, false)) {
                     _state.value = AuthState.Authenticated
@@ -61,6 +62,8 @@ class AuthManager(
                     _attempts++
                     if (_attempts >= MAX_ATTEMPTS) {
                         _state.value = AuthState.AttemptsExceeded
+                    } else {
+                        _state.value = AuthState.RequiresPin(MAX_ATTEMPTS - _attempts)
                     }
                     false
                 }

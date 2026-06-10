@@ -30,7 +30,6 @@ class OnboardingViewModel(
     init {
         viewModelScope.launch {
             val state = authRepository.checkAuthState()
-            println("Auth state: $state")
             when(state) {
                 AuthManager.AuthState.RequiresBiometric -> authenticateWithBiometrics()
                 AuthManager.AuthState.Authenticated -> EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
@@ -43,7 +42,7 @@ class OnboardingViewModel(
         viewModelScope.launch {
             if (authRepository.authenticate(null))
                 EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
-            else if (authState.value == AuthManager.AuthState.RequiresPin)
+            else if (authState.value is AuthManager.AuthState.RequiresPin)
                 EventBus.sendEvent(Event.AuthNavigate(AuthRoutes.EnterPin))
         }
     }

@@ -25,4 +25,12 @@
     <string name="wrong_pin_try_again">Wrong PIN, try again!</string>
     <string name="authentict">Authenticate</string>
     <string name="authenticate">Authenticate</string>
+    <plurals name="remaining_attempts">
+        <item quantity="one">%d attempt remaining</item>
+        <item quantity="other">%d attempts remaining</item>
+    </plurals>
+    <string name="vault_locked">Vault is locked</string>
+    <string name="too_many_failed_attempts">Too many failed attempts !</string>
+    <string name="try_again_after">try again after</string>
+    <string name="reset_app">Reset App</string>
 </resources>
