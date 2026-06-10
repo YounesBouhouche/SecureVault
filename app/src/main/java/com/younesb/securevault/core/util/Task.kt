@@ -17,7 +17,7 @@ class Task {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     // keep suspend signature for compatibility with callers; launching is done on internal scope
-    suspend fun start(block: suspend CoroutineScope.() -> Unit) {
+    fun start(block: suspend CoroutineScope.() -> Unit) {
         stop()
         if (scope.coroutineContext[Job]?.isCancelled == true) {
             throw IllegalStateException("Cannot start Task: underlying scope is cancelled")
@@ -25,7 +25,7 @@ class Task {
         job = scope.launch(block = block)
     }
 
-    suspend fun startRepeating(
+    fun startRepeating(
         delay: Long,
         block: suspend CoroutineScope.() -> Unit,
     ) = start {

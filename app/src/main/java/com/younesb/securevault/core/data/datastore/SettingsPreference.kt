@@ -3,7 +3,6 @@ package com.younesb.securevault.core.data.datastore
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -61,11 +60,6 @@ sealed class SettingsPreference<T, R>(
     data object DynamicColor : SettingsPreference<Boolean, Boolean>(
         booleanPreferencesKey("dynamic_color"),
         true,
-    )
-
-    data object LockoutDuration : SettingsPreference<Int, Int>(
-        intPreferencesKey("lockout_duration"),
-        1,
     )
 
     fun getDataFlow(dataStore: DataStore<Preferences>): Flow<R> =

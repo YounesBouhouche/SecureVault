@@ -3,7 +3,6 @@ package com.younesb.securevault.core.data.util
 import com.younesb.securevault.core.data.datastore.AuthAttemptsDataStore
 import com.younesb.securevault.core.data.datastore.CredentialsDataStore
 import com.younesb.securevault.core.data.models.Credentials
-import com.younesb.securevault.core.domain.repositories.PreferencesRepository
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.auth.presentation.util.Event
 import com.younesb.securevault.features.auth.presentation.util.EventBus
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.first
 class AuthManager(
     val credentialsDataStore: CredentialsDataStore,
     val authAttemptsDataStore: AuthAttemptsDataStore,
-    val preferencesRepository: PreferencesRepository,
     biometricManager: BiometricPromptManager
 ) {
     private var _state: MutableStateFlow<AuthState?> = MutableStateFlow(null)

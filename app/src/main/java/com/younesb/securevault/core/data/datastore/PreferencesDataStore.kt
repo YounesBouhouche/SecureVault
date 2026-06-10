@@ -2,7 +2,6 @@ package com.younesb.securevault.core.data.datastore
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.withContext
 
 class PreferencesDataStore(
     private val context: Context,

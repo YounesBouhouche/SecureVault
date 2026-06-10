@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.repositories.AuthRepository
-import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
 import com.younesb.securevault.features.auth.presentation.util.Event
 import com.younesb.securevault.features.auth.presentation.util.EventBus
 import com.younesb.securevault.features.navigation.NavRoutes
