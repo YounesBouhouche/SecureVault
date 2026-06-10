@@ -26,7 +26,9 @@ class CredentialsCryptoSerializer(
 
     override suspend fun writeTo(t: Credentials?, output: OutputStream) {
         val plain = Json.encodeToString(t?.let {
-            it.copy(pin = Signer.hashString(it.pin))
+            it.copy(pin = withContext(Dispatchers.Default) {
+                Signer.hashString(it.pin)
+            })
         })
         val plainBytes = plain.toByteArray()
         val cipher = crypto.encrypt(plainBytes)

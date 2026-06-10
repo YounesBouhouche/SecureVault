@@ -6,8 +6,10 @@ import com.younesb.securevault.core.data.models.Credentials
 import com.younesb.securevault.core.util.crypto.Crypto
 import com.younesb.securevault.core.util.crypto.CredentialsCryptoSerializer
 import com.younesb.securevault.core.util.crypto.Signer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 
 class CredentialsDataStore(
     private val context: Context,
@@ -20,22 +22,27 @@ class CredentialsDataStore(
     )
 
     suspend fun updateCredentials(credentials: Credentials) {
-        context.credentialsDataStore.updateData { credentials }
+        withContext(Dispatchers.IO) {
+            context.credentialsDataStore.updateData { credentials }
+        }
     }
 
     suspend fun authenticate(inputPin: String, biometricsPassed: Boolean): Boolean {
-        val credentials = context.credentialsDataStore.data.first() ?: return false
-        println("Credentials: $credentials")
-        if (credentials.biometricEnabled and biometricsPassed) return true
-        val pinMatches = Signer.verifyPassword(inputPin, credentials.pin)
-        return pinMatches
+        return withContext(Dispatchers.IO) {
+            val credentials = context.credentialsDataStore.data.first() ?: return@withContext false
+            if (credentials.biometricEnabled and biometricsPassed) return@withContext true
+            val pinMatches = Signer.verifyPassword(inputPin, credentials.pin)
+            pinMatches
+        }
     }
 
     suspend fun clearCredentials() {
-        context.credentialsDataStore.updateData { null }
+        withContext(Dispatchers.IO) {
+            context.credentialsDataStore.updateData { null }
+        }
     }
 
-    suspend fun getCredentials(): Credentials? {
-        return context.credentialsDataStore.data.firstOrNull()
+    suspend fun getCredentials(): Credentials? = withContext(Dispatchers.IO) {
+        context.credentialsDataStore.data.firstOrNull()
     }
 }

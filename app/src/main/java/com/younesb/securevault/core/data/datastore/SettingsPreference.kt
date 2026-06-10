@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.map
 import com.younesb.securevault.core.domain.models.preferences.ColorScheme
 import com.younesb.securevault.core.domain.models.preferences.Language
 import com.younesb.securevault.core.domain.models.preferences.Theme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
 sealed class SettingsPreference<T, R>(
@@ -75,9 +77,11 @@ sealed class SettingsPreference<T, R>(
         dataStore: DataStore<Preferences>,
         value: R,
     ) {
-        dataStore.updateData { preferences ->
-            preferences.toMutablePreferences().apply {
-                this[key] = mapToStored(value)
+        withContext(Dispatchers.IO) {
+            dataStore.updateData { preferences ->
+                preferences.toMutablePreferences().apply {
+                    this[key] = mapToStored(value)
+                }
             }
         }
     }
