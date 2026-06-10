@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
+import java.security.MessageDigest
 import java.util.Base64
 
 
@@ -25,7 +26,9 @@ class CryptoSerializer(
     }
 
     override suspend fun writeTo(t: Credentials?, output: OutputStream) {
-        val plain = Json.encodeToString(t)
+        val plain = Json.encodeToString(t?.let {
+            it.copy(pin = Signer.hashString(it.pin))
+        })
         val plainBytes = plain.toByteArray()
         val cipher = crypto.encrypt(plainBytes)
         val cipherBase64 = Base64.getEncoder().encode(cipher)

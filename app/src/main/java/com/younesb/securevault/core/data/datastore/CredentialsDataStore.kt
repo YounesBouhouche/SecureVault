@@ -5,6 +5,7 @@ import androidx.datastore.dataStore
 import com.younesb.securevault.core.data.models.Credentials
 import com.younesb.securevault.core.util.crypto.Crypto
 import com.younesb.securevault.core.util.crypto.CryptoSerializer
+import com.younesb.securevault.core.util.crypto.Signer
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -19,14 +20,14 @@ class CredentialsDataStore(
     )
 
     suspend fun updateCredentials(credentials: Credentials) {
-        println("Updating credentials: $credentials")
         context.credentialsDataStore.updateData { credentials }
     }
 
     suspend fun authenticate(inputPin: String, biometricsPassed: Boolean): Boolean {
         val credentials = context.credentialsDataStore.data.first() ?: return false
-        if (credentials.biometricEnabled) return biometricsPassed
-        val pinMatches = credentials.pin == inputPin
+        println("Credentials: $credentials")
+        if (credentials.biometricEnabled and biometricsPassed) return true
+        val pinMatches = Signer.verifyPassword(inputPin, credentials.pin)
         return pinMatches
     }
 

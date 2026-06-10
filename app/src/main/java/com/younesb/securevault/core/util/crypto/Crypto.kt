@@ -1,11 +1,8 @@
 package com.younesb.securevault.core.util.crypto
 
-import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import java.security.KeyStore
-import java.security.SecureRandom
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 
@@ -15,32 +12,8 @@ class Crypto(val keyAlias: String) {
     private val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
 
     private fun getKey(): SecretKey {
-        val existingKey = keyStore.getEntry(keyAlias, null) as? KeyStore.SecretKeyEntry
-        return existingKey?.secretKey ?: createKey()
+        return KeyGen(keyStore, keyAlias, ALGORITHM, BLOCK_MODE, PADDING).getKey()
     }
-
-    private fun createKey(): SecretKey {
-        return KeyGenerator.getInstance(ALGORITHM).apply {
-            init(
-                KeyGenParameterSpec.Builder(
-                    keyAlias,
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-                )
-                    .setBlockModes(BLOCK_MODE)
-                    .setEncryptionPaddings(PADDING)
-                    .setUserAuthenticationRequired(false)
-                    .setRandomizedEncryptionRequired(true)
-                    .build()
-            )
-        }.generateKey()
-    }
-//
-//    private fun generateRandomIV(size: Int): ByteArray {
-//        val random = SecureRandom()
-//        val iv = ByteArray(size)
-//        random.nextBytes(iv)
-//        return iv
-//    }
 
     fun encrypt(bytes: ByteArray): ByteArray {
         cipher.init(Cipher.ENCRYPT_MODE, getKey())
