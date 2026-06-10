@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -63,6 +64,12 @@ fun AuthPinScreen(
     val pin by authPinViewModel.pin.collectAsState()
     val wrongPin by authPinViewModel.wrongPin.collectAsState()
     val remainingAttempts by authPinViewModel.remainingAttempts.collectAsState()
+    val loading by authPinViewModel.loading.collectAsState()
+    val alpha by remember(loading) {
+        derivedStateOf {
+            if (loading) 0.5f else 1f
+        }
+    }
     val textRes by remember {
         derivedStateOf {
             if (wrongPin) R.string.wrong_pin_try_again
@@ -87,7 +94,8 @@ fun AuthPinScreen(
         )
         PinTextRow(
             pin = pin,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().alpha(alpha),
+            loadingAnimation = loading
         )
         with(sharedTransitionScope) {
             Surface(
@@ -151,6 +159,7 @@ fun AuthPinScreen(
                                         11 -> authPinViewModel.removeLastDigit()
                                     }
                                 },
+                                enabled = !loading,
                                 modifier = Modifier.fillMaxSize(),
                                 size = ButtonDefaults.MediumContainerHeight,
                                 colors = when(index) {

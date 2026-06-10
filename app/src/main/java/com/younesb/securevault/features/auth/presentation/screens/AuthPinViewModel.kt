@@ -23,6 +23,8 @@ class AuthPinViewModel(
     val pin = _pin.asStateFlow()
     private val _wrongPin = MutableStateFlow(false)
     val wrongPin = _wrongPin.asStateFlow()
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
     private val _authState = authRepository.observeAuthState()
     val remainingAttempts = _authState.map {
         (it as? AuthManager.AuthState.RequiresPin)?.remainingAttempts ?: 0
@@ -37,6 +39,7 @@ class AuthPinViewModel(
         _pin.updateAndGet { it + digit }.let {
             if (it.length == 6) {
                 viewModelScope.launch {
+                    _loading.value = true
                     if (authRepository.authenticate(it)) {
                         EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
                     } else if (_authState.value is AuthManager.AuthState.AttemptsExceeded) {
@@ -45,6 +48,7 @@ class AuthPinViewModel(
                         _wrongPin.value = true
                         _pin.value = ""
                     }
+                    _loading.value = false
                 }
             }
         }
