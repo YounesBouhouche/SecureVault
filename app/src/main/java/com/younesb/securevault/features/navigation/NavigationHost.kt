@@ -25,10 +25,7 @@ fun NavigationHost(
                 navController = navController,
                 sharedTransitionScope = this@SharedTransitionLayout,
             )
-            mainNavGraph(
-                navController = navController,
-                sharedTransitionScope = this@SharedTransitionLayout,
-            )
+            mainNavGraph(navController = navController)
         }
     }
 }
