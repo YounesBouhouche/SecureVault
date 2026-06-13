@@ -46,4 +46,5 @@
     <string name="close_menu">Close menu</string>
     <string name="browse">Browse</string>
     <string name="export">Export</string>
+    <string name="gallery">Gallery</string>
 </resources>

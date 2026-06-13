@@ -8,9 +8,9 @@ import com.younesb.securevault.features.main.data.datasource.local.database.mode
 import com.younesb.securevault.features.main.data.datasource.local.database.models.Folder
 import com.younesb.securevault.features.main.data.datasource.local.database.models.Tag
 import com.younesb.securevault.features.main.domain.models.DocumentDto
-import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
 import com.younesb.securevault.features.main.domain.models.FolderDto
 import com.younesb.securevault.features.main.domain.models.TagDto
+import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.UUID
@@ -65,36 +65,41 @@ class DocumentsRepositoryImpl(
         dao.getDocumentsWithTags().map(DocumentDto::fromDocumentWithTags)
     }
 
-    override suspend fun createDocument(request: DocumentDto): EmptyResult<Exception> = Result.run {
-        dao.upsertDocument(
-            Document(
-                id = UUID.randomUUID().toString(),
-                name = request.name,
-                createdAt = System.currentTimeMillis(),
-                folderId = request.folderId,
-                type = request.type.name,
-                size = request.size,
-                updatedAt = System.currentTimeMillis()
-            )
-        )
-    }
-
-    private suspend fun getDocumentById(documentId: String): Document {
-        return dao.getDocumentsWithTags().find { it.document.id == documentId }?.document
+    private suspend fun getDocument(documentId: String): Document =
+        dao.getDocumentById(documentId)
             ?: throw IllegalArgumentException("Document with id $documentId not found")
-    }
+
+    override suspend fun getDocumentById(documentId: String): Result<DocumentDto, Exception> =
+        Result.run {
+            DocumentDto.fromDocument(getDocument(documentId))
+        }
+
+    override suspend fun createDocument(document: DocumentDto): EmptyResult<Exception> =
+        Result.run {
+            dao.upsertDocument(
+                Document(
+                    id = document.id.takeIf { it.isNotBlank() } ?: UUID.randomUUID().toString(),
+                    name = document.name,
+                    createdAt = System.currentTimeMillis(),
+                    folderId = document.folderId,
+                    type = document.type.name,
+                    size = document.size,
+                    updatedAt = System.currentTimeMillis()
+                )
+            )
+        }
 
     override suspend fun deleteDocument(documentId: String): EmptyResult<Exception> = Result.run {
-        dao.deleteDocument(getDocumentById(documentId))
+        dao.deleteDocumentId(documentId)
     }
+
 
     override suspend fun renameDocument(
         documentId: String,
         newName: String
     ): EmptyResult<Exception> = Result.run {
-        val document = getDocumentById(documentId)
         dao.upsertDocument(
-            document.copy(
+            getDocument(documentId).copy(
                 name = newName,
                 updatedAt = System.currentTimeMillis()
             )
@@ -105,9 +110,8 @@ class DocumentsRepositoryImpl(
         documentId: String,
         newFolderId: String?
     ): EmptyResult<Exception> = Result.run {
-        val document = getDocumentById(documentId)
         dao.upsertDocument(
-            document.copy(
+            getDocument(documentId).copy(
                 folderId = newFolderId,
                 updatedAt = System.currentTimeMillis()
             )

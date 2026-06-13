@@ -16,6 +16,13 @@ sealed interface Result<out D, out E: Throwable> {
     }
 }
 
+inline fun <I, O, E: Throwable> Result<I, E>.pipe(pipe: (I) -> Result<O, E>): Result<O, E> {
+    return when (this) {
+        is Result.Error -> this
+        is Result.Success -> pipe(data)
+    }
+}
+
 inline fun <T, E: Error, R> Result<T, E>.map(map: (T) -> R): Result<R, E> {
     return when(this) {
         is Result.Error -> Result.Error(error)

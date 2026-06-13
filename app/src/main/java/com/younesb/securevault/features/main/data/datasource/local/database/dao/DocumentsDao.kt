@@ -47,8 +47,14 @@ interface DocumentsDao {
     @Upsert
     suspend fun upsertDocument(document: Document)
 
+    @Query("SELECT * FROM Document WHERE id = :documentId")
+    suspend fun getDocumentById(documentId: String): Document?
+
     @Delete
     suspend fun deleteDocument(document: Document)
+
+    @Query("DELETE FROM Document WHERE id = :documentId")
+    suspend fun deleteDocumentId(documentId: String)
 
     @Query("DELETE FROM Document WHERE folderId = :folderId")
     suspend fun deleteDocumentsByFolderId(folderId: String)
