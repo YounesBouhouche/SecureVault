@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.features.auth.presentation.util.AuthEvent
-import com.younesb.securevault.core.presentation.events.EventBus
+import com.younesb.securevault.features.auth.presentation.util.AuthEventsBus
 import com.younesb.securevault.features.navigation.NavRoutes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,9 +40,9 @@ class AuthPinViewModel(
                 viewModelScope.launch {
                     _loading.value = true
                     if (authRepository.authenticate(it)) {
-                        EventBus.sendEvent(AuthEvent.Navigate(NavRoutes.Main))
+                        AuthEventsBus.sendEvent(AuthEvent.Navigate(NavRoutes.Main))
                     } else if (_authState.value is AuthManager.AuthState.AttemptsExceeded) {
-                        EventBus.sendEvent(AuthEvent.Navigate(NavRoutes.Auth))
+                        AuthEventsBus.sendEvent(AuthEvent.Navigate(NavRoutes.Auth))
                     } else {
                         _wrongPin.value = true
                         _pin.value = ""

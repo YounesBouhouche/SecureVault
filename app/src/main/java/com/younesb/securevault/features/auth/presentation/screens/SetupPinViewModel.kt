@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
 import com.younesb.securevault.features.auth.presentation.util.AuthEvent
-import com.younesb.securevault.core.presentation.events.EventBus
+import com.younesb.securevault.features.auth.presentation.util.AuthEventsBus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.updateAndGet
@@ -35,7 +35,7 @@ class SetupPinViewModel(
                         if (it == _pin.value) {
                             authRepository.updateSetupCredentialsPin(it)
                             authRepository.saveCredentials()
-                            EventBus.sendEvent(
+                            AuthEventsBus.sendEvent(
                                 AuthEvent.AuthNavigate(AuthRoutes.FinishSetup)
                             )
                         } else {

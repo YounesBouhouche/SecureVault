@@ -6,7 +6,7 @@ import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.auth.presentation.util.AuthEvent
-import com.younesb.securevault.core.presentation.events.EventBus
+import com.younesb.securevault.features.auth.presentation.util.AuthEventsBus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
@@ -56,7 +56,7 @@ class SetupViewModel(
 
     internal fun sendEvent(event: AuthEvent) {
         viewModelScope.launch {
-            EventBus.sendEvent(event)
+            AuthEventsBus.sendEvent(event)
         }
     }
 }

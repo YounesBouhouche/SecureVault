@@ -1,10 +1,6 @@
 package com.younesb.securevault.features.main.presentation.util
 
 import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

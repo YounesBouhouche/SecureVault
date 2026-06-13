@@ -3,10 +3,9 @@ package com.younesb.securevault.core.data.util
 import com.younesb.securevault.core.data.datastore.AuthAttemptsDataStore
 import com.younesb.securevault.core.data.datastore.CredentialsDataStore
 import com.younesb.securevault.core.data.models.Credentials
-import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.auth.presentation.util.AuthEvent
-import com.younesb.securevault.core.presentation.events.EventBus
 import com.younesb.securevault.features.auth.presentation.util.AuthEventsBus
+import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
