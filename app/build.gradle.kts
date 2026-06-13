@@ -32,8 +32,11 @@ android {
                 load(FileInputStream(localPropertiesFile))
             }
         }
-        val apiKey = localProperties.getProperty("KEY_ALIAS") ?: ""
-        buildConfigField("String", "KEY_ALIAS", "\"$apiKey\"")
+        val keyAlias = localProperties.getProperty("KEY_ALIAS") ?: ""
+        buildConfigField("String", "KEY_ALIAS", "\"$keyAlias\"")
+
+        val dbKeyAlias = localProperties.getProperty("DB_KEY_ALIAS") ?: ""
+        buildConfigField("String", "DB_KEY_ALIAS", "\"$dbKeyAlias\"")
     }
 
     buildTypes {
