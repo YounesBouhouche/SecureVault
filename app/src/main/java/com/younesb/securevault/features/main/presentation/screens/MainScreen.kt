@@ -14,6 +14,7 @@ import com.younesb.securevault.features.main.presentation.components.MainNavigat
 import com.younesb.securevault.features.main.presentation.navigation.MainNavigationHost
 import com.younesb.securevault.features.main.presentation.components.MainSearchBar
 import com.younesb.securevault.features.main.presentation.navigation.util.getCurrentRoute
+import com.younesb.securevault.features.main.presentation.util.CollectMainEvents
 import com.younesb.securevault.features.navigation.NavRoutes
 
 @Composable
@@ -26,6 +27,7 @@ fun MainScreen(
         it.destination
     }
     val isParentRoute = route != null
+    CollectMainEvents(navController = navController)
     Box(modifier.fillMaxSize()) {
         MainNavigationHost(navController = navController)
         MainSearchBar(modifier = Modifier.align(Alignment.TopCenter)) {
