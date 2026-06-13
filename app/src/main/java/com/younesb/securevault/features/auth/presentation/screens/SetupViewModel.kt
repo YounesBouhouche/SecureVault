@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
-import com.younesb.securevault.features.auth.presentation.util.Event
-import com.younesb.securevault.features.auth.presentation.util.EventBus
+import com.younesb.securevault.features.auth.presentation.util.AuthEvent
+import com.younesb.securevault.core.presentation.events.EventBus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
@@ -28,9 +28,9 @@ class SetupViewModel(
         when {
             checkSuccessAndNavigate(promptResult.value) -> return
             promptResult.value is BiometricPromptManager.BiometricResult.AuthenticationNotSet ->
-                sendEvent(Event.LaunchScreenLockSettings)
+                sendEvent(AuthEvent.LaunchScreenLockSettings)
             else -> sendEvent(
-                Event.ShowBiometricPrompt(
+                AuthEvent.ShowBiometricPrompt(
                     title = "Biometric Authentication",
                     description = "Please authenticate to set up biometric authentication for your vault.",
                 )
@@ -44,17 +44,17 @@ class SetupViewModel(
     private fun checkSuccessAndNavigate(result: BiometricPromptManager.BiometricResult?): Boolean {
         return if (result is BiometricPromptManager.BiometricResult.AuthenticationSuccess) {
             authRepository.updateSetupCredentialsBiometrics(true)
-            sendEvent(Event.AuthNavigate(AuthRoutes.SetupPin))
+            sendEvent(AuthEvent.AuthNavigate(AuthRoutes.SetupPin))
             true
         }
         else false
     }
 
     fun skip() {
-        sendEvent(Event.AuthNavigate(AuthRoutes.SetupPin))
+        sendEvent(AuthEvent.AuthNavigate(AuthRoutes.SetupPin))
     }
 
-    internal fun sendEvent(event: Event) {
+    internal fun sendEvent(event: AuthEvent) {
         viewModelScope.launch {
             EventBus.sendEvent(event)
         }

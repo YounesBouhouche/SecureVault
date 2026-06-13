@@ -4,8 +4,9 @@ import com.younesb.securevault.core.data.datastore.AuthAttemptsDataStore
 import com.younesb.securevault.core.data.datastore.CredentialsDataStore
 import com.younesb.securevault.core.data.models.Credentials
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
-import com.younesb.securevault.features.auth.presentation.util.Event
-import com.younesb.securevault.features.auth.presentation.util.EventBus
+import com.younesb.securevault.features.auth.presentation.util.AuthEvent
+import com.younesb.securevault.core.presentation.events.EventBus
+import com.younesb.securevault.features.auth.presentation.util.AuthEventsBus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -50,7 +51,7 @@ class AuthManager(
             AuthState.Authenticated -> true
             is AuthState.AttemptsExceeded -> false
             AuthState.RequiresBiometric -> {
-                EventBus.sendEvent(Event.ShowBiometricPrompt("SecureVault", "Biometrics required"))
+                AuthEventsBus.sendEvent(AuthEvent.ShowBiometricPrompt("SecureVault", "Biometrics required"))
                 val result = resultChannel.first() is
                         BiometricPromptManager.BiometricResult.AuthenticationSuccess
                 _state.value =

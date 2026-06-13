@@ -9,8 +9,8 @@ import com.younesb.securevault.core.domain.repositories.AuthRepository
 import com.younesb.securevault.core.domain.repositories.PreferencesRepository
 import com.younesb.securevault.core.util.Task
 import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
-import com.younesb.securevault.features.auth.presentation.util.Event
-import com.younesb.securevault.features.auth.presentation.util.EventBus
+import com.younesb.securevault.features.auth.presentation.util.AuthEvent
+import com.younesb.securevault.core.presentation.events.EventBus
 import com.younesb.securevault.features.navigation.NavRoutes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -66,7 +66,7 @@ class OnboardingViewModel(
             val state = authRepository.checkAuthState()
             when(state) {
                 AuthManager.AuthState.RequiresBiometric -> authenticateWithBiometrics()
-                AuthManager.AuthState.Authenticated -> EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
+                AuthManager.AuthState.Authenticated -> EventBus.sendEvent(AuthEvent.Navigate(NavRoutes.Main))
                 else -> Unit
             }
         }
@@ -75,9 +75,9 @@ class OnboardingViewModel(
     fun authenticateWithBiometrics() {
         viewModelScope.launch {
             if (authRepository.authenticate(null))
-                EventBus.sendEvent(Event.Navigate(NavRoutes.Main))
+                EventBus.sendEvent(AuthEvent.Navigate(NavRoutes.Main))
             else if (_authState.first() is AuthManager.AuthState.RequiresPin)
-                EventBus.sendEvent(Event.AuthNavigate(AuthRoutes.EnterPin))
+                EventBus.sendEvent(AuthEvent.AuthNavigate(AuthRoutes.EnterPin))
         }
     }
 
