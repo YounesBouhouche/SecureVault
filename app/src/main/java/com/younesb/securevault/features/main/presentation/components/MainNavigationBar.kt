@@ -1,4 +1,4 @@
-package com.younesb.securevault.features.main.presentation.navigation
+package com.younesb.securevault.features.main.presentation.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -31,6 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.younesb.securevault.core.presentation.components.FabMenu
+import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
+import com.younesb.securevault.features.main.presentation.navigation.MainRoutes
 import com.younesb.securevault.features.main.presentation.util.NewItemAction
 import soup.compose.material.motion.animation.materialSharedAxisZ
 

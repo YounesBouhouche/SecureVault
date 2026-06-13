@@ -10,9 +10,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.theme.AppTheme
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
-import com.younesb.securevault.features.main.presentation.navigation.MainNavigationBar
+import com.younesb.securevault.features.main.presentation.components.MainNavigationBar
 import com.younesb.securevault.features.main.presentation.navigation.MainNavigationHost
-import com.younesb.securevault.features.main.presentation.navigation.MainSearchBar
+import com.younesb.securevault.features.main.presentation.components.MainSearchBar
 import com.younesb.securevault.features.main.presentation.navigation.util.getCurrentRoute
 import com.younesb.securevault.features.navigation.NavRoutes
 
