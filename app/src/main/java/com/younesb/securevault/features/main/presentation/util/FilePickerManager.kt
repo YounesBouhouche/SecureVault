@@ -5,7 +5,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class FilePickerManager {
+object FilePickerManager {
     val resultChannel = MutableSharedFlow<FileResult>(
         replay = 0,
         extraBufferCapacity = 1,

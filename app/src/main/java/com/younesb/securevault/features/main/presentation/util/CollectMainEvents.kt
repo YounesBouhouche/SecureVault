@@ -10,23 +10,20 @@ import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.events.CollectEvents
 
 @Composable
-fun CollectMainEvents(
-    navController: NavHostController = rememberNavController(),
-    filePickerManager: FilePickerManager = FilePickerManager()
-) {
+fun CollectMainEvents(navController: NavHostController = rememberNavController()) {
     val context = LocalContext.current
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
-        onResult = filePickerManager::emitResult
+        onResult = FilePickerManager::emitResult
     )
     val pickPictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = filePickerManager::emitResult
+        onResult = FilePickerManager::emitResult
     )
     val takePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
     ) { accepted ->
-        filePickerManager.emitResult(
+        FilePickerManager.emitResult(
             ComposeFileProvider.getImageUri(context).takeIf { accepted }
         )
     }
