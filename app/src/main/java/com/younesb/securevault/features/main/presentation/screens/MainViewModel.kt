@@ -5,9 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.features.main.presentation.util.MainEvent
 import com.younesb.securevault.features.main.presentation.util.MainEventsBus
 import com.younesb.securevault.features.main.presentation.util.NewItemAction
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {

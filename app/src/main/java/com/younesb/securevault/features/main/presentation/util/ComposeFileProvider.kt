@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import com.younesb.securevault.R
 import java.io.File
-import java.nio.file.Files
 
 object ComposeFileProvider: FileProvider(R.xml.file_paths) {
     private var uri: Uri? = null

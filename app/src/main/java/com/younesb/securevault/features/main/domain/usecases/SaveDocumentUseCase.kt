@@ -1,8 +1,6 @@
 package com.younesb.securevault.features.main.domain.usecases
 
 import android.net.Uri
-import com.younesb.securevault.core.domain.utils.EmptyResult
-import com.younesb.securevault.core.domain.utils.Result
 import com.younesb.securevault.core.domain.utils.pipe
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
