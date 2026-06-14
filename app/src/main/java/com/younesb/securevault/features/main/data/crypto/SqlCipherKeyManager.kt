@@ -5,6 +5,7 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
 class SqlCipherKeyManager(val crypto: Crypto) {
     fun getSupportFactory(): SupportOpenHelperFactory {
+        System.loadLibrary("sqlcipher")
         return SupportOpenHelperFactory(crypto.getKey().encoded)
     }
 }
