@@ -20,6 +20,7 @@ interface DocumentsDao {
     @Query("SELECT * FROM Folder")
     suspend fun getFoldersWithDocuments(): List<FolderWithDocuments>
 
+    @Transaction
     @Query("SELECT * FROM Folder WHERE id = :folderId")
     suspend fun getFolderById(folderId: String): FolderWithDocuments?
 
@@ -60,9 +61,9 @@ interface DocumentsDao {
     suspend fun deleteDocumentsByFolderId(folderId: String)
 
     @Upsert
-    suspend fun upsertFolder(folder: Folder): Folder
+    suspend fun upsertFolder(folder: Folder)
 
-    @Delete
+    @Query("DELETE FROM Folder WHERE id = :folderId")
     suspend fun deleteFolder(folderId: String)
 
     @Upsert

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface DocumentsRepository {
     fun observeFolders(): Flow<List<FolderDto>>
     suspend fun getFolders(): Result<List<FolderDto>, Exception>
-    suspend fun createFolder(name: String): Result<FolderDto, Exception>
+    suspend fun createFolder(name: String): EmptyResult<Exception>
     suspend fun deleteFolder(folderId: String, deleteDocuments: Boolean = false): EmptyResult<Exception>
     suspend fun renameFolder(folderId: String, newName: String): EmptyResult<Exception>
 

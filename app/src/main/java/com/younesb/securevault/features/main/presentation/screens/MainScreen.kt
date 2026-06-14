@@ -9,13 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.theme.AppTheme
-import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.components.MainNavigationBar
-import com.younesb.securevault.features.main.presentation.navigation.MainNavigationHost
 import com.younesb.securevault.features.main.presentation.components.MainSearchBar
+import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
+import com.younesb.securevault.features.main.presentation.navigation.MainNavigationHost
 import com.younesb.securevault.features.main.presentation.navigation.util.getCurrentRoute
+import com.younesb.securevault.features.main.presentation.screens.new_item.NewDocumentSheet
 import com.younesb.securevault.features.main.presentation.util.CollectMainEvents
 import com.younesb.securevault.features.navigation.NavRoutes
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen(
@@ -27,7 +29,10 @@ fun MainScreen(
         it.destination
     }
     val isParentRoute = route != null
+    val viewModel = koinViewModel<MainViewModel>()
+
     CollectMainEvents(navController = navController)
+
     Box(modifier.fillMaxSize()) {
         MainNavigationHost(navController = navController)
         MainSearchBar(modifier = Modifier.align(Alignment.TopCenter)) {
@@ -42,9 +47,12 @@ fun MainScreen(
                     popUpTo(it) { inclusive = true }
                 }
             },
+            onNewItemAction = viewModel::showFilePicker,
             visible = isParentRoute
         )
     }
+
+    NewDocumentSheet()
 }
 
 @Preview

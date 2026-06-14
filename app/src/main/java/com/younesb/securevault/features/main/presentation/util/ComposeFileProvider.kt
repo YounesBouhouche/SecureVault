@@ -5,9 +5,16 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import com.younesb.securevault.R
 import java.io.File
+import java.nio.file.Files
 
 object ComposeFileProvider: FileProvider(R.xml.file_paths) {
-    fun getImageUri(context: Context): Uri {
+    private var uri: Uri? = null
+
+    fun getUri(): Uri? {
+        return uri
+    }
+
+    fun createImageUri(context: Context): Uri {
         val directory = File(context.cacheDir, "images")
         directory.mkdirs()
         val file = File.createTempFile(
@@ -16,10 +23,11 @@ object ComposeFileProvider: FileProvider(R.xml.file_paths) {
             directory
         )
         val authority = context.packageName + ".fileprovider"
-        return getUriForFile(
+        uri = getUriForFile(
             context,
             authority,
             file,
         )
+        return uri!!
     }
 }

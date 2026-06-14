@@ -26,4 +26,16 @@ class FilesRepositoryImpl(
             encrypted = true
         )
     }
+
+    override suspend fun saveFile(
+        content: String,
+        destinationFileName: String
+    ): EmptyResult<Exception> = Result.run {
+        val destinationUri = filesManager.getUri(destinationFileName)
+        filesManager.writeFile(
+            destinationUri = destinationUri,
+            content = content.toByteArray(),
+            encrypted = true
+        )
+    }
 }

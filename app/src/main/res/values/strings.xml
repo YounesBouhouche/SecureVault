@@ -47,4 +47,10 @@
     <string name="browse">Browse</string>
     <string name="export">Export</string>
     <string name="gallery">Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="note_content">Note Content</string>
 </resources>

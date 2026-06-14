@@ -28,15 +28,13 @@ class DocumentsRepositoryImpl(
             dao.getFoldersWithDocuments().map(FolderDto::fromFolderWithDocuments)
         }
 
-    override suspend fun createFolder(name: String): Result<FolderDto, Exception> =
+    override suspend fun createFolder(name: String): EmptyResult<Exception> =
         Result.run {
-            FolderDto.fromFolder(
-                dao.upsertFolder(
-                    Folder(
-                        id = UUID.randomUUID().toString(),
-                        name = name,
-                        createdAt = System.currentTimeMillis()
-                    )
+            dao.upsertFolder(
+                Folder(
+                    id = UUID.randomUUID().toString(),
+                    name = name,
+                    createdAt = System.currentTimeMillis()
                 )
             )
         }

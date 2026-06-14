@@ -8,4 +8,6 @@ interface FilesRepository {
     suspend fun getFileContent(name: String): Result<ByteArray, Exception>
 
     suspend fun saveFile(sourceUri: Uri, destinationFileName: String): EmptyResult<Exception>
+
+    suspend fun saveFile(content: String, destinationFileName: String): EmptyResult<Exception>
 }

@@ -8,24 +8,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.events.CollectEvents
+import com.younesb.securevault.features.main.presentation.NewDocument
 
 @Composable
 fun CollectMainEvents(navController: NavHostController = rememberNavController()) {
     val context = LocalContext.current
     val filePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = FilePickerManager::emitResult
-    )
+        contract = ActivityResultContracts.OpenDocument()
+    ) {
+        it?.let {
+            FilePickerManager.emitResult(NewDocument.File(it))
+        }
+    }
     val pickPictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = FilePickerManager::emitResult
-    )
+    ) {
+        it?.let {
+            FilePickerManager.emitResult(NewDocument.Image(it))
+        }
+    }
     val takePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
     ) { accepted ->
-        FilePickerManager.emitResult(
-            ComposeFileProvider.getImageUri(context).takeIf { accepted }
-        )
+        ComposeFileProvider.getUri().takeIf { accepted }?.let {
+            FilePickerManager.emitResult(NewDocument.Image(it))
+        }
     }
     CollectEvents(MainEventsBus.events) {
         when (it) {
@@ -41,10 +48,14 @@ fun CollectMainEvents(navController: NavHostController = rememberNavController()
                 )
             }
             is MainEvent.TakePicture -> {
-                takePickerLauncher.launch(ComposeFileProvider.getImageUri(context))
+                takePickerLauncher.launch(ComposeFileProvider.createImageUri(context))
             }
             is MainEvent.MainNavigate -> {
                 navController.navigate(it.route)
+            }
+
+            MainEvent.RequestNewNote -> {
+                FilePickerManager.emitResult(NewDocument.Note())
             }
         }
     }
