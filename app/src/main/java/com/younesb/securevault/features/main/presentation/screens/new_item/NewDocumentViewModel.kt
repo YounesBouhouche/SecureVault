@@ -5,34 +5,46 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.onSuccess
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
+import com.younesb.securevault.features.main.domain.usecases.GetFoldersUseCase
+import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
 import com.younesb.securevault.features.main.presentation.NewDocument
 import com.younesb.securevault.features.main.presentation.util.FilePickerManager
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NewDocumentViewModel(
     val saveDocumentUseCase: SaveDocumentUseCase,
     val saveNoteUseCase: SaveNoteUseCase,
-): ViewModel() {
+    observeFoldersUseCase: ObserveFoldersUseCase
+) : ViewModel() {
     private val _uiState = MutableStateFlow(NewDocumentUiState())
-    val uiState = _uiState.asStateFlow()
+    val uiState = combine(_uiState, observeFoldersUseCase()) { state, folders ->
+        state.copy(folders = folders)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        NewDocumentUiState()
+    )
 
     init {
         viewModelScope.launch {
             FilePickerManager.fileResults.collectLatest {
                 println(it)
-                val fileUri = when(it) {
+                val fileUri = when (it) {
                     is NewDocument.File -> it.uri
                     is NewDocument.Image -> it.uri
                     is NewDocument.Note -> null
                 }
                 val name = fileUri?.lastPathSegment ?: ""
-                val type = when(it) {
+                val type = when (it) {
                     is NewDocument.File -> DocumentType.FILE
                     is NewDocument.Image -> DocumentType.IMAGE
                     is NewDocument.Note -> DocumentType.NOTE
@@ -50,12 +62,16 @@ class NewDocumentViewModel(
     }
 
     fun onAction(action: NewDocumentAction) {
-        when(action) {
+        when (action) {
             is NewDocumentAction.Confirm -> {
                 val document = DocumentDto(
                     name = action.name,
                     type = _uiState.value.type,
-                    folderId = null,
+                    folderId = _uiState.value.selectedFolder?.let {
+                        _uiState.value.folders.getOrNull(
+                            it
+                        )
+                    }?.id,
                     tags = emptyList()
                 )
                 viewModelScope.launch {
@@ -76,9 +92,16 @@ class NewDocumentViewModel(
                     }
                 }
             }
+
             NewDocumentAction.Dismiss -> {
                 _uiState.update { state ->
                     state.copy(sheetVisible = false)
+                }
+            }
+
+            is NewDocumentAction.SelectFolder -> {
+                _uiState.update { state ->
+                    state.copy(selectedFolder = action.index)
                 }
             }
         }

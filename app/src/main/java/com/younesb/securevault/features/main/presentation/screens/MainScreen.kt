@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +32,7 @@ fun MainScreen(
     }
     val isParentRoute = route != null
     val viewModel = koinViewModel<MainViewModel>()
+    val uiState by viewModel.uiState.collectAsState()
 
     CollectMainEvents(navController = navController)
 
@@ -47,12 +50,24 @@ fun MainScreen(
                     popUpTo(it) { inclusive = true }
                 }
             },
-            onNewItemAction = viewModel::showFilePicker,
+            onNewItemAction = {
+                viewModel.onAction(Action.ShowFilePicker(it))
+            },
             visible = isParentRoute
         )
     }
 
-    NewDocumentSheet()
+    NewDocumentSheet {
+        viewModel.onAction(Action.ShowNewFolderDialog)
+    }
+
+    NewFolderDialog(
+        visible = uiState.showNewFolderDialog,
+        onDismissRequest = { viewModel.onAction(Action.HideNewFolderDialog) },
+        onConfirm = {
+            viewModel.onAction(Action.CreateFolder(it))
+        }
+    )
 }
 
 @Preview

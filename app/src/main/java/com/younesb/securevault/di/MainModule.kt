@@ -6,6 +6,9 @@ import com.younesb.securevault.features.main.data.repository.DocumentsRepository
 import com.younesb.securevault.features.main.data.repository.FilesRepositoryImpl
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
 import com.younesb.securevault.features.main.domain.repository.FilesRepository
+import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
+import com.younesb.securevault.features.main.domain.usecases.GetFoldersUseCase
+import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.OpenDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
@@ -27,6 +30,9 @@ val mainModule = module {
     viewModelOf(::NewDocumentViewModel)
 
     factoryOf(::SaveDocumentUseCase)
+    factoryOf(::GetFoldersUseCase)
+    factoryOf(::ObserveFoldersUseCase)
+    factoryOf(::CreateFolderUseCase)
     factoryOf(::SaveNoteUseCase)
     factoryOf(::OpenDocumentUseCase)
 }

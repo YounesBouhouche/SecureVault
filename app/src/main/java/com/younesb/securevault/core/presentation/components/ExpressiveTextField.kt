@@ -18,20 +18,28 @@ fun ExpressiveTextField(
     modifier: Modifier = Modifier,
     label: @Composable (TextFieldLabelScope.() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
-    lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     TextField(
         state = state,
         modifier = modifier,
         label = label,
         placeholder = placeholder,
+        readOnly = readOnly,
+        enabled = enabled,
         shape = MaterialTheme.shapes.large,
         contentPadding = PaddingValues(16.dp),
         lineLimits = lineLimits,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             errorContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,

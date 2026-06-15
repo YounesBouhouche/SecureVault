@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.younesb.securevault.core.presentation.components.FabMenu
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.navigation.MainRoutes
-import com.younesb.securevault.features.main.presentation.util.NewItemAction
+import com.younesb.securevault.features.main.presentation.util.NewItemType
 import soup.compose.material.motion.animation.materialSharedAxisZ
 
 @Composable
@@ -41,14 +41,14 @@ fun MainNavigationBar(
     route: MainNavRoutes?,
     modifier: Modifier = Modifier,
     visible: Boolean = true,
-    onNewItemAction: (NewItemAction) -> Unit = { },
+    onNewItemAction: (NewItemType) -> Unit = { },
     navigate: (MainRoutes) -> Unit = { },
 ) {
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(modifier) {
         FabMenu(
-            actions = NewItemAction.entries,
+            actions = NewItemType.entries,
             icon = { it.icon },
             text = { stringResource(it.textRes) },
             modifier = Modifier.align(Alignment.End),

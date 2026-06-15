@@ -8,7 +8,7 @@ import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.younesb.securevault.R
 
-enum class NewItemAction(
+enum class NewItemType(
     val icon: ImageVector,
     val textRes: Int
 ) {
