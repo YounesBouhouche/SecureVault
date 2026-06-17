@@ -19,7 +19,11 @@ class CredentialsCryptoSerializer(
             input.use { it.readBytes() }
         }
         val cipherDecoded = Base64.getDecoder().decode(cipherBytes)
-        val plainBytes = crypto.decrypt(cipherDecoded)
+        val plainBytes = try {
+            crypto.decrypt(cipherDecoded)
+        } catch (_: Exception) {
+            return defaultValue
+        }
         val plain = plainBytes.decodeToString()
         return Json.decodeFromString(plain)
     }
