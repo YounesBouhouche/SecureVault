@@ -2,6 +2,10 @@ package com.younesb.securevault.features.main.presentation.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -75,6 +79,12 @@ fun MainSearchBar(
         }
     AnimatedVisibility(
         visible = visible,
+        enter = slideInVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { -it } + fadeIn(
+            animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()
+        ),
+        exit = slideOutVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { -it } + fadeOut(
+            animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()
+        ),
         modifier = modifier
             .statusBarsPadding()
             .padding(16.dp)
@@ -84,7 +94,11 @@ fun MainSearchBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            SearchBar(state = searchBarState, inputField = inputField, modifier = Modifier.weight(1f))
+            SearchBar(
+                state = searchBarState,
+                inputField = inputField,
+                modifier = Modifier.weight(1f)
+            )
             ExpandedFullScreenSearchBar(state = searchBarState, inputField = inputField) {
             }
             IconButton(

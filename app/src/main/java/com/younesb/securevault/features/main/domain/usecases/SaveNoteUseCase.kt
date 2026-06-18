@@ -17,7 +17,7 @@ class SaveNoteUseCase(
         document.copy(id = document.id.ifBlank { UUID.randomUUID().toString() }).let { doc ->
             filesRepository.saveFile(content, doc.id)
                 .pipe {
-                    documentsRepository.createDocument(doc)
+                    documentsRepository.createDocument(doc.copy(size = it))
                 }
         }
 }

@@ -12,6 +12,8 @@ fun<T, R> NavHostController.getCurrentRoute(
     = currentBackStackEntryAsState().value?.destination?.route?.let { route ->
         entries
             .firstOrNull {
-                callback(it)?.javaClass?.kotlin?.qualifiedName?.contains(route) == true
+                callback(it)?.javaClass?.kotlin?.qualifiedName?.let { name ->
+                    (name.contains(route)) or (route.contains(name))
+                } ?: false
             }
     }

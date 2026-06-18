@@ -4,10 +4,10 @@ import com.younesb.securevault.features.main.data.datasource.local.database.mode
 import com.younesb.securevault.features.main.data.datasource.local.database.models.FolderWithDocuments
 
 data class FolderDto(
-    val id: String,
-    val name: String,
-    val createdAt: Long,
-    val documents: List<DocumentDto>
+    val id: String = "",
+    val name: String = "",
+    val createdAt: Long = 0L,
+    val documents: List<DocumentDto> = emptyList()
 ) {
     companion object {
         fun fromFolderWithDocuments(folderWithDocuments: FolderWithDocuments): FolderDto {

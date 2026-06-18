@@ -7,7 +7,7 @@ data class DocumentDto(
     val id: String = "",
     val name: String = "",
     val createdAt: Long = 0L,
-    val folderId: String? = null,
+    val folderId: String = "",
     val size: Long = 0L,
     val type: DocumentType = DocumentType.FILE,
     val tags: List<TagDto> = emptyList()
@@ -50,7 +50,7 @@ data class DocumentDto(
         private var id: String = ""
         private var name: String = ""
         private var createdAt: Long = 0L
-        private var folderId: String? = null
+        private var folderId: String = ""
         private var size: Long = 0L
         private var type: DocumentType = DocumentType.FILE
         private var tags: List<TagDto> = emptyList()
@@ -58,7 +58,7 @@ data class DocumentDto(
         fun id(id: String) = apply { this.id = id }
         fun name(name: String) = apply { this.name = name }
         fun createdAt(createdAt: Long) = apply { this.createdAt = createdAt }
-        fun folderId(folderId: String?) = apply { this.folderId = folderId }
+        fun folderId(folderId: String) = apply { this.folderId = folderId }
         fun size(size: Long) = apply { this.size = size }
         fun type(type: DocumentType) = apply { this.type = type }
         fun tags(tags: List<TagDto>) = apply { this.tags = tags }

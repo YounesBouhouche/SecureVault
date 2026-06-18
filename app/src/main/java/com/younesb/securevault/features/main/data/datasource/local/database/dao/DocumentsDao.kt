@@ -29,12 +29,20 @@ interface DocumentsDao {
     fun observeFoldersWithDocuments(): Flow<List<FolderWithDocuments>>
 
     @Transaction
+    @Query("SELECT * FROM Folder where id=:folderId")
+    fun observeFolderWithDocuments(folderId: String): Flow<FolderWithDocuments>
+
+    @Transaction
     @Query("SELECT * FROM Document")
     suspend fun getDocumentsWithTags(): List<DocumentWithTags>
 
     @Transaction
+    @Query("SELECT * FROM Document where folderId=:folderId")
+    fun observeDocumentsWithTags(folderId: String?): Flow<List<DocumentWithTags>>
+
+    @Transaction
     @Query("SELECT * FROM Document")
-    fun observeDocumentsWithTags(): Flow<List<DocumentWithTags>>
+    fun observeAllDocumentsWithTags(): Flow<List<DocumentWithTags>>
 
     @Query("SELECT * FROM Tag")
     fun observeTags(): Flow<List<Tag>>

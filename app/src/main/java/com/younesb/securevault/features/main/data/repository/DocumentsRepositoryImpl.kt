@@ -23,6 +23,11 @@ class DocumentsRepositoryImpl(
             it.map(FolderDto::fromFolderWithDocuments)
         }
 
+    override fun observeFolder(folderId: String): Flow<FolderDto> =
+        dao.observeFolderWithDocuments(folderId).map {
+            FolderDto.fromFolderWithDocuments(it)
+        }
+
     override suspend fun getFolders(): Result<List<FolderDto>, Exception> =
         Result.run {
             dao.getFoldersWithDocuments().map(FolderDto::fromFolderWithDocuments)
@@ -54,8 +59,13 @@ class DocumentsRepositoryImpl(
             dao.upsertFolder(folder.copy(name = newName))
         }
 
-    override fun observeDocuments(): Flow<List<DocumentDto>> =
-        dao.observeDocumentsWithTags().map {
+    override fun observeDocuments(folderId: String): Flow<List<DocumentDto>> =
+        dao.observeDocumentsWithTags(folderId).map {
+            it.map(DocumentDto::fromDocumentWithTags)
+        }
+
+    override fun observeAllDocuments(): Flow<List<DocumentDto>> =
+        dao.observeAllDocumentsWithTags().map {
             it.map(DocumentDto::fromDocumentWithTags)
         }
 
@@ -106,7 +116,7 @@ class DocumentsRepositoryImpl(
 
     override suspend fun moveDocument(
         documentId: String,
-        newFolderId: String?
+        newFolderId: String
     ): EmptyResult<Exception> = Result.run {
         dao.upsertDocument(
             getDocument(documentId).copy(

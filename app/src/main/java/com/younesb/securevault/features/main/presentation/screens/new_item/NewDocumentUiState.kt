@@ -11,5 +11,5 @@ data class NewDocumentUiState(
     val name: String = "",
     val tags: List<String> = emptyList(),
     val folders: List<FolderDto> = emptyList(),
-    val selectedFolder: Int? = 0
+    val selectedFolder: Int? = null
 )

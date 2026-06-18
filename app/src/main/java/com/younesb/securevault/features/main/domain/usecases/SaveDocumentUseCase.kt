@@ -18,7 +18,7 @@ class SaveDocumentUseCase(
         document.copy(id = document.id.ifBlank { UUID.randomUUID().toString() }).let { doc ->
             filesRepository.saveFile(sourceFile, doc.id)
                 .pipe {
-                    documentsRepository.createDocument(doc)
+                    documentsRepository.createDocument(doc.copy(size = it))
                 }
         }
 }

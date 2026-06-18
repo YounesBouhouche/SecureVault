@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.onSuccess
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
-import com.younesb.securevault.features.main.domain.usecases.GetFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
@@ -13,7 +12,6 @@ import com.younesb.securevault.features.main.presentation.NewDocument
 import com.younesb.securevault.features.main.presentation.util.FilePickerManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
@@ -26,7 +24,8 @@ class NewDocumentViewModel(
     observeFoldersUseCase: ObserveFoldersUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewDocumentUiState())
-    val uiState = combine(_uiState, observeFoldersUseCase()) { state, folders ->
+    private val _folders = observeFoldersUseCase()
+    val uiState = combine(_uiState, _folders) { state, folders ->
         state.copy(folders = folders)
     }.stateIn(
         viewModelScope,
@@ -64,14 +63,13 @@ class NewDocumentViewModel(
     fun onAction(action: NewDocumentAction) {
         when (action) {
             is NewDocumentAction.Confirm -> {
+                val folderId = _uiState.value.selectedFolder?.let {
+                    uiState.value.folders.getOrNull(it)
+                }?.id ?: ""
                 val document = DocumentDto(
                     name = action.name,
                     type = _uiState.value.type,
-                    folderId = _uiState.value.selectedFolder?.let {
-                        _uiState.value.folders.getOrNull(
-                            it
-                        )
-                    }?.id,
+                    folderId = folderId,
                     tags = emptyList()
                 )
                 viewModelScope.launch {

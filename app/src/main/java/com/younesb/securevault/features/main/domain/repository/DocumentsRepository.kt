@@ -9,18 +9,20 @@ import kotlinx.coroutines.flow.Flow
 
 interface DocumentsRepository {
     fun observeFolders(): Flow<List<FolderDto>>
+    fun observeFolder(folderId: String): Flow<FolderDto>
     suspend fun getFolders(): Result<List<FolderDto>, Exception>
     suspend fun createFolder(name: String): EmptyResult<Exception>
     suspend fun deleteFolder(folderId: String, deleteDocuments: Boolean = false): EmptyResult<Exception>
     suspend fun renameFolder(folderId: String, newName: String): EmptyResult<Exception>
 
-    fun observeDocuments(): Flow<List<DocumentDto>>
+    fun observeDocuments(folderId: String): Flow<List<DocumentDto>>
+    fun observeAllDocuments(): Flow<List<DocumentDto>>
     suspend fun getDocuments(): Result<List<DocumentDto>, Exception>
     suspend fun getDocumentById(documentId: String): Result<DocumentDto, Exception>
     suspend fun createDocument(document: DocumentDto): EmptyResult<Exception>
     suspend fun deleteDocument(documentId: String): EmptyResult<Exception>
     suspend fun renameDocument(documentId: String, newName: String): EmptyResult<Exception>
-    suspend fun moveDocument(documentId: String, newFolderId: String?): EmptyResult<Exception>
+    suspend fun moveDocument(documentId: String, newFolderId: String): EmptyResult<Exception>
     suspend fun addTagToDocument(documentId: String, tagId: String): EmptyResult<Exception>
     suspend fun removeTagFromDocument(documentId: String, tagId: String): EmptyResult<Exception>
 
