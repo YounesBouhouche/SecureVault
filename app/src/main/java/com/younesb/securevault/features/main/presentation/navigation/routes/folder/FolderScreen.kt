@@ -60,7 +60,7 @@ fun FolderScreen(
     val folder by viewModel.folder.collectAsStateWithLifecycle()
     val documents by viewModel.documents.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(listState)
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(scrollableState = listState)
     Scaffold(
         modifier = modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {

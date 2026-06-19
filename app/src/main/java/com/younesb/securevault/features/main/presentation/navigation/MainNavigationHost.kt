@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.younesb.securevault.features.main.presentation.navigation.routes.browse.BrowseScreen
-import com.younesb.securevault.features.main.presentation.navigation.routes.document.DocumentScreen
+import com.younesb.securevault.features.main.presentation.navigation.routes.document.DocumentRoute
 import com.younesb.securevault.features.main.presentation.navigation.routes.folder.FolderScreen
 import soup.compose.material.motion.animation.materialSharedAxisYIn
 import soup.compose.material.motion.animation.materialSharedAxisYOut
@@ -32,7 +32,7 @@ fun MainNavigationHost(
                 materialSharedAxisYIn(forward = true, slideDistance = slideDistance)
             },
             exitTransition = {
-                materialSharedAxisYOut(forward = true, slideDistance = slideDistance)
+                materialSharedAxisYOut(forward = false, slideDistance = slideDistance)
             },
             modifier = modifier
         ) {
@@ -61,7 +61,7 @@ fun MainNavigationHost(
             }
             composable<MainRoutes.Document> {
                 val documentId = it.toRoute<MainRoutes.Document>().documentId
-                DocumentScreen(documentId = documentId)
+                DocumentRoute(documentId = documentId)
             }
             composable<MainRoutes.Export> {
 

@@ -86,4 +86,13 @@
     <string name="folder_name">Folder Name</string>
     <string name="files">Files</string>
     <string name="folders">Folders</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="days_ago">%1$d days ago</string>
+    <string name="weeks_ago">%1$d weeks ago</string>
+    <string name="years_ago">%1$d years ago</string>
+    <string name="created">Created %1$s</string>
+    <string name="document_created_at">Created At</string>
+    <string name="file_size">File size</string>
+    <string name="document_name">Name</string>
 </resources>
