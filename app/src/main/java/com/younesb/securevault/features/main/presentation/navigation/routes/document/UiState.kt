@@ -1,5 +1,5 @@
 package com.younesb.securevault.features.main.presentation.navigation.routes.document
 
-sealed interface Action {
-    data object ToggleFavorite: Action
-}
+data class UiState(
+    val isFavorite: Boolean = false,
+)

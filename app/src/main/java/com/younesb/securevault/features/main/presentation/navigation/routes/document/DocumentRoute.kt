@@ -17,10 +17,12 @@ fun DocumentRoute(
     }
     val document by viewModel.document.collectAsStateWithLifecycle()
     val file by viewModel.file.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     DocumentScreen(
         document = document,
         file = file,
+        uiState = uiState,
         onAction = viewModel::onAction,
         modifier = modifier,
     )

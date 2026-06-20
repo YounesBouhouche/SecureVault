@@ -92,6 +92,7 @@ class DocumentsRepositoryImpl(
                     folderId = document.folderId,
                     type = document.type.name,
                     size = document.size,
+                    favorite = false,
                     updatedAt = System.currentTimeMillis()
                 )
             )
@@ -112,6 +113,13 @@ class DocumentsRepositoryImpl(
                 updatedAt = System.currentTimeMillis()
             )
         )
+    }
+
+    override suspend fun setFavorite(
+        documentId: String,
+        favorite: Boolean
+    ): EmptyResult<Exception> = Result.run {
+        dao.setFavorite(documentId, favorite)
     }
 
     override suspend fun moveDocument(

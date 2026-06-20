@@ -56,6 +56,9 @@ interface DocumentsDao {
     @Upsert
     suspend fun upsertDocument(document: Document)
 
+    @Query("UPDATE Document SET favorite = :favorite WHERE id = :documentId")
+    suspend fun setFavorite(documentId: String, favorite: Boolean)
+
     @Query("SELECT * FROM Document WHERE id = :documentId")
     suspend fun getDocumentById(documentId: String): Document?
 

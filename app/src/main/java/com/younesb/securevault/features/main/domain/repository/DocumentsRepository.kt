@@ -22,6 +22,7 @@ interface DocumentsRepository {
     suspend fun createDocument(document: DocumentDto): EmptyResult<Exception>
     suspend fun deleteDocument(documentId: String): EmptyResult<Exception>
     suspend fun renameDocument(documentId: String, newName: String): EmptyResult<Exception>
+    suspend fun setFavorite(documentId: String, favorite: Boolean): EmptyResult<Exception>
     suspend fun moveDocument(documentId: String, newFolderId: String): EmptyResult<Exception>
     suspend fun addTagToDocument(documentId: String, tagId: String): EmptyResult<Exception>
     suspend fun removeTagFromDocument(documentId: String, tagId: String): EmptyResult<Exception>

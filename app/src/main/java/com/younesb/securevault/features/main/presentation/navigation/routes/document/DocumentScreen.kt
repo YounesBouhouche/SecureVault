@@ -95,6 +95,7 @@ import com.younesb.securevault.features.main.presentation.util.toReadableDateStr
 fun DocumentScreen(
     document: Resource<DocumentDto, Throwable>,
     file: Resource<Any, Throwable>,
+    uiState: UiState,
     onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
     onBack: () -> Unit = { },
@@ -265,9 +266,10 @@ fun DocumentScreen(
                                 label = "Download",
                             )
                             toggleableItem(
-                                checked = false,
-                                enabled = false,
-                                onCheckedChange = { /* doSomething() */ },
+                                checked = uiState.isFavorite,
+                                onCheckedChange = {
+                                    onAction(Action.ToggleFavorite)
+                                },
                                 icon = {
                                     Icon(
                                         Icons.Filled.Favorite,
@@ -442,6 +444,7 @@ private fun DocumentScreenPreview() {
             file = Resource.Success(Any()),
             onAction = {},
             modifier = Modifier.fillMaxSize(),
+            uiState = UiState(isFavorite = true)
         )
     }
 }

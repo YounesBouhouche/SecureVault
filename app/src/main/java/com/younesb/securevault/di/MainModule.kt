@@ -15,6 +15,7 @@ import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCa
 import com.younesb.securevault.features.main.domain.usecases.OpenDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
+import com.younesb.securevault.features.main.domain.usecases.SetFavoriteUseCase
 import com.younesb.securevault.features.main.presentation.navigation.routes.browse.BrowseViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.document.DocumentViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.folder.FolderViewModel
@@ -47,6 +48,7 @@ val mainModule = module {
         DocumentViewModel(
             getDocumentUseCase = get(),
             openDocumentUseCase = get(),
+            setFavoriteUseCase = get(),
             documentId = it[0]
         )
     }
@@ -60,4 +62,5 @@ val mainModule = module {
     factoryOf(::OpenDocumentUseCase)
     factoryOf(::GetDocumentUseCase)
     factoryOf(::ObserveFolderUseCase)
+    factoryOf(::SetFavoriteUseCase)
 }

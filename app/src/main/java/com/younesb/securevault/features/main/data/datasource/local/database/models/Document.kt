@@ -9,6 +9,7 @@ data class Document(
     val id: String,
     val name: String,
     val size: Long,
+    val favorite: Boolean,
     val folderId: String,
     val type: String,
     val createdAt: Long,

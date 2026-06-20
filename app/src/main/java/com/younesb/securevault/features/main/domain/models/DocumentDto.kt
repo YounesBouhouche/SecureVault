@@ -10,6 +10,7 @@ data class DocumentDto(
     val folderId: String = "",
     val size: Long = 0L,
     val type: DocumentType = DocumentType.FILE,
+    val favorite: Boolean = false,
     val tags: List<TagDto> = emptyList()
 ) {
     companion object {
@@ -25,7 +26,8 @@ data class DocumentDto(
                 } catch (_: IllegalArgumentException) {
                     DocumentType.UNKNOWN
                 },
-                tags = documentWithTags.tags.map(TagDto::fromTag)
+                tags = documentWithTags.tags.map(TagDto::fromTag),
+                favorite = documentWithTags.document.favorite
             )
         }
 
@@ -41,7 +43,8 @@ data class DocumentDto(
                 } catch (_: IllegalArgumentException) {
                     DocumentType.UNKNOWN
                 },
-                tags = emptyList()
+                tags = emptyList(),
+                favorite = document.favorite
             )
         }
     }
@@ -54,6 +57,7 @@ data class DocumentDto(
         private var size: Long = 0L
         private var type: DocumentType = DocumentType.FILE
         private var tags: List<TagDto> = emptyList()
+        private var favorite: Boolean = false
 
         fun id(id: String) = apply { this.id = id }
         fun name(name: String) = apply { this.name = name }
@@ -62,7 +66,8 @@ data class DocumentDto(
         fun size(size: Long) = apply { this.size = size }
         fun type(type: DocumentType) = apply { this.type = type }
         fun tags(tags: List<TagDto>) = apply { this.tags = tags }
+        fun favorite(favorite: Boolean) = apply { this.favorite = favorite }
 
-        fun build() = DocumentDto(id, name, createdAt, folderId, size, type, tags)
+        fun build() = DocumentDto(id, name, createdAt, folderId, size, type, favorite, tags)
     }
 }
