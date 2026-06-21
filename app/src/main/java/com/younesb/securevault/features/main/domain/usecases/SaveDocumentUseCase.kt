@@ -20,5 +20,10 @@ class SaveDocumentUseCase(
                 .pipe {
                     documentsRepository.createDocument(doc.copy(size = it))
                 }
+                .also {
+                    document.tags.forEach { tag ->
+                        documentsRepository.addTagToDocument(doc.id, tag.id)
+                    }
+                }
         }
 }

@@ -6,6 +6,7 @@ import com.younesb.securevault.core.domain.utils.onSuccess
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
 import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
+import com.younesb.securevault.features.main.domain.usecases.ObserveTagsUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
 import com.younesb.securevault.features.main.presentation.NewDocument
@@ -21,12 +22,14 @@ import kotlinx.coroutines.launch
 class NewDocumentViewModel(
     val saveDocumentUseCase: SaveDocumentUseCase,
     val saveNoteUseCase: SaveNoteUseCase,
-    observeFoldersUseCase: ObserveFoldersUseCase
+    observeFoldersUseCase: ObserveFoldersUseCase,
+    observeTagsUseCase: ObserveTagsUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewDocumentUiState())
     private val _folders = observeFoldersUseCase()
-    val uiState = combine(_uiState, _folders) { state, folders ->
-        state.copy(folders = folders)
+    private val _tags = observeTagsUseCase()
+    val uiState = combine(_uiState, _folders, _tags) { state, folders, tags ->
+        state.copy(folders = folders, tags = tags)
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
@@ -100,6 +103,17 @@ class NewDocumentViewModel(
             is NewDocumentAction.SelectFolder -> {
                 _uiState.update { state ->
                     state.copy(selectedFolder = action.index)
+                }
+            }
+
+            is NewDocumentAction.SetTagSelected -> {
+                _uiState.update { state ->
+                    val updatedTags = if (action.selected) {
+                        state.selectedTags + action.id
+                    } else {
+                        state.selectedTags - action.id
+                    }
+                    state.copy(selectedTags = updatedTags)
                 }
             }
         }

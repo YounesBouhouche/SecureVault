@@ -3,6 +3,7 @@ package com.younesb.securevault.features.main.presentation.screens
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
+import com.younesb.securevault.features.main.domain.usecases.CreateTagUseCase
 import com.younesb.securevault.features.main.presentation.util.MainEvent
 import com.younesb.securevault.features.main.presentation.util.MainEventsBus
 import com.younesb.securevault.features.main.presentation.util.NewItemType
@@ -12,24 +13,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    val createFolderUseCase: CreateFolderUseCase
+    val createFolderUseCase: CreateFolderUseCase,
+    val createTagUseCase: CreateTagUseCase,
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
     fun onAction(action: Action) {
         when (action) {
-            is Action.CreateFolder -> {
-                viewModelScope.launch {
-                    _uiState.update {
-                        it.copy(newFolderLoading = true)
-                    }
-                    createFolderUseCase(name = action.name)
-                    _uiState.update {
-                        it.copy(newFolderLoading = false, showNewFolderDialog = false)
-                    }
-                }
-            }
             is Action.ShowFilePicker -> {
                 viewModelScope.launch {
                     MainEventsBus.sendEvent(
@@ -48,6 +39,35 @@ class MainViewModel(
             }
             Action.ShowNewFolderDialog -> _uiState.update {
                 it.copy(showNewFolderDialog = true)
+            }
+            is Action.CreateFolder -> {
+                viewModelScope.launch {
+                    _uiState.update {
+                        it.copy(newFolderLoading = true)
+                    }
+                    createFolderUseCase(name = action.name)
+                    _uiState.update {
+                        it.copy(newFolderLoading = false, showNewFolderDialog = false)
+                    }
+                }
+            }
+
+            Action.HideNewTagDialog -> _uiState.update {
+                it.copy(showNewTagDialog = false)
+            }
+            Action.ShowNewTagDialog -> _uiState.update {
+                it.copy(showNewTagDialog = true)
+            }
+            is Action.CreateTag -> {
+                viewModelScope.launch {
+                    _uiState.update {
+                        it.copy(newTagLoading = true)
+                    }
+                    createTagUseCase(name = action.name)
+                    _uiState.update {
+                        it.copy(newTagLoading = false, showNewTagDialog = false)
+                    }
+                }
             }
         }
     }

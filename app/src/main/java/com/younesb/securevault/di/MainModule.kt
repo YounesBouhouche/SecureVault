@@ -7,11 +7,13 @@ import com.younesb.securevault.features.main.data.repository.FilesRepositoryImpl
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
 import com.younesb.securevault.features.main.domain.repository.FilesRepository
 import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
+import com.younesb.securevault.features.main.domain.usecases.CreateTagUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveDocumentsUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveFolderUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
+import com.younesb.securevault.features.main.domain.usecases.ObserveTagsUseCase
 import com.younesb.securevault.features.main.domain.usecases.OpenDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
@@ -58,6 +60,8 @@ val mainModule = module {
     factoryOf(::ObserveFoldersUseCase)
     factoryOf(::ObserveDocumentsUseCase)
     factoryOf(::CreateFolderUseCase)
+    factoryOf(::CreateTagUseCase)
+    factoryOf(::ObserveTagsUseCase)
     factoryOf(::SaveNoteUseCase)
     factoryOf(::OpenDocumentUseCase)
     factoryOf(::GetDocumentUseCase)

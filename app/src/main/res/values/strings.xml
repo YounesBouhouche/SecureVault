@@ -95,4 +95,8 @@
     <string name="document_created_at">Created At</string>
     <string name="file_size">File size</string>
     <string name="document_name">Name</string>
+    <string name="tags">Tags</string>
+    <string name="add_tag">Add tag</string>
+    <string name="new_tag">New tag</string>
+    <string name="tag_name">Tag name</string>
 </resources>

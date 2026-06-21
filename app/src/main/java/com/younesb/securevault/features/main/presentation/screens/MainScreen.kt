@@ -71,15 +71,28 @@ fun MainScreen(
         )
     }
 
-    NewDocumentSheet {
-        viewModel.onAction(Action.ShowNewFolderDialog)
-    }
+    NewDocumentSheet(
+        onCreateFolder = {
+            viewModel.onAction(Action.ShowNewFolderDialog)
+        },
+        onCreateTag = {
+            viewModel.onAction(Action.ShowNewTagDialog)
+        }
+    )
 
     NewFolderDialog(
         visible = uiState.showNewFolderDialog,
         onDismissRequest = { viewModel.onAction(Action.HideNewFolderDialog) },
         onConfirm = {
             viewModel.onAction(Action.CreateFolder(it))
+        }
+    )
+
+    NewTagDialog(
+        visible = uiState.showNewTagDialog,
+        onDismissRequest = { viewModel.onAction(Action.HideNewTagDialog) },
+        onConfirm = {
+            viewModel.onAction(Action.CreateTag(it))
         }
     )
 }

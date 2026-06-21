@@ -7,4 +7,7 @@ sealed interface Action {
     data object ShowNewFolderDialog: Action
     data object HideNewFolderDialog: Action
     data class CreateFolder(val name: String): Action
+    data object ShowNewTagDialog: Action
+    data object HideNewTagDialog: Action
+    data class CreateTag(val name: String): Action
 }
