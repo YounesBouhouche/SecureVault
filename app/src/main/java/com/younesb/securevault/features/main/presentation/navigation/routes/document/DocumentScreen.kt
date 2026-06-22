@@ -23,12 +23,13 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Straighten
 import androidx.compose.material.icons.rounded.Title
@@ -272,7 +273,10 @@ fun DocumentScreen(
                                 },
                                 icon = {
                                     Icon(
-                                        Icons.Filled.Favorite,
+                                        if (uiState.isFavorite)
+                                            Icons.Rounded.Favorite
+                                        else
+                                            Icons.Rounded.FavoriteBorder,
                                         contentDescription = "Localized description",
                                     )
                                 },
