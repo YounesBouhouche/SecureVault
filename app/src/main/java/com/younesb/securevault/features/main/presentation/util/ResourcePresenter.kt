@@ -26,6 +26,14 @@ fun<T, E: Throwable> ResourcePresenter(
     transitionSpec: AnimatedContentTransitionScope<Resource<T, E>>.() -> ContentTransform = {
         fadeIn() togetherWith fadeOut()
     },
+    contentKey: (Resource<T, E>) -> Any? = {
+        when (it) {
+            is Resource.Error<*> -> "error"
+            Resource.Idle -> "idle"
+            Resource.Loading -> "loading"
+            is Resource.Success<*> -> "success"
+        }
+    },
     idleContent: @Composable BoxScope.() -> Unit = {},
     errorContent: @Composable (E) -> Unit = {},
     loadingContent: @Composable BoxScope.() -> Unit = {
@@ -41,7 +49,8 @@ fun<T, E: Throwable> ResourcePresenter(
     AnimatedContent(
         modifier = modifier,
         targetState = resource,
-        transitionSpec = transitionSpec
+        transitionSpec = transitionSpec,
+        contentKey = contentKey
     ) {
         Box(Modifier, contentAlignment = contentAlignment) {
             when (it) {
