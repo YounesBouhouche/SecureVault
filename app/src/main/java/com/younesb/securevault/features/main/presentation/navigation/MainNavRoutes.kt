@@ -1,0 +1,37 @@
+package com.younesb.securevault.features.main.presentation.navigation
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.younesb.securevault.R
+
+enum class MainNavRoutes(
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    val label: Int,
+    val destination: MainRoutes
+) {
+    HOME(
+        selectedIcon = Icons.Rounded.Home,
+        unselectedIcon = Icons.Outlined.Home,
+        label = R.string.home,
+        destination = MainRoutes.Home
+    ),
+    BROWSE(
+        selectedIcon = Icons.Rounded.Folder,
+        unselectedIcon = Icons.Outlined.Folder,
+        label = R.string.browse,
+        destination = MainRoutes.Browse
+    ),
+    SETTINGS(
+        selectedIcon = Icons.Rounded.Settings,
+        unselectedIcon = Icons.Outlined.Settings,
+        label = R.string.settings,
+        destination = MainRoutes.Settings
+    ),
+}

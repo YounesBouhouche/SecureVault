@@ -1,17 +1,21 @@
-package com.younesb.securevault.features.auth.presentation.util
+package com.younesb.securevault.core.presentation.events
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun CollectEvents(callback: (Event) -> Unit) {
+fun<T> CollectEvents(
+    channel: Flow<T>,
+    callback: (T) -> Unit
+) {
     val lifecycleOwner = LocalLifecycleOwner.current.lifecycle
     LaunchedEffect(key1 = lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            EventBus.events.collect(callback)
+            channel.collect(callback)
         }
     }
 }

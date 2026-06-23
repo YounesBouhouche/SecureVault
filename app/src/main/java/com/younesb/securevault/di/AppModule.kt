@@ -6,6 +6,8 @@ import com.younesb.securevault.core.data.repositories.PreferencesRepositoryImpl
 import com.younesb.securevault.core.domain.repositories.PreferencesRepository
 import com.younesb.securevault.core.presentation.theme.ThemeViewModel
 import com.younesb.securevault.core.util.crypto.Crypto
+import com.younesb.securevault.features.main.data.datasource.local.database.DocumentsDatabase
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -17,4 +19,7 @@ val appModule = module {
         PreferencesRepositoryImpl(get())
     }
     single { Crypto(BuildConfig.KEY_ALIAS) }
+    single<DocumentsDatabase> {
+        DocumentsDatabase.getInstance(androidContext())
+    }
 }

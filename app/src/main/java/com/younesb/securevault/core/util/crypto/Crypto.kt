@@ -11,7 +11,7 @@ class Crypto(val keyAlias: String) {
     private val cipher = Cipher.getInstance(TRANSFORMATION)
     private val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
 
-    private fun getKey(): SecretKey {
+    fun getKey(): SecretKey {
         return KeyGen(keyStore, keyAlias, ALGORITHM, BLOCK_MODE, PADDING).getKey()
     }
 
