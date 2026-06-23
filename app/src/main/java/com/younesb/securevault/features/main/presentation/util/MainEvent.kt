@@ -8,4 +8,5 @@ sealed interface MainEvent {
     data object TakePicture: MainEvent
     data object RequestNewNote: MainEvent
     data class MainNavigate(val route: AuthRoutes): MainEvent
+    data object MainPopBackStack: MainEvent
 }

@@ -8,6 +8,7 @@ import com.younesb.securevault.features.main.domain.repository.DocumentsReposito
 import com.younesb.securevault.features.main.domain.repository.FilesRepository
 import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
 import com.younesb.securevault.features.main.domain.usecases.CreateTagUseCase
+import com.younesb.securevault.features.main.domain.usecases.DeleteDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveDocumentsUseCase
@@ -15,6 +16,7 @@ import com.younesb.securevault.features.main.domain.usecases.ObserveFolderUseCas
 import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveTagsUseCase
 import com.younesb.securevault.features.main.domain.usecases.OpenDocumentUseCase
+import com.younesb.securevault.features.main.domain.usecases.RenameDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
 import com.younesb.securevault.features.main.domain.usecases.SetFavoriteUseCase
@@ -51,6 +53,8 @@ val mainModule = module {
             getDocumentUseCase = get(),
             openDocumentUseCase = get(),
             setFavoriteUseCase = get(),
+            renameDocumentUseCase = get(),
+            deleteDocumentUseCase = get(),
             documentId = it[0]
         )
     }
@@ -67,4 +71,6 @@ val mainModule = module {
     factoryOf(::GetDocumentUseCase)
     factoryOf(::ObserveFolderUseCase)
     factoryOf(::SetFavoriteUseCase)
+    factoryOf(::RenameDocumentUseCase)
+    factoryOf(::DeleteDocumentUseCase)
 }

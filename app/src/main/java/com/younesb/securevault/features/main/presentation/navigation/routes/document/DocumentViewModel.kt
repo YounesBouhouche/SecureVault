@@ -5,9 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.onSuccess
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
+import com.younesb.securevault.features.main.domain.usecases.DeleteDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.OpenDocumentUseCase
+import com.younesb.securevault.features.main.domain.usecases.RenameDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SetFavoriteUseCase
+import com.younesb.securevault.features.main.presentation.util.MainEvent
+import com.younesb.securevault.features.main.presentation.util.MainEventsBus
 import com.younesb.securevault.features.main.presentation.util.Resource
 import com.younesb.securevault.features.main.presentation.util.getOrNull
 import com.younesb.securevault.features.main.presentation.util.map
@@ -22,6 +26,8 @@ class DocumentViewModel(
     getDocumentUseCase: GetDocumentUseCase,
     openDocumentUseCase: OpenDocumentUseCase,
     val setFavoriteUseCase: SetFavoriteUseCase,
+    val renameDocumentUseCase: RenameDocumentUseCase,
+    val deleteDocumentUseCase: DeleteDocumentUseCase,
     documentId: String,
 ): ViewModel() {
     private val _document = MutableStateFlow<Resource<DocumentDto, Throwable>>(Resource.Idle)
@@ -67,6 +73,55 @@ class DocumentViewModel(
                                 }
                             }
                         }
+                }
+            }
+
+            Action.Delete -> {
+                val id = _document.value.getOrNull()?.id ?: return
+                _uiState.update {
+                    it.copy(deleteDialogVisible = false)
+                }
+                viewModelScope.launch {
+                    deleteDocumentUseCase(id)
+                        .onSuccess {
+                            MainEventsBus.sendEvent(MainEvent.MainPopBackStack)
+                        }
+                }
+            }
+            Action.HideDeleteDialog -> {
+                _uiState.update {
+                    it.copy(deleteDialogVisible = false)
+                }
+            }
+            Action.HideRenameDialog -> {
+                _uiState.update {
+                    it.copy(renameDialogVisible = false)
+                }
+            }
+            is Action.Rename -> {
+                val id = _document.value.getOrNull()?.id ?: return
+                _uiState.update {
+                    it.copy(renameDialogVisible = false)
+                }
+                viewModelScope.launch {
+                    renameDocumentUseCase(id, action.newName)
+                        .onSuccess {
+                            _document.update { doc ->
+                                doc.map {
+                                    it.copy(name = action.newName)
+                                }
+                            }
+                        }
+                }
+            }
+            Action.ShowDeleteDialog -> {
+                _uiState.update {
+                    it.copy(deleteDialogVisible = true)
+                }
+            }
+            Action.ShowRenameDialog -> {
+                _uiState.update {
+                    it.copy(renameDialogVisible = true)
                 }
             }
         }

@@ -53,6 +53,9 @@ fun CollectMainEvents(navController: NavHostController = rememberNavController()
             is MainEvent.MainNavigate -> {
                 navController.navigate(it.route)
             }
+            is MainEvent.MainPopBackStack -> {
+                navController.popBackStack()
+            }
 
             MainEvent.RequestNewNote -> {
                 FilePickerManager.emitResult(NewDocument.Note())

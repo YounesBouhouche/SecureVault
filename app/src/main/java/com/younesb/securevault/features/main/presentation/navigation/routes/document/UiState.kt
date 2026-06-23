@@ -2,4 +2,6 @@ package com.younesb.securevault.features.main.presentation.navigation.routes.doc
 
 data class UiState(
     val isFavorite: Boolean = false,
+    val renameDialogVisible: Boolean = false,
+    val deleteDialogVisible: Boolean = false,
 )
