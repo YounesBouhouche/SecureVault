@@ -29,10 +29,7 @@ import com.younesb.securevault.features.navigation.NavRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MainScreen(
-    modifier: Modifier = Modifier,
-    navigate: (NavRoutes) -> Unit = { },
-) {
+fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val route = navController.getCurrentRoute(MainNavRoutes.entries) {
         it.destination

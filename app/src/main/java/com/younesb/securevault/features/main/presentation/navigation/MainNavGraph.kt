@@ -9,7 +9,5 @@ import com.younesb.securevault.features.navigation.NavRoutes
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController,
 ) = composable<NavRoutes.Main> {
-    MainScreen(
-        navigate = navController::navigate
-    )
+    MainScreen()
 }
