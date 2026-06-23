@@ -63,7 +63,7 @@ fun MainNavigationHost(
                 val documentId = it.toRoute<MainRoutes.Document>().documentId
                 DocumentRoute(documentId = documentId)
             }
-            composable<MainRoutes.Export> {
+            composable<MainRoutes.Settings> {
 
             }
         }

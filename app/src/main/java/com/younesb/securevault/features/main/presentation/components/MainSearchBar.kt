@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -38,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
@@ -46,7 +48,6 @@ import kotlinx.coroutines.launch
 fun MainSearchBar(
     modifier: Modifier = Modifier,
     visible: Boolean = true,
-    navigateToSettings: () -> Unit = { },
 ) {
     val searchBarState = rememberContainedSearchBarState()
     val textFieldState = rememberTextFieldState()
@@ -63,18 +64,31 @@ fun MainSearchBar(
                 searchBarState = searchBarState,
                 onSearch = { scope.launch { searchBarState.animateToCollapsed() } },
                 placeholder = {
-                    Text(modifier = Modifier.clearAndSetSemantics {}, text = "Search")
-                },
-                leadingIcon = {
-                    AnimatedContent(expanded) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally)
+                    ) {
                         Icon(
-                            imageVector =
-                                if (it) Icons.AutoMirrored.Default.ArrowBack
-                                else Icons.Default.Search,
+                            imageVector = Icons.Default.Search,
                             contentDescription = null,
+                        )
+                        Text(
+                            modifier = Modifier
+                                .clearAndSetSemantics {},
+                            text = "Search",
                         )
                     }
                 },
+                leadingIcon =
+                    if (expanded) {
+                        {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
+                    } else null,
             )
         }
     AnimatedVisibility(
@@ -92,35 +106,14 @@ fun MainSearchBar(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
         ) {
             SearchBar(
                 state = searchBarState,
                 inputField = inputField,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.width(360.dp)
             )
             ExpandedFullScreenSearchBar(state = searchBarState, inputField = inputField) {
-            }
-            IconButton(
-                modifier = Modifier
-                    .size(
-                        IconButtonDefaults.mediumContainerSize(
-                            IconButtonDefaults.IconButtonWidthOption.Narrow
-                        )
-                    )
-                    .height(SearchBarDefaults.InputFieldHeight),
-                onClick = navigateToSettings,
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                ),
-                shapes = IconButtonDefaults.shapes()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.size(IconButtonDefaults.mediumIconSize)
-                )
             }
         }
     }

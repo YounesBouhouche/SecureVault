@@ -4,9 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Outbox
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Outbox
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.younesb.securevault.R
 
@@ -28,10 +30,10 @@ enum class MainNavRoutes(
         label = R.string.browse,
         destination = MainRoutes.Browse
     ),
-    EXPORT(
-        selectedIcon = Icons.Rounded.Outbox,
-        unselectedIcon = Icons.Outlined.Outbox,
-        label = R.string.export,
-        destination = MainRoutes.Export
+    SETTINGS(
+        selectedIcon = Icons.Rounded.Settings,
+        unselectedIcon = Icons.Outlined.Settings,
+        label = R.string.settings,
+        destination = MainRoutes.Settings
     ),
 }

@@ -13,5 +13,5 @@ sealed class MainRoutes {
     @Serializable
     data class Document(val documentId: String): MainRoutes()
     @Serializable
-    data object Export: MainRoutes()
+    data object Settings: MainRoutes()
 }

@@ -51,9 +51,7 @@ fun MainScreen(
 
     Box(modifier.fillMaxSize()) {
         MainNavigationHost(navController = navController, contentPadding = contentPadding)
-        MainSearchBar(modifier = Modifier.align(Alignment.TopCenter), visible = isParentRoute) {
-            navigate(NavRoutes.Settings)
-        }
+        MainSearchBar(modifier = Modifier.align(Alignment.TopCenter), visible = isParentRoute)
         MainNavigationBar(
             route = route,
             modifier = Modifier.align(Alignment.BottomCenter),
