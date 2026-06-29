@@ -35,6 +35,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         it.destination
     }
     val isParentRoute = route != null
+    val searchBarVisible = isParentRoute and (route != MainNavRoutes.SETTINGS)
     val contentPadding =
         WindowInsets.statusBars.add(WindowInsets(top = 80.dp, bottom = 200.dp)).asPaddingValues()
     val viewModel = koinViewModel<MainViewModel>()
@@ -48,7 +49,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     Box(modifier.fillMaxSize()) {
         MainNavigationHost(navController = navController, contentPadding = contentPadding)
-        MainSearchBar(modifier = Modifier.align(Alignment.TopCenter), visible = isParentRoute)
+        MainSearchBar(modifier = Modifier.align(Alignment.TopCenter), visible = searchBarVisible)
         MainNavigationBar(
             route = route,
             modifier = Modifier.align(Alignment.BottomCenter),
