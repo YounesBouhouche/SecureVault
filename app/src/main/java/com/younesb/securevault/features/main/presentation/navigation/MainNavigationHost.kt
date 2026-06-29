@@ -13,6 +13,7 @@ import androidx.navigation.toRoute
 import com.younesb.securevault.features.main.presentation.navigation.routes.browse.BrowseScreen
 import com.younesb.securevault.features.main.presentation.navigation.routes.document.DocumentRoute
 import com.younesb.securevault.features.main.presentation.navigation.routes.folder.FolderScreen
+import com.younesb.securevault.features.main.presentation.navigation.routes.settings.SettingsRoute
 import soup.compose.material.motion.animation.materialSharedAxisYIn
 import soup.compose.material.motion.animation.materialSharedAxisYOut
 import soup.compose.material.motion.animation.rememberSlideDistance
@@ -64,7 +65,7 @@ fun MainNavigationHost(
                 DocumentRoute(documentId = documentId)
             }
             composable<MainRoutes.Settings> {
-
+                SettingsRoute(contentPadding = PaddingValues(bottom = 200.dp))
             }
         }
     }
