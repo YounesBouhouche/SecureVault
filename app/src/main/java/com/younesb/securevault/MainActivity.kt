@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.theme.AppTheme
 import com.younesb.securevault.core.presentation.theme.SetSystemBarColors
 import com.younesb.securevault.core.presentation.theme.ThemeViewModel
+import com.younesb.securevault.core.presentation.utils.CollectGlobalEvents
 import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.auth.presentation.util.CollectAuthEvents
 import com.younesb.securevault.features.navigation.NavigationHost
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             val dynamicColors by viewModel.dynamicColors.collectAsState()
             val navController = rememberNavController()
             CollectAuthEvents(navController, biometricPromptManager)
+            CollectGlobalEvents()
             SetSystemBarColors(themeMode)
             AppTheme(
                 themeMode = themeMode,
