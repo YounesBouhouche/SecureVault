@@ -14,7 +14,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.theme.AppTheme
 import com.younesb.securevault.features.main.presentation.components.MainNavigationBar
-import com.younesb.securevault.features.main.presentation.components.MainSearchBar
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.navigation.MainNavigationHost
 import com.younesb.securevault.features.main.presentation.navigation.util.getCurrentRoute
@@ -36,7 +35,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         println("Current route: ${backStack?.destination?.route}")
     }
 
-    CollectMainEvents(navController = navController)
+    CollectMainEvents(navController = navController, onShowExportSheet = viewModel::onShowExportSheet)
 
     Box(modifier.fillMaxSize()) {
         MainNavigationHost(navController = navController)
@@ -52,7 +51,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
             onNewItemAction = {
                 viewModel.onAction(Action.ShowFilePicker(it))
             },
-            visible = isParentRoute
+            visible = isParentRoute,
+            onExport = {
+                viewModel.onAction(Action.ShowExportSheet())
+            }
         )
     }
 
@@ -78,6 +80,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
         onDismissRequest = { viewModel.onAction(Action.HideNewTagDialog) },
         onConfirm = {
             viewModel.onAction(Action.CreateTag(it))
+        }
+    )
+
+    ExportSheet(
+        state = uiState.exportState,
+        onDismissRequest = { viewModel.onAction(Action.HideExportSheet) },
+        onExport = {
+            viewModel.onAction(Action.ExportFiles(it))
         }
     )
 }

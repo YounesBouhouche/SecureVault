@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalFloatingToolbar
@@ -41,12 +39,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -65,6 +64,7 @@ fun MainNavigationBar(
     route: MainNavRoutes?,
     modifier: Modifier = Modifier,
     visible: Boolean = true,
+    exportButtonVisible: Boolean = true,
     onNewItemAction: (NewItemType) -> Unit = { },
     navigate: (MainRoutes) -> Unit = { },
     onExport: () -> Unit = { }
@@ -97,7 +97,7 @@ fun MainNavigationBar(
                             resources.getString(R.string.export)
                     }
                     .animateFloatingActionButton(
-                        visible = fabVisible,
+                        visible = fabVisible and exportButtonVisible,
                         alignment = Alignment.BottomEnd
                     )
                     .align(Alignment.End)
@@ -106,7 +106,7 @@ fun MainNavigationBar(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer
         ) {
             Icon(
-                painter = rememberVectorPainter(Icons.Rounded.Share),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_upload),
                 contentDescription = null,
                 modifier = Modifier.size(ButtonDefaults.IconSize),
             )

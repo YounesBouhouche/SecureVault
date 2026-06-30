@@ -12,7 +12,7 @@ class ResetAppUseCase(
     val documentsRepository: DocumentsRepository,
     val filesRepository: FilesRepository
 ) {
-    suspend operator fun invoke(): EmptyResult<Throwable> =
+    suspend operator fun invoke(): EmptyResult<Exception> =
         filesRepository.deleteAllFiles().pipe {
             documentsRepository.deleteAllDocuments()
         }.pipe {

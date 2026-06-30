@@ -5,4 +5,5 @@ data class UiState(
     val newFolderLoading: Boolean = false,
     val showNewTagDialog: Boolean = false,
     val newTagLoading: Boolean = false,
+    val exportState: ExportState = ExportState.Initial
 )

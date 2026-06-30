@@ -9,29 +9,40 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.events.CollectEvents
 import com.younesb.securevault.features.main.presentation.NewDocument
+import com.younesb.securevault.features.main.presentation.NewDocument.*
 
 @Composable
-fun CollectMainEvents(navController: NavHostController = rememberNavController()) {
+fun CollectMainEvents(
+    navController: NavHostController = rememberNavController(),
+    onShowExportSheet: (List<String>) -> Unit = {},
+) {
     val context = LocalContext.current
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) {
         it?.let {
-            FilePickerManager.emitResult(NewDocument.File(it))
+            FilePickerManager.emitResult(File(it))
         }
     }
     val pickPictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) {
         it?.let {
-            FilePickerManager.emitResult(NewDocument.Image(it))
+            FilePickerManager.emitResult(Image(it))
         }
     }
     val takePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
     ) { accepted ->
         ComposeFileProvider.getUri().takeIf { accepted }?.let {
-            FilePickerManager.emitResult(NewDocument.Image(it))
+            FilePickerManager.emitResult(Image(it))
+        }
+    }
+    val saveFileLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("*/*")
+    ) { result ->
+        result?.let {
+            SaveFileDialogManager.emitResult(it)
         }
     }
     CollectEvents(MainEventsBus.events) {
@@ -58,7 +69,15 @@ fun CollectMainEvents(navController: NavHostController = rememberNavController()
             }
 
             MainEvent.RequestNewNote -> {
-                FilePickerManager.emitResult(NewDocument.Note())
+                FilePickerManager.emitResult(Note())
+            }
+
+            is MainEvent.ShowExportSheet -> {
+                onShowExportSheet(it.documentsIds)
+            }
+
+            is MainEvent.PickSavePath -> {
+                saveFileLauncher.launch(it.fileName)
             }
         }
     }
