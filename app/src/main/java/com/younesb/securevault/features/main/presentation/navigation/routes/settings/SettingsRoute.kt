@@ -39,6 +39,7 @@ fun SettingsRoute(
     var themeSheetVisible by remember { mutableStateOf(false) }
     var languageSheetVisible by remember { mutableStateOf(false) }
     var resetAppDialogVisible by remember { mutableStateOf(false) }
+    var aboutSheetVisible by remember { mutableStateOf(false) }
     val viewModel = koinViewModel<SettingsViewModel>()
     val scope = rememberCoroutineScope()
     SettingsScreenWrapper(
@@ -100,7 +101,7 @@ fun SettingsRoute(
                 shape = expressiveListItemShape(0, 2),
                 icon = Icons.Default.Info,
                 iconBackground = MaterialTheme.colorScheme.tertiaryContainer,
-                onClick = { onNavigate(MainRoutes.About) }
+                onClick = { aboutSheetVisible = true }
             )
         }
         item {
@@ -132,5 +133,9 @@ fun SettingsRoute(
         onConfirm = {
             viewModel.resetApp()
         }
+    )
+    AboutSheet(
+        visible = aboutSheetVisible,
+        onDismissRequest = { aboutSheetVisible = false }
     )
 }

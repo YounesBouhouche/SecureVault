@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SecureVault</string>
+    <string name="app_description">A secure and private vault to sensitive data in a safe and encrypted environment.</string>
     <string name="green">Green</string>
     <string name="blue">Blue</string>
     <string name="red">Red</string>
@@ -123,4 +124,12 @@
     <string name="choose_theme">Choose Theme</string>
     <string name="dynamic_colors">Dynamic Colors (Android 12+)</string>
     <string name="reset_app_confirmation">Are you sure you want to reset the app to its default settings?</string>
+    <string name="github">Github</string>
+    <string name="developer_name">Younes Bouhouche</string>
+    <string name="developer_bio">Android/Web Developer</string>
+    <string name="x_form">X (Formerly Twitter)</string>
+    <string name="x_formerly_twitter">Instagram</string>
+    <string name="portfo">Portfolio</string>
+    <string name="portfolio">Portfolio</string>
+    <string name="instagram">Instagram</string>
 </resources>
