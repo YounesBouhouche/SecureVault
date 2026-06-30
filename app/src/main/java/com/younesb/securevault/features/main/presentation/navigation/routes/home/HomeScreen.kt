@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -82,7 +83,8 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .clip(expressiveListItemShape(0, 2))
                             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                            .padding(16.dp, 12.dp)
+                            .padding(16.dp, 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = stringResource(R.string.files),
