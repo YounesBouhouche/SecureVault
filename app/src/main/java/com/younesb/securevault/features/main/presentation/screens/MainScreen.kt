@@ -29,7 +29,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
         it.destination
     }
     val isParentRoute = route != null
-    val searchBarVisible = isParentRoute and (route != MainNavRoutes.SETTINGS)
     val viewModel = koinViewModel<MainViewModel>()
     val uiState by viewModel.uiState.collectAsState()
     val backStack = navController.currentBackStackEntryAsState().value
@@ -41,7 +40,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     Box(modifier.fillMaxSize()) {
         MainNavigationHost(navController = navController)
-        MainSearchBar(modifier = Modifier.align(Alignment.TopCenter), visible = searchBarVisible)
         MainNavigationBar(
             route = route,
             modifier = Modifier.align(Alignment.BottomCenter),

@@ -2,7 +2,7 @@ package com.younesb.securevault.features.main.presentation.navigation.routes.hom
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -46,6 +47,7 @@ import com.younesb.securevault.R
 import com.younesb.securevault.core.presentation.utils.expressiveListItemShape
 import com.younesb.securevault.features.main.presentation.components.DocumentItem
 import com.younesb.securevault.features.main.presentation.components.FolderItem
+import com.younesb.securevault.features.main.presentation.components.MainSearchBar
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,11 +65,12 @@ fun HomeScreen(
     var expanded by remember { mutableStateOf(false) }
     val total = folders.size + documents.size
 
-    Column(modifier.fillMaxSize()) {
+    Box(modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f)
+                .statusBarsPadding()
+                .padding(top = 90.dp)
                 .clip(
                     MaterialTheme.shapes.extraLarge.copy(
                         bottomStart = ZeroCornerSize, bottomEnd = ZeroCornerSize
@@ -163,5 +166,9 @@ fun HomeScreen(
                 }
             }
         }
+        MainSearchBar(
+            modifier = Modifier.align(Alignment.TopCenter),
+            onQueryUpdate = viewModel::setQuery
+        )
     }
 }

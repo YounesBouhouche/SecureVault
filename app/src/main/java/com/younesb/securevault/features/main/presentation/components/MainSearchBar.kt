@@ -38,33 +38,48 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.younesb.mydesignsystem.presentation.components.ExpressiveIconButton
 import com.younesb.securevault.R
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class,
+    FlowPreview::class
+)
 @Composable
 fun MainSearchBar(
     modifier: Modifier = Modifier,
     visible: Boolean = true,
+    onQueryUpdate: (query: String) -> Unit = {}
 ) {
     val textFieldState = rememberTextFieldState()
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
     val focused by interactionSource.collectIsFocusedAsState()
     var fraction by remember {
-        mutableFloatStateOf(1f)
+        mutableFloatStateOf(.5f)
     }
     val animatedFraction by animateFloatAsState(fraction)
     LaunchedEffect(focused) {
         fraction = if (focused) 1f else .5f
+    }
+    LaunchedEffect(textFieldState.text) {
+        snapshotFlow { textFieldState.text }
+            .debounce(300.milliseconds) // Wait for 300ms of inactivity
+            .distinctUntilChanged()
+            .collect { query ->
+                onQueryUpdate(query.toString())
+            }
     }
     AnimatedVisibility(
         visible = visible,
@@ -159,16 +174,6 @@ fun MainSearchBar(
             focusManager.clearFocus()
         } catch (_: CancellationException) {
             fraction = 1f
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun SearchBarPreview() {
-    Surface(Modifier.fillMaxSize()) {
-        Box(Modifier.fillMaxSize()) {
-            MainSearchBar()
         }
     }
 }
