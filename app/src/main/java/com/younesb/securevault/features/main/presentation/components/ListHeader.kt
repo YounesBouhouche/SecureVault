@@ -1,6 +1,7 @@
 package com.younesb.securevault.features.main.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.younesb.securevault.core.presentation.utils.expressiveListItemShape
 
 fun LazyListScope.listHeader(
     key: Any? = null,
@@ -18,10 +20,10 @@ fun LazyListScope.listHeader(
         Text(
             text = text(),
             modifier = Modifier
-                .padding(2.dp, 6.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(12.dp, 6.dp),
+                .fillMaxWidth()
+                .clip(expressiveListItemShape(0, 2))
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                .padding(16.dp, 12.dp),
             color = MaterialTheme.colorScheme.primary
         )
     }

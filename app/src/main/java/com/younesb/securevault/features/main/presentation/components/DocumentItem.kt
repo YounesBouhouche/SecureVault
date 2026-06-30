@@ -30,6 +30,12 @@ fun DocumentItem(
             DocumentType.UNKNOWN -> Icons.AutoMirrored.Filled.InsertDriveFile
             DocumentType.IMAGE -> Icons.Rounded.Image
         },
+    iconTint = when (document.type) {
+        DocumentType.FILE -> MaterialTheme.colorScheme.secondary
+        DocumentType.IMAGE -> MaterialTheme.colorScheme.error
+        DocumentType.NOTE -> MaterialTheme.colorScheme.tertiary
+        DocumentType.UNKNOWN -> MaterialTheme.colorScheme.onSurfaceVariant
+    },
     title = document.name,
     subtitle = document.size.formatFileSize(),
     onSelectedChange = {},
