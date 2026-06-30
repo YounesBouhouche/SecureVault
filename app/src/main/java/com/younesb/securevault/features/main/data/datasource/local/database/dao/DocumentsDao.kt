@@ -88,4 +88,7 @@ interface DocumentsDao {
 
     @Delete
     suspend fun deleteDocumentTagCrossRef(ref: DocumentTagCrossRef)
+
+//    @Query("DELETE FROM sqlite_sequence")
+//    suspend fun clearPrimaryKeys()
 }

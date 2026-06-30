@@ -31,4 +31,6 @@ interface DocumentsRepository {
     suspend fun getTags(): Result<List<TagDto>, Exception>
     suspend fun createTag(name: String): EmptyResult<Exception>
     suspend fun deleteTag(tagId: String): EmptyResult<Exception>
+
+    suspend fun deleteAllDocuments(): EmptyResult<Exception>
 }

@@ -9,4 +9,6 @@ interface FilesRepository {
     suspend fun saveFile(sourceUri: Uri, destinationFileName: String): Result<Long, Exception>
 
     suspend fun saveFile(content: String, destinationFileName: String): Result<Long, Exception>
+    suspend fun deleteFile(name: String): Result<Boolean, Exception>
+    suspend fun deleteAllFiles(): Result<Boolean, Exception>
 }

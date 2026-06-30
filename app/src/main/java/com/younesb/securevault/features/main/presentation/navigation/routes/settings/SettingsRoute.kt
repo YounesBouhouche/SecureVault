@@ -28,6 +28,7 @@ import com.younesb.securevault.features.main.presentation.components.SettingsScr
 import com.younesb.securevault.features.main.presentation.components.settingsLabel
 import com.younesb.securevault.features.main.presentation.navigation.MainRoutes
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingsRoute(
@@ -37,6 +38,8 @@ fun SettingsRoute(
 ) {
     var themeSheetVisible by remember { mutableStateOf(false) }
     var languageSheetVisible by remember { mutableStateOf(false) }
+    var resetAppDialogVisible by remember { mutableStateOf(false) }
+    val viewModel = koinViewModel<SettingsViewModel>()
     val scope = rememberCoroutineScope()
     SettingsScreenWrapper(
         icon = Icons.Default.Settings,
@@ -84,7 +87,7 @@ fun SettingsRoute(
                 shape = expressiveListItemShape(1, 2),
                 icon = Icons.Default.Restore,
                 iconBackground = MaterialTheme.colorScheme.errorContainer,
-                onClick = { /* Handle reset app click */ }
+                onClick = { resetAppDialogVisible = true }
             )
         }
         settingsLabel {
@@ -122,5 +125,12 @@ fun SettingsRoute(
     LanguageSheet(
         visible = languageSheetVisible,
         onDismissRequest = { languageSheetVisible = false }
+    )
+    ResetAppDialog(
+        visible = resetAppDialogVisible,
+        onDismissRequest = { resetAppDialogVisible = false },
+        onConfirm = {
+            viewModel.resetApp()
+        }
     )
 }

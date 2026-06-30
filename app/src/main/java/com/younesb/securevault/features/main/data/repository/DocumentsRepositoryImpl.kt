@@ -2,6 +2,7 @@ package com.younesb.securevault.features.main.data.repository
 
 import com.younesb.securevault.core.domain.utils.EmptyResult
 import com.younesb.securevault.core.domain.utils.Result
+import com.younesb.securevault.features.main.data.datasource.local.database.DocumentsDatabase
 import com.younesb.securevault.features.main.data.datasource.local.database.dao.DocumentsDao
 import com.younesb.securevault.features.main.data.datasource.local.database.models.Document
 import com.younesb.securevault.features.main.data.datasource.local.database.models.DocumentTagCrossRef
@@ -11,13 +12,17 @@ import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.FolderDto
 import com.younesb.securevault.features.main.domain.models.TagDto
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class DocumentsRepositoryImpl(
-    val dao: DocumentsDao
+    val db: DocumentsDatabase
 ) : DocumentsRepository {
+    private val dao: DocumentsDao = db.dao
+
     override fun observeFolders(): Flow<List<FolderDto>> =
         dao.observeFoldersWithDocuments().map {
             it.map(FolderDto::fromFolderWithDocuments)
@@ -182,5 +187,14 @@ class DocumentsRepositoryImpl(
         val tag = dao.getTagById(tagId)
             ?: throw IllegalArgumentException("Tag with id $tagId not found")
         dao.deleteTag(tag)
+    }
+
+    override suspend fun deleteAllDocuments(): EmptyResult<Exception> {
+        return withContext(Dispatchers.IO) {
+            Result.run {
+                db.clearAllTables()
+//                dao.clearPrimaryKeys()
+            }
+        }
     }
 }
