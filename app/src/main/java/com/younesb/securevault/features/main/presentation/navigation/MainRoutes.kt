@@ -7,8 +7,6 @@ sealed class MainRoutes {
     @Serializable
     data object Home: MainRoutes()
     @Serializable
-    data object Browse: MainRoutes()
-    @Serializable
     data class Folder(val folderId: String): MainRoutes()
     @Serializable
     data class Document(val documentId: String): MainRoutes()
@@ -16,6 +14,4 @@ sealed class MainRoutes {
     data object Settings: MainRoutes()
     @Serializable
     data object ChangePassword: MainRoutes()
-    @Serializable
-    data object About: MainRoutes()
 }

@@ -38,9 +38,6 @@ fun MainNavigationHost(
             modifier = modifier
         ) {
             composable<MainRoutes.Home> {
-
-            }
-            composable<MainRoutes.Browse> {
                 BrowseScreen(
                     contentPadding = contentPadding,
                     onFolderClick = { id ->

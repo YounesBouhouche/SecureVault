@@ -22,12 +22,6 @@ enum class MainNavRoutes(
         label = R.string.home,
         destination = MainRoutes.Home
     ),
-    BROWSE(
-        selectedIcon = Icons.Rounded.Folder,
-        unselectedIcon = Icons.Outlined.Folder,
-        label = R.string.browse,
-        destination = MainRoutes.Browse
-    ),
     SETTINGS(
         selectedIcon = Icons.Rounded.Settings,
         unselectedIcon = Icons.Outlined.Settings,
