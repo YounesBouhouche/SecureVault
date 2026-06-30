@@ -1,6 +1,7 @@
 package com.younesb.securevault.features.main.presentation.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,7 +20,7 @@ fun FolderItem(
 ) = ListItem(
     modifier = modifier,
     shape = shape,
-    leadingIcon = Icons.Rounded.FolderOpen,
+    leadingIcon = Icons.Rounded.Folder,
     title = folder.name,
     subtitle = pluralStringResource(R.plurals.files, folder.documents.size, folder.documents.size),
     onSelectedChange = {},

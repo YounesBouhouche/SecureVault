@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ fun ListItem(
     subtitle: String,
     modifier: Modifier = Modifier,
     leadingIcon: ImageVector = Icons.AutoMirrored.Filled.InsertDriveFile,
+    iconTint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     selected: Boolean = false,
     onSelectedChange: () -> Unit,
     shape: Shape = MaterialTheme.shapes.medium,
@@ -42,7 +44,7 @@ fun ListItem(
 ) {
     val background by animateColorAsState(
         if (selected) MaterialTheme.colorScheme.primaryContainer
-        else MaterialTheme.colorScheme.surfaceContainer
+        else MaterialTheme.colorScheme.surfaceContainerLowest
     )
     val iconBackground by animateColorAsState(
         if (selected) MaterialTheme.colorScheme.primary
@@ -50,7 +52,7 @@ fun ListItem(
     )
     val iconTint by animateColorAsState(
         if (selected) MaterialTheme.colorScheme.onPrimaryContainer
-        else MaterialTheme.colorScheme.onSurfaceVariant
+        else iconTint
     )
     Row(
         modifier = modifier
@@ -101,7 +103,7 @@ fun ListItem(
                     ),
                 onClick = it,
                 colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 shapes = IconButtonDefaults.shapes()

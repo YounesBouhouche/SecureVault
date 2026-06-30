@@ -21,7 +21,7 @@ import com.younesb.securevault.features.main.domain.usecases.ResetAppUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
 import com.younesb.securevault.features.main.domain.usecases.SetFavoriteUseCase
-import com.younesb.securevault.features.main.presentation.navigation.routes.browse.BrowseViewModel
+import com.younesb.securevault.features.main.presentation.navigation.routes.home.HomeViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.document.DocumentViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.folder.FolderViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.settings.SettingsViewModel
@@ -42,7 +42,7 @@ val mainModule = module {
 
     viewModelOf(::MainViewModel)
     viewModelOf(::NewDocumentViewModel)
-    viewModelOf(::BrowseViewModel)
+    viewModelOf(::HomeViewModel)
     viewModelOf(::SettingsViewModel)
     viewModel {
         FolderViewModel(
