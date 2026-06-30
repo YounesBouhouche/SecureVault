@@ -10,5 +10,4 @@ sealed interface Action {
     data object ShowNewTagDialog: Action
     data object HideNewTagDialog: Action
     data class CreateTag(val name: String): Action
-    data class ToggleTagSelection(val id: String): Action
 }

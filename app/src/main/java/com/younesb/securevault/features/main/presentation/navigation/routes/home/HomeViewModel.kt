@@ -5,13 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.features.main.domain.usecases.ObserveDocumentsUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveTagsUseCase
-import com.younesb.securevault.features.main.presentation.util.MainEvent
-import com.younesb.securevault.features.main.presentation.util.MainEventsBus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class HomeViewModel(
     observeDocumentsUseCase: ObserveDocumentsUseCase,
