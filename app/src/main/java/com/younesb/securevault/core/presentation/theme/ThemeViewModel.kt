@@ -33,4 +33,8 @@ class ThemeViewModel(
     fun setThemeMode(value: Theme) {
         SettingsPreference.ThemeMode.set(value)
     }
+
+    fun setDynamicColors(value: Boolean) {
+        SettingsPreference.DynamicColor.set(value)
+    }
 }

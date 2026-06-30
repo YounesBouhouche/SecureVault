@@ -121,4 +121,6 @@
     <string name="language">Language</string>
     <string name="choose_your_preferred_language">Choose your preferred language</string>
     <string name="choose_theme">Choose Theme</string>
+    <string name="dynamic_colors">Dynamic Colors (Android 12+)</string>
+    <string name="reset_app_confirmation">Are you sure you want to reset the app to its default settings?</string>
 </resources>

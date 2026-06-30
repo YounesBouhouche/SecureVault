@@ -12,11 +12,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,11 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.younesb.securevault.R
-import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.presentation.components.ButtonsRow
-import com.younesb.securevault.core.presentation.theme.ThemeViewModel
 import com.younesb.securevault.core.presentation.utils.expressiveListItemShape
-import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +37,8 @@ fun<T> OptionsSheetWrapper(
     option: T,
     label: @Composable (T) -> String,
     modifier: Modifier = Modifier,
-    onDismissRequest: (T?) -> Unit = { }
+    onDismissRequest: (T?) -> Unit = { },
+    trailingContent: @Composable () -> Unit = { }
 ) {
     var selectedOption by remember {
         mutableStateOf(option)
@@ -55,6 +54,10 @@ fun<T> OptionsSheetWrapper(
         contentWindowInsets = {
             BottomSheetDefaults.modalWindowInsets.add(WindowInsets(bottom = 16.dp))
         },
+        sheetState = rememberBottomSheetState(
+            SheetValue.Expanded,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+        )
     ) {
         Column(
             modifier =
@@ -80,7 +83,13 @@ fun<T> OptionsSheetWrapper(
                 options.forEachIndexed { index, entry ->
                     val isSelected = selectedOption == entry
                     Surface(
-                        shape = expressiveListItemShape(index, options.size),
+                        shape = expressiveListItemShape(
+                            index = index,
+                            count = options.size,
+                            largeShape = MaterialTheme.shapes.extraLarge,
+                            smallShape = MaterialTheme.shapes.medium,
+                            selected = isSelected
+                        ),
                         color =
                             if (isSelected) MaterialTheme.colorScheme.surfaceContainerHigh
                             else MaterialTheme.colorScheme.surfaceContainer
@@ -93,7 +102,6 @@ fun<T> OptionsSheetWrapper(
                             Modifier
                                 .fillMaxWidth().padding(12.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             RadioButton(
                                 selected = isSelected,
@@ -107,6 +115,7 @@ fun<T> OptionsSheetWrapper(
                     }
                 }
             }
+            trailingContent()
             ButtonsRow(
                 count = 2,
                 onClick = { index ->

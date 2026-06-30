@@ -11,7 +11,11 @@ fun expressiveListItemShape(
     count: Int,
     largeShape: CornerBasedShape = MaterialTheme.shapes.large,
     smallShape: CornerBasedShape = MaterialTheme.shapes.extraSmall,
+    selected: Boolean = false,
 ): CornerBasedShape {
+    if (selected) {
+        return RoundedCornerShape(100)
+    }
     val topStart = when {
         index == 0 -> largeShape.topStart
         else -> smallShape.topStart
