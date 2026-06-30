@@ -22,6 +22,9 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun authenticate(inputPin: String?) = authManager.authenticate(inputPin)
+    override suspend fun resetCredentials() {
+        authManager.resetCredentials()
+    }
 
     override suspend fun saveCredentials(): Boolean = authManager.updateCredentials(newBiometricEnabled, newPin)
 }

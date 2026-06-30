@@ -8,6 +8,4 @@ sealed class NavRoutes {
     data object Auth: NavRoutes()
     @Serializable
     data object Main: NavRoutes()
-    @Serializable
-    data object Settings: NavRoutes()
 }

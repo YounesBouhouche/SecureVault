@@ -7,6 +7,7 @@ import com.younesb.securevault.core.domain.repositories.PreferencesRepository
 import com.younesb.securevault.core.presentation.theme.ThemeViewModel
 import com.younesb.securevault.core.util.crypto.Crypto
 import com.younesb.securevault.features.main.data.datasource.local.database.DocumentsDatabase
+import com.younesb.securevault.features.main.presentation.navigation.routes.settings.LanguageViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -14,6 +15,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     viewModelOf(::ThemeViewModel)
+    viewModelOf(::LanguageViewModel)
     singleOf(::PreferencesDataStore)
     single<PreferencesRepository> {
         PreferencesRepositoryImpl(get())

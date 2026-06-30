@@ -17,12 +17,14 @@ import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCa
 import com.younesb.securevault.features.main.domain.usecases.ObserveTagsUseCase
 import com.younesb.securevault.features.main.domain.usecases.OpenDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.RenameDocumentUseCase
+import com.younesb.securevault.features.main.domain.usecases.ResetAppUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
 import com.younesb.securevault.features.main.domain.usecases.SetFavoriteUseCase
 import com.younesb.securevault.features.main.presentation.navigation.routes.browse.BrowseViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.document.DocumentViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.folder.FolderViewModel
+import com.younesb.securevault.features.main.presentation.navigation.routes.settings.SettingsViewModel
 import com.younesb.securevault.features.main.presentation.screens.MainViewModel
 import com.younesb.securevault.features.main.presentation.screens.new_item.NewDocumentViewModel
 import org.koin.android.ext.koin.androidContext
@@ -35,12 +37,13 @@ val mainModule = module {
     single {
         FilesManager(context = androidContext(), crypto = get())
     }
-    single<DocumentsRepository> { DocumentsRepositoryImpl(get<DocumentsDatabase>().dao) }
+    single<DocumentsRepository> { DocumentsRepositoryImpl(get<DocumentsDatabase>()) }
     single<FilesRepository> { FilesRepositoryImpl(get()) }
 
     viewModelOf(::MainViewModel)
     viewModelOf(::NewDocumentViewModel)
     viewModelOf(::BrowseViewModel)
+    viewModelOf(::SettingsViewModel)
     viewModel {
         FolderViewModel(
             observeDocumentsUseCase = get(),
@@ -73,4 +76,5 @@ val mainModule = module {
     factoryOf(::SetFavoriteUseCase)
     factoryOf(::RenameDocumentUseCase)
     factoryOf(::DeleteDocumentUseCase)
+    factoryOf(::ResetAppUseCase)
 }

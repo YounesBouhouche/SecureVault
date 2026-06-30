@@ -40,4 +40,17 @@ class FilesRepositoryImpl(
             )
         }.size.toLong()
     }
+
+    override suspend fun deleteFile(name: String): Result<Boolean, Exception> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAllFiles(): Result<Boolean, Exception> {
+        try {
+            filesManager.deleteAllFiles()
+            return Result.Success(true)
+        } catch (e: Exception) {
+            return Result.Error(e)
+        }
+    }
 }

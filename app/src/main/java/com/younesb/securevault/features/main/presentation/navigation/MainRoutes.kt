@@ -14,4 +14,8 @@ sealed class MainRoutes {
     data class Document(val documentId: String): MainRoutes()
     @Serializable
     data object Settings: MainRoutes()
+    @Serializable
+    data object ChangePassword: MainRoutes()
+    @Serializable
+    data object About: MainRoutes()
 }

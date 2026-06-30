@@ -63,4 +63,19 @@ class FilesManager(
         val dir = if (external) context.getExternalFilesDir(null) else context.filesDir
         return Uri.fromFile(File(dir, fileName))
     }
+
+    fun deleteFile(uri: Uri) {
+        uri.safeCall {
+            context.contentResolver.delete(it, null, null)
+        }
+    }
+
+    suspend fun deleteAllFiles(external: Boolean = false) {
+        val dir = if (external) context.getExternalFilesDir(null) else context.filesDir
+        withContext(Dispatchers.IO) {
+            dir?.listFiles()?.forEach { file ->
+                file.delete()
+            }
+        }
+    }
 }

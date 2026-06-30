@@ -93,6 +93,12 @@ class AuthManager(
         }
     }
 
+    suspend fun resetCredentials() {
+        credentialsDataStore.clearCredentials()
+        authAttemptsDataStore.updateState(0)
+        _state.value = AuthState.NoCredentials
+    }
+
     fun lock() {
         _state.value = AuthState.LockedOut
     }

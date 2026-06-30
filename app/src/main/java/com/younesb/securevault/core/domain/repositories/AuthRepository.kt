@@ -10,5 +10,5 @@ interface AuthRepository {
     fun updateSetupCredentialsPin(pin: String)
     suspend fun saveCredentials(): Boolean
     suspend fun authenticate(inputPin: String?): Boolean
-
+    suspend fun resetCredentials()
 }
