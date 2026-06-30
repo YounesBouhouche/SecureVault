@@ -41,7 +41,6 @@ fun MainNavigationHost(
         ) {
             composable<MainRoutes.Home> {
                 HomeScreen(
-                    modifier = Modifier.statusBarsPadding().padding(top = 90.dp),
                     onFolderClick = { id ->
                         navController.navigate(MainRoutes.Folder(folderId = id))
                     },
