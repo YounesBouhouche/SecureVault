@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -73,7 +74,9 @@ class NewDocumentViewModel(
                     name = action.name,
                     type = _uiState.value.type,
                     folderId = folderId,
-                    tags = emptyList()
+                    tags = _uiState.value.selectedTags.mapNotNull { tagId ->
+                        uiState.value.tags.find { it.id == tagId }
+                    }
                 )
                 viewModelScope.launch {
                     (if (_uiState.value.type == DocumentType.NOTE) {
