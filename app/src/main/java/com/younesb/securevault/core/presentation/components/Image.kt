@@ -72,6 +72,7 @@ fun Image(
     iconTint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     shape: Shape = MaterialTheme.shapes.medium,
     background: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    contentScale: ContentScale = ContentScale.Crop,
     fraction: Float = .5f,
     onClick: (() -> Unit)? = null,
     onError: ((AsyncImagePainter.State.Error) -> Unit)? = null,
@@ -90,7 +91,7 @@ fun Image(
                     Modifier
                 }
             ),
-        contentScale = ContentScale.Crop,
+        contentScale = contentScale,
         loading = {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularWavyProgressIndicator(Modifier.fillMaxWidth(.5f).aspectRatio(1f))

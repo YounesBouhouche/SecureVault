@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,6 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
@@ -67,11 +65,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -82,13 +77,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.younesb.securevault.R
 import com.younesb.securevault.core.presentation.components.ExpressiveTextField
-import com.younesb.securevault.core.presentation.components.Image
 import com.younesb.securevault.core.presentation.theme.AppTheme
 import com.younesb.securevault.core.presentation.utils.expressiveListItemShape
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
 import com.younesb.securevault.features.main.domain.models.TagDto
 import com.younesb.securevault.features.main.presentation.components.TitleText
+import com.younesb.securevault.features.main.presentation.navigation.routes.document.viewers.ImageViewer
 import com.younesb.securevault.features.main.presentation.util.Resource
 import com.younesb.securevault.features.main.presentation.util.formatFileSize
 import com.younesb.securevault.features.main.presentation.util.getOrNull
@@ -313,21 +308,15 @@ fun DocumentSuccessScreen(
             }
             when (document.type) {
                 DocumentType.IMAGE ->
-                    Image(
-                        model = file.getOrNull(),
-                        icon = Icons.Default.Image,
-                        modifier = Modifier.fillMaxSize().pointerInput(Unit) {
-                            detectTapGestures(
-                                onLongPress = {
-                                    onAction(Action.ShowInfoSheet)
-                                },
-                                onPress = {
-                                    onAction(Action.ToggleToolbar)
-                                }
-                            )
+                    ImageViewer(
+                        file.getOrNull(),
+                        modifier = Modifier.fillMaxSize(),
+                        onToggleToolbar = {
+                            onAction(Action.ToggleToolbar)
                         },
-                        shape = RectangleShape,
-                        background = Color.Transparent,
+                        onShowInfo = {
+                            onAction(Action.ShowInfoSheet)
+                        }
                     )
 
                 DocumentType.NOTE ->
