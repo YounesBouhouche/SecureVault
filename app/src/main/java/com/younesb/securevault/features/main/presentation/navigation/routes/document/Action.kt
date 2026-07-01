@@ -9,4 +9,7 @@ sealed interface Action {
     data object HideDeleteDialog: Action
     data object Delete: Action
     data object ExportFile: Action
+    data object ShowInfoSheet: Action
+    data object HideInfoSheet: Action
+    data object ToggleToolbar: Action
 }
