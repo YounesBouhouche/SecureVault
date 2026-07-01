@@ -144,4 +144,5 @@
     <string name="file_info">File Info</string>
     <string name="mime_type">MimeType</string>
     <string name="unknown">Unknown</string>
+    <string name="file">File</string>
 </resources>
