@@ -4,4 +4,6 @@ data class UiState(
     val isFavorite: Boolean = false,
     val renameDialogVisible: Boolean = false,
     val deleteDialogVisible: Boolean = false,
+    val infoSheetVisible: Boolean = false,
+    val controlsVisible: Boolean = true
 )

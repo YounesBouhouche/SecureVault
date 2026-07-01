@@ -3,7 +3,7 @@ package com.younesb.securevault.features.main.presentation.navigation.routes.doc
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.onSuccess
-import com.younesb.securevault.features.export.presentation.util.ExportEvent
+import com.younesb.securevault.features.export.presentation.util.ExportEvent.ShowExportSheet
 import com.younesb.securevault.features.export.presentation.util.ExportEventsBus
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
@@ -135,7 +135,25 @@ class DocumentViewModel(
 
             Action.ExportFile -> {
                 viewModelScope.launch {
-                    ExportEventsBus.sendEvent(ExportEvent.ShowExportSheet(listOf(documentId)))
+                    ExportEventsBus.sendEvent(ShowExportSheet(listOf(documentId)))
+                }
+            }
+
+            Action.HideInfoSheet -> {
+                _uiState.update {
+                    it.copy(infoSheetVisible = false)
+                }
+            }
+
+            Action.ShowInfoSheet -> {
+                _uiState.update {
+                    it.copy(infoSheetVisible = true)
+                }
+            }
+
+            Action.ToggleToolbar -> {
+                _uiState.update {
+                    it.copy(controlsVisible = !it.controlsVisible)
                 }
             }
         }

@@ -140,5 +140,6 @@
     <string name="decrypted_export_description">Export your files in a decrypted format</string>
     <string name="export_files">Export Files</string>
     <string name="export_success">Exported Successfully\n</string>
-    <string name="exporting">Exporting...</string>
+    <string name="exporting">Exporting…</string>
+    <string name="file_info">File Info</string>
 </resources>

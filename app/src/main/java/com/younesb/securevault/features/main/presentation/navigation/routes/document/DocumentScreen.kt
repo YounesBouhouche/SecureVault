@@ -2,6 +2,8 @@ package com.younesb.securevault.features.main.presentation.navigation.routes.doc
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,19 +24,24 @@ fun DocumentScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = { },
 ) {
-    ResourcePresenter(
-        resource = document,
+    Surface(
         modifier = modifier,
-        idleContent = {},
-    ) { doc ->
-        DocumentSuccessScreen(
-            document = doc,
-            file = file,
-            uiState = uiState,
-            onAction = onAction,
-            modifier = modifier,
-            onBack = onBack
-        )
+        color = MaterialTheme.colorScheme.surfaceContainerLowest
+    ) {
+        ResourcePresenter(
+            modifier = Modifier.fillMaxSize(),
+            resource = document,
+            idleContent = {},
+        ) { doc ->
+            DocumentSuccessScreen(
+                document = doc,
+                file = file,
+                uiState = uiState,
+                onAction = onAction,
+                modifier = modifier,
+                onBack = onBack
+            )
+        }
     }
 }
 
