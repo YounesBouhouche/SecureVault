@@ -3,12 +3,8 @@ package com.younesb.securevault.core.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +21,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
-import kotlin.let
+import com.younesb.securevault.features.main.presentation.components.LoadingCircularBar
 
 /**
  * An async image component with loading states, error handling, and fallback content.
@@ -93,9 +89,7 @@ fun Image(
             ),
         contentScale = contentScale,
         loading = {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularWavyProgressIndicator(Modifier.fillMaxWidth(.5f).aspectRatio(1f))
-            }
+            LoadingCircularBar()
         },
         error = {
             Column(
