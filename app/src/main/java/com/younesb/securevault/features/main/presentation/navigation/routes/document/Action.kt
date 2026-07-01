@@ -8,4 +8,5 @@ sealed interface Action {
     data object ShowDeleteDialog: Action
     data object HideDeleteDialog: Action
     data object Delete: Action
+    data object ExportFile: Action
 }
