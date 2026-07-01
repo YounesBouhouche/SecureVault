@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Upload
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalFloatingToolbar
@@ -106,9 +108,8 @@ fun MainNavigationBar(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_upload),
+                imageVector = Icons.Rounded.Upload,
                 contentDescription = null,
-                modifier = Modifier.size(ButtonDefaults.IconSize),
             )
         }
         FabMenu(

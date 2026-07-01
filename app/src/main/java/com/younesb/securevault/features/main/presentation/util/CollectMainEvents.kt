@@ -8,13 +8,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.events.CollectEvents
-import com.younesb.securevault.features.main.presentation.NewDocument
+import com.younesb.securevault.features.export.presentation.util.SaveFileDialogManager
 import com.younesb.securevault.features.main.presentation.NewDocument.*
 
 @Composable
 fun CollectMainEvents(
     navController: NavHostController = rememberNavController(),
-    onShowExportSheet: (List<String>) -> Unit = {},
 ) {
     val context = LocalContext.current
     val filePickerLauncher = rememberLauncherForActivityResult(
@@ -70,10 +69,6 @@ fun CollectMainEvents(
 
             MainEvent.RequestNewNote -> {
                 FilePickerManager.emitResult(Note())
-            }
-
-            is MainEvent.ShowExportSheet -> {
-                onShowExportSheet(it.documentsIds)
             }
 
             is MainEvent.PickSavePath -> {

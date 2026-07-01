@@ -10,6 +10,5 @@ sealed interface MainEvent {
     data class MainNavigate(val route: AuthRoutes): MainEvent
     data object MainPopBackStack: MainEvent
 
-    data class ShowExportSheet(val documentsIds: List<String>): MainEvent
     data class PickSavePath(val fileName: String): MainEvent
 }

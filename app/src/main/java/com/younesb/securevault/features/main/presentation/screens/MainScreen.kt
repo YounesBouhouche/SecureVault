@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.theme.AppTheme
+import com.younesb.securevault.features.export.presentation.ExportSheet
 import com.younesb.securevault.features.main.presentation.components.MainNavigationBar
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.navigation.MainNavigationHost
@@ -35,7 +36,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         println("Current route: ${backStack?.destination?.route}")
     }
 
-    CollectMainEvents(navController = navController, onShowExportSheet = viewModel::onShowExportSheet)
+    CollectMainEvents(navController = navController)
 
     Box(modifier.fillMaxSize()) {
         MainNavigationHost(navController = navController)
@@ -83,13 +84,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         }
     )
 
-    ExportSheet(
-        state = uiState.exportState,
-        onDismissRequest = { viewModel.onAction(Action.HideExportSheet) },
-        onExport = {
-            viewModel.onAction(Action.ExportFiles(it))
-        }
-    )
+    ExportSheet()
 }
 
 @Preview

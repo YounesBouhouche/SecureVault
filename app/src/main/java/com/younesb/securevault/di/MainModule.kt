@@ -10,7 +10,8 @@ import com.younesb.securevault.features.main.domain.repository.FilesRepository
 import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
 import com.younesb.securevault.features.main.domain.usecases.CreateTagUseCase
 import com.younesb.securevault.features.main.domain.usecases.DeleteDocumentUseCase
-import com.younesb.securevault.features.main.domain.usecases.ExportDocumentsUseCase
+import com.younesb.securevault.features.export.domain.use_cases.ExportDocumentsUseCase
+import com.younesb.securevault.features.export.presentation.ExportViewModel
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentsUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetFoldersUseCase
@@ -47,6 +48,7 @@ val mainModule = module {
     single<FilesRepository> { FilesRepositoryImpl(get()) }
 
     viewModelOf(::MainViewModel)
+    viewModelOf(::ExportViewModel)
     viewModelOf(::NewDocumentViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SettingsViewModel)

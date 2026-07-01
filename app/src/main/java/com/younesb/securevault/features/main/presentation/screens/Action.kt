@@ -11,6 +11,4 @@ sealed interface Action {
     data object HideNewTagDialog: Action
     data class CreateTag(val name: String): Action
     data class ShowExportSheet(val ids: List<String>? = null): Action
-    data object HideExportSheet: Action
-    data class ExportFiles(val encrypted: Boolean): Action
 }
