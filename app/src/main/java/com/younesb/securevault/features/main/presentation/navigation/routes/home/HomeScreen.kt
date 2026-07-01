@@ -227,10 +227,14 @@ fun HomeScreen(
                                 .rememberSharedContentState(key = "doc_${document.id}"),
                             animatedVisibilityScope = animatedVisibilityScope,
                             resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                        )
-                    ) {
-                        onDocumentClick(document.id)
-                    }
+                        ),
+                        onSwipe = {
+                            viewModel.deleteFile(document.id)
+                        },
+                        onClick = {
+                            onDocumentClick(document.id)
+                        }
+                    )
                 }
             }
         }

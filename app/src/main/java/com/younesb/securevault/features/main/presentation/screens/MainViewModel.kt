@@ -24,10 +24,16 @@ class MainViewModel(
     fun onAction(action: Action) {
         when (action) {
             is Action.ShowFilePicker -> {
+                if (action.type == NewItemType.FOLDER) {
+                    _uiState.update {
+                        it.copy(showNewFolderDialog = true)
+                    }
+                    return
+                }
                 viewModelScope.launch {
                     MainEventsBus.sendEvent(
                         when (action.type) {
-                            NewItemType.IMPORT -> MainEvent.PickFile
+                            NewItemType.FILE -> MainEvent.PickFile
                             NewItemType.GALLERY -> MainEvent.PickPicture
                             NewItemType.CAMERA -> MainEvent.TakePicture
                             NewItemType.NOTE -> MainEvent.RequestNewNote

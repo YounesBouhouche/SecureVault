@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,11 +15,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -40,7 +44,8 @@ fun ListItem(
     onSelectedChange: () -> Unit,
     shape: Shape = MaterialTheme.shapes.medium,
     onMoreClick: (() -> Unit)? = null,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onSwipe: (() -> Unit)? = null,
 ) {
     val background by animateColorAsState(
         if (selected) MaterialTheme.colorScheme.primaryContainer
@@ -54,65 +59,106 @@ fun ListItem(
         if (selected) MaterialTheme.colorScheme.onPrimaryContainer
         else iconTint
     )
-    Row(
-        modifier = modifier
-            .clip(shape)
-            .background(background)
-            .clickable(onClick = onClick)
-            .padding(12.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Box(
-            Modifier
-                .size(60.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .background(iconBackground),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = if (selected) Icons.Default.Check else leadingIcon,
-                contentDescription = null,
-                modifier = Modifier.size(30.dp),
-                tint = iconTint
+    val dismissState = rememberSwipeToDismissBoxState { .5f }
+    SwipeToDismissBox(
+        modifier = modifier,
+        state = dismissState,
+        enableDismissFromStartToEnd = false,
+        gesturesEnabled = onSwipe != null,
+        onDismiss = {
+            onSwipe?.invoke()
+        },
+        backgroundContent = {
+            val background by animateColorAsState(
+                if (dismissState.progress < 1f) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.surfaceVariant
+                },
             )
-        }
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge
+            val tint by animateColorAsState(
+                if (dismissState.progress < 1f) {
+                    MaterialTheme.colorScheme.onError
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
             )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-        onMoreClick?.let {
-            IconButton(
+            Box(
                 modifier = Modifier
-                    .size(
-                        IconButtonDefaults.smallContainerSize(
-                            IconButtonDefaults.IconButtonWidthOption.Narrow
-                        )
-                    ),
-                onClick = it,
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                ),
-                shapes = IconButtonDefaults.shapes()
+                    .fillMaxSize()
+                    .clip(MaterialTheme.shapes.extraLarge)
+                    .background(background)
+                    .padding(horizontal = 24.dp),
+                contentAlignment = Alignment.CenterEnd
             ) {
                 Icon(
-                    imageVector = Icons.Default.MoreVert,
+                    imageVector = Icons.Rounded.Delete,
                     contentDescription = null,
-                    modifier = Modifier.size(IconButtonDefaults.smallIconSize)
+                    tint = tint
                 )
+            }
+        }
+    ) {
+        Row(
+            modifier = modifier
+                .clip(shape)
+                .background(background)
+                .clickable(onClick = onClick)
+                .padding(12.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                Modifier
+                    .size(60.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(iconBackground),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = if (selected) Icons.Default.Check else leadingIcon,
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = iconTint
+                )
+            }
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            onMoreClick?.let {
+                IconButton(
+                    modifier = Modifier
+                        .size(
+                            IconButtonDefaults.smallContainerSize(
+                                IconButtonDefaults.IconButtonWidthOption.Narrow
+                            )
+                        ),
+                    onClick = it,
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    shapes = IconButtonDefaults.shapes()
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = null,
+                        modifier = Modifier.size(IconButtonDefaults.smallIconSize)
+                    )
+                }
             }
         }
     }

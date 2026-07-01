@@ -16,6 +16,7 @@ fun DocumentItem(
     shape: Shape = MaterialTheme.shapes.large,
     selected: Boolean = false,
     onClick: () -> Unit = { },
+    onSwipe: () -> Unit = { },
 ) {
     val (icon, color) = remember {
         document.getIconAndColor()
@@ -30,6 +31,7 @@ fun DocumentItem(
         subtitle = document.size.formatFileSize(),
         onSelectedChange = {},
         onMoreClick = {},
-        onClick = onClick
+        onClick = onClick,
+        onSwipe = onSwipe,
     )
 }
