@@ -20,21 +20,36 @@ fun CollectMainEvents(
         contract = ActivityResultContracts.OpenDocument()
     ) {
         it?.let {
-            FilePickerManager.emitResult(File(it))
+            FilePickerManager.emitResult(
+                File(
+                    it,
+                    FileInfo.getFileProviderInfo(context, it)
+                )
+            )
         }
     }
     val pickPictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) {
         it?.let {
-            FilePickerManager.emitResult(Image(it))
+            FilePickerManager.emitResult(
+                Image(
+                    it,
+                    FileInfo.getFileProviderInfo(context, it)
+                )
+            )
         }
     }
     val takePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
     ) { accepted ->
         ComposeFileProvider.getUri().takeIf { accepted }?.let {
-            FilePickerManager.emitResult(Image(it))
+            FilePickerManager.emitResult(
+                Image(
+                    it,
+                    FileInfo.getFileProviderInfo(context, it)
+                )
+            )
         }
     }
     val saveFileLauncher = rememberLauncherForActivityResult(
@@ -57,12 +72,15 @@ fun CollectMainEvents(
                     )
                 )
             }
+
             is MainEvent.TakePicture -> {
                 takePickerLauncher.launch(ComposeFileProvider.createImageUri(context))
             }
+
             is MainEvent.MainNavigate -> {
                 navController.navigate(it.route)
             }
+
             is MainEvent.MainPopBackStack -> {
                 navController.popBackStack()
             }

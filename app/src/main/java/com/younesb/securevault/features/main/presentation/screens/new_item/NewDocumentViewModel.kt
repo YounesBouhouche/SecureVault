@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,7 +45,7 @@ class NewDocumentViewModel(
                     is NewDocument.Image -> it.uri
                     is NewDocument.Note -> null
                 }
-                val name = fileUri?.lastPathSegment ?: ""
+                val name = it.info?.name ?: fileUri?.lastPathSegment ?: ""
                 val type = when (it) {
                     is NewDocument.File -> DocumentType.FILE
                     is NewDocument.Image -> DocumentType.IMAGE
@@ -57,6 +56,7 @@ class NewDocumentViewModel(
                         fileUri = fileUri,
                         name = name,
                         type = type,
+                        mimeType = it.info?.mimeType ?: "",
                         sheetVisible = true
                     )
                 }
@@ -73,6 +73,7 @@ class NewDocumentViewModel(
                 val document = DocumentDto(
                     name = action.name,
                     type = _uiState.value.type,
+                    mimeType = _uiState.value.mimeType,
                     folderId = folderId,
                     tags = _uiState.value.selectedTags.mapNotNull { tagId ->
                         uiState.value.tags.find { it.id == tagId }
