@@ -20,12 +20,14 @@ fun CollectMainEvents(
         contract = ActivityResultContracts.OpenDocument()
     ) {
         it?.let {
-            FilePickerManager.emitResult(
-                File(
-                    it,
-                    FileInfo.getFileProviderInfo(context, it)
+            FileInfo.getFileProviderInfo(context, it).let { info ->
+                FilePickerManager.emitResult(
+                    if (info.mimeType?.startsWith("image/") == true)
+                        Image(it, info)
+                    else
+                        File(it, info)
                 )
-            )
+            }
         }
     }
     val pickPictureLauncher = rememberLauncherForActivityResult(
