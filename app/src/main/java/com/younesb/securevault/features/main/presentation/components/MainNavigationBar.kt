@@ -49,6 +49,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.younesb.securevault.R
 import com.younesb.securevault.core.presentation.components.FabMenu
@@ -153,7 +155,9 @@ fun MainNavigationBar(
                         modifier = Modifier
                             .width(itemSize)
                             .fillMaxHeight()
-                            .offset(x = animatedOffset),
+                            .offset {
+                                IntOffset(x = animatedOffset.roundToPx(), y = 0)
+                            },
                         content = {},
                         shape = RoundedCornerShape(100)
                     )

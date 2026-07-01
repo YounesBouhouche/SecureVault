@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -60,6 +59,9 @@ fun NewDocumentScreen(
     LaunchedEffect(uiState.name) {
         nameTextFieldState.setTextAndPlaceCursorAtEnd(uiState.name)
     }
+    LaunchedEffect(nameTextFieldState.text) {
+        onAction(NewDocumentAction.RemoveError)
+    }
     ModalSheet(
         visible = uiState.sheetVisible,
         modifier = modifier,
@@ -90,11 +92,12 @@ fun NewDocumentScreen(
             }
             ExpressiveTextField(
                 state = nameTextFieldState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(2f),
+                modifier = Modifier.fillMaxWidth().weight(2f),
                 label = {
                     Text(stringResource(R.string.name))
+                },
+                error = uiState.docNameError?.let {
+                    stringResource(it.stringRes)
                 }
             )
         }

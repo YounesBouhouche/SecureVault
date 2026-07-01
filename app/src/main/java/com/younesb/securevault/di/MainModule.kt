@@ -9,6 +9,7 @@ import com.younesb.securevault.features.main.data.repository.DocumentsRepository
 import com.younesb.securevault.features.main.data.repository.FilesRepositoryImpl
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
 import com.younesb.securevault.features.main.domain.repository.FilesRepository
+import com.younesb.securevault.features.main.domain.usecases.CheckForFileExistence
 import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
 import com.younesb.securevault.features.main.domain.usecases.CreateTagUseCase
 import com.younesb.securevault.features.main.domain.usecases.DeleteDocumentUseCase
@@ -85,6 +86,7 @@ val mainModule = module {
     factoryOf(::CreateFolderUseCase)
     factoryOf(::CreateTagUseCase)
     factoryOf(::ObserveTagsUseCase)
+    factoryOf(::CheckForFileExistence)
     factoryOf(::SaveNoteUseCase)
     factoryOf(::OpenDocumentUseCase)
     factoryOf(::GetDocumentUseCase)

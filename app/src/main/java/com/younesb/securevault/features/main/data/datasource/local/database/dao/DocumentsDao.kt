@@ -89,6 +89,9 @@ interface DocumentsDao {
     @Delete
     suspend fun deleteDocumentTagCrossRef(ref: DocumentTagCrossRef)
 
+    @Query("SELECT EXISTS(SELECT 1 FROM Document WHERE name = :name LIMIT 1)")
+    suspend fun checkIfDocumentExists(name: String): Boolean
+
 //    @Query("DELETE FROM sqlite_sequence")
 //    suspend fun clearPrimaryKeys()
 }

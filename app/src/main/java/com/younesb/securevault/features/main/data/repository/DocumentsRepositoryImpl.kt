@@ -205,4 +205,9 @@ class DocumentsRepositoryImpl(
             }
         }
     }
+
+    override suspend fun checkIfDocumentExists(name: String): Result<Boolean, Exception> =
+        Result.run {
+            dao.checkIfDocumentExists(name)
+        }
 }

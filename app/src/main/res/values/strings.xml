@@ -145,4 +145,8 @@
     <string name="mime_type">MimeType</string>
     <string name="unknown">Unknown</string>
     <string name="file">File</string>
+    <string name="error_empty_doc_name">Name can\'t be empty</string>
+    <string name="error_invalid_characters_doc_name">Invalid characters</string>
+    <string name="error_too_long_doc_name">Name is too long</string>
+    <string name="already_exists_doc_name">File with this name already exists</string>
 </resources>
