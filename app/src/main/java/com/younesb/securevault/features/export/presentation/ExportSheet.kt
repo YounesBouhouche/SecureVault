@@ -18,7 +18,9 @@ fun ExportSheet(modifier: Modifier = Modifier) {
         state = state,
         modifier = modifier,
         onDismissRequest = {
-            viewModel.onAction(ExportAction.HideExportSheet)
+            if (state !is ExportState.Exporting) {
+                viewModel.onAction(ExportAction.HideExportSheet)
+            }
         },
         onExport = {
             viewModel.onAction(ExportAction.ExportFiles(it))

@@ -50,7 +50,15 @@ fun ExportScreen(
             },
             sheetState = rememberBottomSheetState(
                 SheetValue.Expanded,
-                enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+                enabledValues =
+                    if (state is ExportState.Exporting) {
+                        setOf(SheetValue.Expanded)
+                    } else {
+                        setOf(SheetValue.Expanded, SheetValue.Hidden)
+                    },
+                confirmValueChange = { newValue ->
+                    !((newValue == SheetValue.Hidden) and (state is ExportState.Exporting))
+                },
             )
         ) {
             Column(
