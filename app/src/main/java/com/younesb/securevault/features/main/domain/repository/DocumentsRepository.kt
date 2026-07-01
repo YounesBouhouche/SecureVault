@@ -34,4 +34,5 @@ interface DocumentsRepository {
     suspend fun deleteTag(tagId: String): EmptyResult<Exception>
 
     suspend fun deleteAllDocuments(): EmptyResult<Exception>
+    suspend fun checkIfDocumentExists(name: String): Result<Boolean, Exception>
 }

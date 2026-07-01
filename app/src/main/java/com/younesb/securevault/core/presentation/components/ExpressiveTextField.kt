@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TextFieldLabelScope
@@ -20,6 +21,7 @@ fun ExpressiveTextField(
     placeholder: @Composable (() -> Unit)? = null,
     readOnly: Boolean = false,
     enabled: Boolean = true,
+    error: String? = null,
     lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null
@@ -36,6 +38,12 @@ fun ExpressiveTextField(
         lineLimits = lineLimits,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
+        isError = error != null,
+        supportingText = error?.let { e ->
+            {
+                Text(e)
+            }
+        },
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,

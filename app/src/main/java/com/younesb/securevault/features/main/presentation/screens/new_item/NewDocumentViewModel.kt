@@ -2,9 +2,11 @@ package com.younesb.securevault.features.main.presentation.screens.new_item
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.younesb.securevault.core.domain.utils.Result
 import com.younesb.securevault.core.domain.utils.onSuccess
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
+import com.younesb.securevault.features.main.domain.usecases.CheckForFileExistence
 import com.younesb.securevault.features.main.domain.usecases.ObserveFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveTagsUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
@@ -24,6 +26,7 @@ class NewDocumentViewModel(
     val saveNoteUseCase: SaveNoteUseCase,
     observeFoldersUseCase: ObserveFoldersUseCase,
     observeTagsUseCase: ObserveTagsUseCase,
+    val checkForFileExistence: CheckForFileExistence
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewDocumentUiState())
     private val _folders = observeFoldersUseCase()
@@ -66,20 +69,44 @@ class NewDocumentViewModel(
 
     fun onAction(action: NewDocumentAction) {
         when (action) {
+            NewDocumentAction.RemoveError -> {
+                _uiState.update {
+                    it.copy(docNameError = null)
+                }
+            }
             is NewDocumentAction.Confirm -> {
-                val folderId = _uiState.value.selectedFolder?.let {
-                    uiState.value.folders.getOrNull(it)
-                }?.id ?: ""
-                val document = DocumentDto(
-                    name = action.name,
-                    type = _uiState.value.type,
-                    mimeType = _uiState.value.mimeType,
-                    folderId = folderId,
-                    tags = _uiState.value.selectedTags.mapNotNull { tagId ->
-                        uiState.value.tags.find { it.id == tagId }
-                    }
-                )
                 viewModelScope.launch {
+                    if (action.name.isBlank()) {
+                        _uiState.update {
+                            it.copy(docNameError = DocNameError.EMPTY)
+                        }
+                        return@launch
+                    }
+                    if (action.name.length > 255) {
+                        _uiState.update {
+                            it.copy(docNameError = DocNameError.TOO_LONG)
+                        }
+                        return@launch
+                    }
+                    if ((checkForFileExistence(action.name) as? Result.Success)?.data == true) {
+                        _uiState.update {
+                            it.copy(docNameError = DocNameError.ALREADY_EXISTS)
+                        }
+                        return@launch
+                    }
+
+                    val folderId = _uiState.value.selectedFolder?.let {
+                        uiState.value.folders.getOrNull(it)
+                    }?.id ?: ""
+                    val document = DocumentDto(
+                        name = action.name,
+                        type = _uiState.value.type,
+                        mimeType = _uiState.value.mimeType,
+                        folderId = folderId,
+                        tags = _uiState.value.selectedTags.mapNotNull { tagId ->
+                            uiState.value.tags.find { it.id == tagId }
+                        }
+                    )
                     (if (_uiState.value.type == DocumentType.NOTE) {
                         saveNoteUseCase(
                             content = action.noteContent,

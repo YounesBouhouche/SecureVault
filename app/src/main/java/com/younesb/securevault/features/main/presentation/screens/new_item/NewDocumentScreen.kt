@@ -60,6 +60,9 @@ fun NewDocumentScreen(
     LaunchedEffect(uiState.name) {
         nameTextFieldState.setTextAndPlaceCursorAtEnd(uiState.name)
     }
+    LaunchedEffect(nameTextFieldState.text) {
+        onAction(NewDocumentAction.RemoveError)
+    }
     ModalSheet(
         visible = uiState.sheetVisible,
         modifier = modifier,
@@ -90,11 +93,12 @@ fun NewDocumentScreen(
             }
             ExpressiveTextField(
                 state = nameTextFieldState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(2f),
+                modifier = Modifier.fillMaxWidth().weight(2f),
                 label = {
                     Text(stringResource(R.string.name))
+                },
+                error = uiState.docNameError?.let {
+                    stringResource(it.stringRes)
                 }
             )
         }

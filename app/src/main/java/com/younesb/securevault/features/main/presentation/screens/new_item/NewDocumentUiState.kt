@@ -15,4 +15,5 @@ data class NewDocumentUiState(
     val folders: List<FolderDto> = emptyList(),
     val selectedFolder: Int? = null,
     val selectedTags: Set<String> = emptySet(),
+    val docNameError: DocNameError? = null
 )
