@@ -130,7 +130,7 @@ fun MainNavigationBar(
         ) {
             HorizontalFloatingToolbar(
                 expanded = true,
-                contentPadding = PaddingValues(12.dp, 8.dp),
+                contentPadding = PaddingValues(10.dp, 8.dp),
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 48.dp),
