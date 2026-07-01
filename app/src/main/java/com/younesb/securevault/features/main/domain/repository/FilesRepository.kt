@@ -4,7 +4,8 @@ import android.net.Uri
 import com.younesb.securevault.core.domain.utils.Result
 
 interface FilesRepository {
-    suspend fun getFileContent(name: String): Result<ByteArray, Exception>
+    suspend fun getFileContent(name: String, encrypted: Boolean = false): Result<ByteArray, Exception>
+    suspend fun getFileUri(name: String, external: Boolean = false): Uri
 
     suspend fun saveFile(sourceUri: Uri, destinationFileName: String): Result<Long, Exception>
 

@@ -25,7 +25,7 @@ fun <T, E: Throwable> Resource<T, E>.getOrNull(): T? =
         is Resource.Error -> null
     }
 
-fun <T, E: Throwable> Result<T, E>.toResource(): Resource<T, E> =
+fun <T, E: Exception> Result<T, E>.toResource(): Resource<T, E> =
     when (this) {
         is Result.Success -> Resource.Success(data)
         is Result.Error -> Resource.Error(error)

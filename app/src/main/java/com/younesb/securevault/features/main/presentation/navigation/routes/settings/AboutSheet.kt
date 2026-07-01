@@ -5,14 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,7 +44,7 @@ import com.younesb.securevault.core.presentation.components.Image
 import com.younesb.securevault.core.presentation.utils.GlobalEvent
 import com.younesb.securevault.core.presentation.utils.GlobalEventsBus
 import com.younesb.securevault.core.presentation.utils.getAppVersion
-import com.younesb.securevault.features.auth.presentation.components.AnimatedAppLogo
+import com.younesb.securevault.core.presentation.components.AnimatedAppLogo
 import com.younesb.securevault.features.main.presentation.components.TitleText
 import kotlinx.coroutines.launch
 

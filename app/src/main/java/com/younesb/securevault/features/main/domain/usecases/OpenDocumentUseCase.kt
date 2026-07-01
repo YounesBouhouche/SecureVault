@@ -11,6 +11,6 @@ class OpenDocumentUseCase(
     suspend operator fun invoke(id: String) =
         documentsRepository.getDocumentById(id)
             .pipe { document ->
-                filesRepository.getFileContent(document.id)
+                filesRepository.getFileContent(document.id, true)
             }
 }

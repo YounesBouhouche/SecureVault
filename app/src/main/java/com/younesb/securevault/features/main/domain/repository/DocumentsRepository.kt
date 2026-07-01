@@ -19,6 +19,7 @@ interface DocumentsRepository {
     fun observeAllDocuments(): Flow<List<DocumentDto>>
     suspend fun getDocuments(): Result<List<DocumentDto>, Exception>
     suspend fun getDocumentById(documentId: String): Result<DocumentDto, Exception>
+    suspend fun getDocumentsByIds(ids: List<String>): Result<List<DocumentDto>, Exception>
     suspend fun createDocument(document: DocumentDto): EmptyResult<Exception>
     suspend fun deleteDocument(documentId: String): EmptyResult<Exception>
     suspend fun renameDocument(documentId: String, newName: String): EmptyResult<Exception>

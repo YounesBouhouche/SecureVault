@@ -3,6 +3,8 @@ package com.younesb.securevault.features.main.presentation.navigation.routes.doc
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.onSuccess
+import com.younesb.securevault.features.export.presentation.util.ExportEvent
+import com.younesb.securevault.features.export.presentation.util.ExportEventsBus
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
 import com.younesb.securevault.features.main.domain.usecases.DeleteDocumentUseCase
@@ -28,10 +30,11 @@ class DocumentViewModel(
     val setFavoriteUseCase: SetFavoriteUseCase,
     val renameDocumentUseCase: RenameDocumentUseCase,
     val deleteDocumentUseCase: DeleteDocumentUseCase,
-    documentId: String,
-): ViewModel() {
+    private val documentId: String,
+) : ViewModel() {
     private val _document = MutableStateFlow<Resource<DocumentDto, Throwable>>(Resource.Idle)
-    val document = _document.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Resource.Idle)
+    val document =
+        _document.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Resource.Idle)
 
     private val _file = MutableStateFlow<Resource<Any, Throwable>>(Resource.Idle)
     val file = _file.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Resource.Idle)
@@ -88,16 +91,19 @@ class DocumentViewModel(
                         }
                 }
             }
+
             Action.HideDeleteDialog -> {
                 _uiState.update {
                     it.copy(deleteDialogVisible = false)
                 }
             }
+
             Action.HideRenameDialog -> {
                 _uiState.update {
                     it.copy(renameDialogVisible = false)
                 }
             }
+
             is Action.Rename -> {
                 val id = _document.value.getOrNull()?.id ?: return
                 _uiState.update {
@@ -114,14 +120,22 @@ class DocumentViewModel(
                         }
                 }
             }
+
             Action.ShowDeleteDialog -> {
                 _uiState.update {
                     it.copy(deleteDialogVisible = true)
                 }
             }
+
             Action.ShowRenameDialog -> {
                 _uiState.update {
                     it.copy(renameDialogVisible = true)
+                }
+            }
+
+            Action.ExportFile -> {
+                viewModelScope.launch {
+                    ExportEventsBus.sendEvent(ExportEvent.ShowExportSheet(listOf(documentId)))
                 }
             }
         }

@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 fun IconContainer(
     icon: ImageVector,
     shape: Shape,
-    fraction: Float,
     color: Color,
     backgroundColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fraction: Float = .5f
 ) {
     Surface(
         modifier = modifier,

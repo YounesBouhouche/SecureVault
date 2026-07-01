@@ -8,10 +8,16 @@ import com.younesb.securevault.features.main.domain.repository.FilesRepository
 class FilesRepositoryImpl(
     val filesManager: FilesManager
 ) : FilesRepository {
-    override suspend fun getFileContent(name: String): Result<ByteArray, Exception> =
+    override suspend fun getFileContent(
+        name: String,
+        encrypted: Boolean
+    ): Result<ByteArray, Exception> =
         Result.run {
-            filesManager.readFile(filesManager.getUri(name), encrypted = true)
+            filesManager.readFile(filesManager.getUri(name), encrypted)
         }
+
+    override suspend fun getFileUri(name: String, external: Boolean): Uri =
+        filesManager.getUri(name, external)
 
     override suspend fun saveFile(
         sourceUri: Uri,

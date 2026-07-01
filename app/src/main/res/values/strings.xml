@@ -134,4 +134,11 @@
     <string name="instagram">Instagram</string>
     <string name="search">Search</string>
     <string name="your_files_will_appear_here_once_you_add_them">Your files will appear here once you add them.</string>
+    <string name="encrypted_export">Encrypted Export</string>
+    <string name="decrypted_export">Decrypted Export</string>
+    <string name="encrypted_export_description">Export your files in an encrypted format</string>
+    <string name="decrypted_export_description">Export your files in a decrypted format</string>
+    <string name="export_files">Export Files</string>
+    <string name="export_success">Exported Successfully\n</string>
+    <string name="exporting">Exporting...</string>
 </resources>

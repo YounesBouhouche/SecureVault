@@ -1,6 +1,7 @@
 package com.younesb.securevault.di
 
 import com.younesb.securevault.features.main.data.datasource.local.database.DocumentsDatabase
+import com.younesb.securevault.features.main.data.files_utils.Archiver
 import com.younesb.securevault.features.main.data.files_utils.FilesManager
 import com.younesb.securevault.features.main.data.repository.DocumentsRepositoryImpl
 import com.younesb.securevault.features.main.data.repository.FilesRepositoryImpl
@@ -9,7 +10,10 @@ import com.younesb.securevault.features.main.domain.repository.FilesRepository
 import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
 import com.younesb.securevault.features.main.domain.usecases.CreateTagUseCase
 import com.younesb.securevault.features.main.domain.usecases.DeleteDocumentUseCase
+import com.younesb.securevault.features.export.domain.use_cases.ExportDocumentsUseCase
+import com.younesb.securevault.features.export.presentation.ExportViewModel
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentUseCase
+import com.younesb.securevault.features.main.domain.usecases.GetDocumentsUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetFoldersUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveDocumentsUseCase
 import com.younesb.securevault.features.main.domain.usecases.ObserveFolderUseCase
@@ -37,10 +41,14 @@ val mainModule = module {
     single {
         FilesManager(context = androidContext(), crypto = get())
     }
+    single {
+        Archiver(context = androidContext(), filesManager = get())
+    }
     single<DocumentsRepository> { DocumentsRepositoryImpl(get<DocumentsDatabase>()) }
     single<FilesRepository> { FilesRepositoryImpl(get()) }
 
     viewModelOf(::MainViewModel)
+    viewModelOf(::ExportViewModel)
     viewModelOf(::NewDocumentViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SettingsViewModel)
@@ -72,9 +80,11 @@ val mainModule = module {
     factoryOf(::SaveNoteUseCase)
     factoryOf(::OpenDocumentUseCase)
     factoryOf(::GetDocumentUseCase)
+    factoryOf(::GetDocumentsUseCase)
     factoryOf(::ObserveFolderUseCase)
     factoryOf(::SetFavoriteUseCase)
     factoryOf(::RenameDocumentUseCase)
     factoryOf(::DeleteDocumentUseCase)
     factoryOf(::ResetAppUseCase)
+    factoryOf(::ExportDocumentsUseCase)
 }

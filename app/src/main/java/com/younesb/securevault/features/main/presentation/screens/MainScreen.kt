@@ -13,8 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.younesb.securevault.core.presentation.theme.AppTheme
+import com.younesb.securevault.features.export.presentation.ExportSheet
 import com.younesb.securevault.features.main.presentation.components.MainNavigationBar
-import com.younesb.securevault.features.main.presentation.components.MainSearchBar
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.navigation.MainNavigationHost
 import com.younesb.securevault.features.main.presentation.navigation.util.getCurrentRoute
@@ -52,7 +52,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
             onNewItemAction = {
                 viewModel.onAction(Action.ShowFilePicker(it))
             },
-            visible = isParentRoute
+            visible = isParentRoute,
+            onExport = {
+                viewModel.onAction(Action.ShowExportSheet())
+            }
         )
     }
 
@@ -80,6 +83,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
             viewModel.onAction(Action.CreateTag(it))
         }
     )
+
+    ExportSheet()
 }
 
 @Preview

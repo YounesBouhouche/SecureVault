@@ -42,7 +42,7 @@ import com.younesb.securevault.R
 import com.younesb.securevault.core.data.util.AuthManager
 import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.presentation.components.ExpressiveButton
-import com.younesb.securevault.features.auth.presentation.components.AnimatedAppLogo
+import com.younesb.securevault.core.presentation.components.AnimatedAppLogo
 import com.younesb.securevault.features.auth.presentation.components.AnimatedCounter
 import com.younesb.securevault.features.auth.presentation.components.CounterAnimationDirection
 import org.koin.compose.viewmodel.koinViewModel

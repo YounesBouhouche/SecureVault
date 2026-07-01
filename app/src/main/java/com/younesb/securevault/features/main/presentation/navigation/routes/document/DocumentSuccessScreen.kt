@@ -254,7 +254,9 @@ fun DocumentSuccessScreen(
                         }
                     ) {
                         clickableItem(
-                            onClick = { /* doSomething() */ },
+                            onClick = {
+                                onAction(Action.ExportFile)
+                            },
                             icon = {
                                 Icon(
                                     Icons.Filled.Download,

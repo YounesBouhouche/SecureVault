@@ -2,6 +2,8 @@ package com.younesb.securevault.features.main.presentation.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.younesb.securevault.features.export.presentation.util.ExportEvent
+import com.younesb.securevault.features.export.presentation.util.ExportEventsBus
 import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
 import com.younesb.securevault.features.main.domain.usecases.CreateTagUseCase
 import com.younesb.securevault.features.main.presentation.util.MainEvent
@@ -69,6 +71,13 @@ class MainViewModel(
                     }
                 }
             }
+
+            is Action.ShowExportSheet -> {
+                viewModelScope.launch {
+                    ExportEventsBus.sendEvent(ExportEvent.ShowExportSheet(action.ids))
+                }
+            }
         }
     }
+
 }

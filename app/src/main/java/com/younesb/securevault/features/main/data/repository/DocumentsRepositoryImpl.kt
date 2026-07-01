@@ -87,6 +87,13 @@ class DocumentsRepositoryImpl(
             DocumentDto.fromDocument(getDocument(documentId))
         }
 
+    override suspend fun getDocumentsByIds(ids: List<String>): Result<List<DocumentDto>, Exception>  =
+        Result.run {
+            ids.map { documentId ->
+                DocumentDto.fromDocument(getDocument(documentId))
+            }
+        }
+
     override suspend fun createDocument(document: DocumentDto): EmptyResult<Exception> =
         Result.run {
             dao.upsertDocument(
