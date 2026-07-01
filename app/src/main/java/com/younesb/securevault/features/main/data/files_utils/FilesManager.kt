@@ -2,6 +2,7 @@ package com.younesb.securevault.features.main.data.files_utils
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toFile
 import com.younesb.securevault.core.util.crypto.Crypto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -66,7 +67,7 @@ class FilesManager(
 
     fun deleteFile(uri: Uri) {
         uri.safeCall {
-            context.contentResolver.delete(it, null, null)
+            it.toFile().delete()
         }
     }
 

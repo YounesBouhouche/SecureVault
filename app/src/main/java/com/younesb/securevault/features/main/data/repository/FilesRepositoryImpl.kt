@@ -1,6 +1,7 @@
 package com.younesb.securevault.features.main.data.repository
 
 import android.net.Uri
+import com.younesb.securevault.core.domain.utils.EmptyResult
 import com.younesb.securevault.core.domain.utils.Result
 import com.younesb.securevault.features.main.data.files_utils.FilesManager
 import com.younesb.securevault.features.main.domain.repository.FilesRepository
@@ -47,9 +48,10 @@ class FilesRepositoryImpl(
         }.size.toLong()
     }
 
-    override suspend fun deleteFile(name: String): Result<Boolean, Exception> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteFile(name: String, external: Boolean): EmptyResult<Exception> =
+        Result.run {
+            filesManager.deleteFile(filesManager.getUri(name, external))
+        }
 
     override suspend fun deleteAllFiles(): Result<Boolean, Exception> {
         try {
