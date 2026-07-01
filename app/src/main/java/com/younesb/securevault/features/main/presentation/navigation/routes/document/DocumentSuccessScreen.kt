@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Favorite
@@ -395,21 +396,28 @@ fun InfoSheet(
                     label = stringResource(R.string.document_name),
                     text = document.name,
                     index = 0,
-                    count = 3
+                    count = 4
                 )
                 InfoElement(
                     icon = Icons.Rounded.Straighten,
                     label = stringResource(R.string.file_size),
                     text = document.size.formatFileSize(),
                     index = 1,
-                    count = 3
+                    count = 4
+                )
+                InfoElement(
+                    icon = Icons.Rounded.Apps,
+                    label = stringResource(R.string.mime_type),
+                    text = document.mimeType.takeIf { it.isNotBlank() } ?: stringResource(R.string.unknown),
+                    index = 2,
+                    count = 4
                 )
                 InfoElement(
                     icon = Icons.Rounded.Today,
                     label = stringResource(R.string.document_created_at),
                     text = document.createdAt.toReadableDateString(),
-                    index = 2,
-                    count = 3
+                    index = 3,
+                    count = 4
                 )
             }
         }
