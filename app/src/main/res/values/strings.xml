@@ -142,4 +142,6 @@
     <string name="export_success">Exported Successfully\n</string>
     <string name="exporting">Exporting…</string>
     <string name="file_info">File Info</string>
+    <string name="mime_type">MimeType</string>
+    <string name="unknown">Unknown</string>
 </resources>

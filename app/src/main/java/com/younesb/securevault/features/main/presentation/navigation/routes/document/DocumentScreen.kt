@@ -12,13 +12,14 @@ import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.TagDto
 import com.younesb.securevault.features.main.presentation.util.Resource
 import com.younesb.securevault.features.main.presentation.util.ResourcePresenter
+import okhttp3.internal.EMPTY_BYTE_ARRAY
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DocumentScreen(
     document: Resource<DocumentDto, Throwable>,
-    file: Resource<Any, Throwable>,
+    file: Resource<ByteArray, Throwable>,
     uiState: UiState,
     onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
@@ -62,7 +63,7 @@ private fun DocumentScreenPreview() {
                     )
                 )
             ),
-            file = Resource.Success(Any()),
+            file = Resource.Success(EMPTY_BYTE_ARRAY),
             onAction = {},
             modifier = Modifier.fillMaxSize(),
             uiState = UiState(isFavorite = true)

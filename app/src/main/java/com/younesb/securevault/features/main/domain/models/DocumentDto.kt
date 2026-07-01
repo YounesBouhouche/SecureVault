@@ -10,6 +10,7 @@ data class DocumentDto(
     val folderId: String = "",
     val size: Long = 0L,
     val type: DocumentType = DocumentType.FILE,
+    val mimeType: String = "",
     val favorite: Boolean = false,
     val tags: List<TagDto> = emptyList()
 ) {
@@ -26,6 +27,7 @@ data class DocumentDto(
                 } catch (_: IllegalArgumentException) {
                     DocumentType.UNKNOWN
                 },
+                mimeType = documentWithTags.document.mimeType,
                 tags = documentWithTags.tags.map(TagDto::fromTag),
                 favorite = documentWithTags.document.favorite
             )
@@ -43,6 +45,7 @@ data class DocumentDto(
                 } catch (_: IllegalArgumentException) {
                     DocumentType.UNKNOWN
                 },
+                mimeType = document.mimeType,
                 tags = emptyList(),
                 favorite = document.favorite
             )
@@ -56,6 +59,7 @@ data class DocumentDto(
         private var folderId: String = ""
         private var size: Long = 0L
         private var type: DocumentType = DocumentType.FILE
+        private var mimeType: String = ""
         private var tags: List<TagDto> = emptyList()
         private var favorite: Boolean = false
 
@@ -65,9 +69,10 @@ data class DocumentDto(
         fun folderId(folderId: String) = apply { this.folderId = folderId }
         fun size(size: Long) = apply { this.size = size }
         fun type(type: DocumentType) = apply { this.type = type }
+        fun mimeType(mimeType: String) = apply { this.mimeType = mimeType }
         fun tags(tags: List<TagDto>) = apply { this.tags = tags }
         fun favorite(favorite: Boolean) = apply { this.favorite = favorite }
 
-        fun build() = DocumentDto(id, name, createdAt, folderId, size, type, favorite, tags)
+        fun build() = DocumentDto(id, name, createdAt, folderId, size, type, mimeType, favorite, tags)
     }
 }

@@ -6,7 +6,6 @@ import com.younesb.securevault.core.domain.utils.onSuccess
 import com.younesb.securevault.features.export.presentation.util.ExportEvent.ShowExportSheet
 import com.younesb.securevault.features.export.presentation.util.ExportEventsBus
 import com.younesb.securevault.features.main.domain.models.DocumentDto
-import com.younesb.securevault.features.main.domain.models.DocumentType
 import com.younesb.securevault.features.main.domain.usecases.DeleteDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.OpenDocumentUseCase
@@ -36,7 +35,7 @@ class DocumentViewModel(
     val document =
         _document.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Resource.Idle)
 
-    private val _file = MutableStateFlow<Resource<Any, Throwable>>(Resource.Idle)
+    private val _file = MutableStateFlow<Resource<ByteArray, Throwable>>(Resource.Idle)
     val file = _file.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Resource.Idle)
 
     private val _uiState = MutableStateFlow(UiState())
@@ -47,14 +46,8 @@ class DocumentViewModel(
             launch {
                 _document.value = Resource.Loading
                 _file.value = Resource.Loading
-                _document.value = getDocumentUseCase(documentId).toResource().also { doc ->
-                    val result = openDocumentUseCase(documentId)
-                    _file.value = result.toResource().map {
-                        if (doc.getOrNull()?.type == DocumentType.NOTE)
-                            it.decodeToString()
-                        else it
-                    }
-                }
+                _document.value = getDocumentUseCase(documentId).toResource()
+                _file.value = openDocumentUseCase(documentId).toResource()
             }
         }
     }

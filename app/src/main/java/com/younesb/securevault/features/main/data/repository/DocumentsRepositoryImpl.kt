@@ -103,6 +103,7 @@ class DocumentsRepositoryImpl(
                     createdAt = System.currentTimeMillis(),
                     folderId = document.folderId,
                     type = document.type.name,
+                    mimeType = document.mimeType,
                     size = document.size,
                     favorite = false,
                     updatedAt = System.currentTimeMillis()

@@ -12,6 +12,7 @@ data class Document(
     val favorite: Boolean,
     val folderId: String,
     val type: String,
+    val mimeType: String,
     val createdAt: Long,
     val updatedAt: Long
 )

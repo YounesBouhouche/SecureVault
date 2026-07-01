@@ -8,6 +8,7 @@ import com.younesb.securevault.features.main.data.files_utils.Archiver
 import com.younesb.securevault.features.main.domain.models.DocumentType
 import com.younesb.securevault.features.main.domain.repository.FilesRepository
 import com.younesb.securevault.features.main.domain.usecases.GetDocumentsUseCase
+import com.younesb.securevault.features.main.presentation.util.FileInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -26,13 +27,16 @@ class ExportDocumentsUseCase(
                 Result.run {
                     archiver.zip(
                         docs.map { doc ->
-                            val docName = StringBuilder(doc.name).also {
-                                when (doc.type) {
-                                    DocumentType.NOTE -> it.append(".txt")
-                                    DocumentType.IMAGE -> it.append(".jpg")
-                                    else -> Unit
+                            val docName = doc.name.let { name ->
+                                val extension = when (doc.type) {
+                                    DocumentType.NOTE -> ".txt"
+                                    else -> FileInfo.mimeTypeToExtension(doc.mimeType)
+                                        ?.let { ext -> ".$ext" } ?: ""
                                 }
-                            }.toString()
+                                if (!name.endsWith(extension)) {
+                                    name + extension
+                                } else name
+                            }
                             filesRepository.getFileUri(doc.id) to docName
                         },
                         destination,
