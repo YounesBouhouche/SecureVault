@@ -1,17 +1,5 @@
 package com.younesb.securevault.features.main.domain.models
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
-import androidx.compose.material.icons.automirrored.rounded.Note
-import androidx.compose.material.icons.filled.InsertDriveFile
-import androidx.compose.material.icons.rounded.Movie
-import androidx.compose.material.icons.rounded.MusicNote
-import androidx.compose.material.icons.rounded.Note
-import androidx.compose.material.icons.rounded.PictureAsPdf
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.younesb.securevault.features.main.data.datasource.local.database.models.Document
 import com.younesb.securevault.features.main.data.datasource.local.database.models.DocumentWithTags
 
