@@ -41,6 +41,8 @@ fun MainNavigationHost(
         ) {
             composable<MainRoutes.Home> {
                 HomeScreen(
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this,
                     onFolderClick = { id ->
                         navController.navigate(MainRoutes.Folder(folderId = id))
                     },
@@ -60,7 +62,11 @@ fun MainNavigationHost(
             }
             composable<MainRoutes.Document> {
                 val documentId = it.toRoute<MainRoutes.Document>().documentId
-                DocumentRoute(documentId = documentId)
+                DocumentRoute(
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this,
+                    documentId = documentId
+                )
             }
             composable<MainRoutes.Settings> {
                 SettingsRoute(contentPadding = PaddingValues(bottom = 200.dp))

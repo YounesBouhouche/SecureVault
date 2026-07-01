@@ -1,5 +1,7 @@
 package com.younesb.securevault.features.main.presentation.navigation.routes.home
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
@@ -23,7 +24,6 @@ import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Inbox
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,6 +63,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HomeScreen(
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,
     onFolderClick: (String) -> Unit = { },
     onDocumentClick: (String) -> Unit = { }
@@ -212,16 +214,23 @@ fun HomeScreen(
                 }
             }
             itemsIndexed(documents, { _, it -> "doc_${it.id}" }) { index, document ->
-                DocumentItem(
-                    document = document,
-                    shape = expressiveListItemShape(
-                        folders.size + index + 1,
-                        total + 1,
-                        smallShape = MaterialTheme.shapes.small
-                    ),
-                    modifier = Modifier.animateItem(),
-                ) {
-                    onDocumentClick(document.id)
+                with(sharedTransitionScope) {
+                    DocumentItem(
+                        document = document,
+                        shape = expressiveListItemShape(
+                            folders.size + index + 1,
+                            total + 1,
+                            smallShape = MaterialTheme.shapes.small
+                        ),
+                        modifier = Modifier.animateItem().sharedBounds(
+                            sharedContentState = sharedTransitionScope
+                                .rememberSharedContentState(key = "doc_${document.id}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                        )
+                    ) {
+                        onDocumentClick(document.id)
+                    }
                 }
             }
         }
