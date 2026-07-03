@@ -163,4 +163,5 @@
         The file was added to the vault, but it wasn\'t deleted from your storage. This might be due to insufficient permissions, Android 10+ restrictions, or the file being in a protected location (like Drive or External USB Storage).
         \nYou can delete it manually to ensure it\'s only accessible through the vault or reselect the file through \"File\" option and not \"Gallery\".
     </string>
+    <string name="unsupported_file_type">Unsupported file type</string>
 </resources>

@@ -172,4 +172,5 @@
         Le fichier a été ajouté à la xozne, mais il n\'a pas été supprimé de votre stockage. Cela peut être dû à des permissions insuffisantes, aux restrictions d\'Android 10+, ou au fait que le fichier se trouve dans un emplacement protégé (comme Drive ou un stockage USB externe).
         \nVous pouvez le supprimer manuellement pour vous assurer qu\'il n\'est accessible que via la xozne, ou resélectionner le fichier via l\'option \"Fichier\" et non \"Galerie\".
     </string>
+    <string name="unsupported_file_type">Type de fichier non pris en charge</string>
 </resources>
