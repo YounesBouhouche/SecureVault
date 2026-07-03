@@ -149,4 +149,14 @@
     <string name="error_invalid_characters_doc_name">Invalid characters</string>
     <string name="error_too_long_doc_name">Name is too long</string>
     <string name="already_exists_doc_name">File with this name already exists</string>
+    <string name="biometric_authentication">Biometric authentication</string>
+    <string name="biometric_authentication_description">Use your fingerprint or face to quickly and securely access your vault.</string>
+    <string name="fallback_authentication">Fallback authentication</string>
+    <string name="fallback_authentication_description">Set up a PIN as a backup authentication method.</string>
+    <string name="auto_lock_and_timeout">Auto-lock and timeout</string>
+    <string name="auto_lock_and_timeout_description">Configure auto-lock settings to protect your vault when you\'re away.</string>
+    <string name="biometric_authentication_failure">Biometric authentication is not set up or failed to authenticate. Please set it up to enhance the security of your vault.</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="biometric_skip_description">Using biometric authentication makes your vault more secure, you can use PIN only (if you insist)</string>
+    <string name="use_pin_only">Use PIN Only</string>
 </resources>

@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Fingerprint
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ButtonDefaults
@@ -40,7 +39,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.younesb.securevault.R
 import com.younesb.securevault.core.presentation.components.ExpressiveButton
@@ -104,11 +102,15 @@ fun SetupScreen(
                         ),
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    AnimatedContent(promptResult, Modifier.weight(1f).fillMaxSize()) {
+                    AnimatedContent(promptResult, Modifier
+                        .weight(1f)
+                        .fillMaxSize()) {
                         when (it) {
                             BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
                                 Box(
-                                    modifier = Modifier.fillMaxSize().weight(1f),
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .weight(1f),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     IconContainer(
@@ -128,16 +130,16 @@ fun SetupScreen(
                                     verticalArrangement = Arrangement.SpaceEvenly
                                 ) {
                                     SetupExplanationElement(
-                                        title = "Biometric authentication",
-                                        text = "Use your fingerprint or face to quickly and securely access your vault."
+                                        title = stringResource(R.string.biometric_authentication),
+                                        text = stringResource(R.string.biometric_authentication_description)
                                     )
                                     SetupExplanationElement(
-                                        title = "Fallback authentication",
-                                        text = "Set up a PIN as a backup authentication method."
+                                        title = stringResource(R.string.fallback_authentication),
+                                        text = stringResource(R.string.fallback_authentication_description)
                                     )
                                     SetupExplanationElement(
-                                        title = "Auto-lock and timeout",
-                                        text = "Configure auto-lock settings to protect your vault when you're away."
+                                        title = stringResource(R.string.auto_lock_and_timeout),
+                                        text = stringResource(R.string.auto_lock_and_timeout_description)
                                     )
                                 }
                             }
@@ -155,7 +157,7 @@ fun SetupScreen(
                                         tint = MaterialTheme.colorScheme.error
                                     )
                                     Text(
-                                        text = "Biometric authentication is not set up or failed to authenticate. Please set it up to enhance the security of your vault.",
+                                        text = stringResource(R.string.biometric_authentication_failure),
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -208,7 +210,9 @@ fun SetupScreen(
                 color = MaterialTheme.colorScheme.surfaceContainer
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(20.dp, 24.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp, 24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -219,13 +223,13 @@ fun SetupScreen(
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "Are you sure?",
+                        text = stringResource(R.string.are_you_sure),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Text(
-                        text = "Using biometric authentication makes your vault more secure, you can use PIN only (if you insist)",
+                        text = stringResource(R.string.biometric_skip_description),
                         textAlign = TextAlign.Justify,
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.bodyMedium,
@@ -233,7 +237,7 @@ fun SetupScreen(
                     )
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         ExpressiveButton(
-                            text = "No",
+                            text = stringResource(R.string.no),
                             size = ButtonDefaults.MediumContainerHeight,
                             outlined = true,
                             modifier = Modifier.weight(1f)
@@ -241,7 +245,7 @@ fun SetupScreen(
                             showSkipDialog = false
                         }
                         ExpressiveButton(
-                            text = "Use PIN Only",
+                            text = stringResource(R.string.use_pin_only),
                             size = ButtonDefaults.MediumContainerHeight,
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(
