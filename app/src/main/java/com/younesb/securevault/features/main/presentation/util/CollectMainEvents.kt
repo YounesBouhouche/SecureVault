@@ -1,0 +1,103 @@
+package com.younesb.securevault.features.main.presentation.util
+
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.younesb.securevault.core.presentation.events.CollectEvents
+import com.younesb.securevault.features.export.presentation.util.SaveFileDialogManager
+import com.younesb.securevault.features.main.presentation.NewDocument.*
+
+@Composable
+fun CollectMainEvents(
+    navController: NavHostController = rememberNavController(),
+) {
+    val context = LocalContext.current
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) {
+        it?.let {
+            val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            context.contentResolver.takePersistableUriPermission(it, takeFlags)
+            FileInfo.getFileProviderInfo(context, it).let { info ->
+                FilePickerManager.emitResult(
+                    if (info.mimeType?.startsWith("image/") == true)
+                        Image(it, info)
+                    else
+                        File(it, info)
+                )
+            }
+        }
+    }
+    val pickPictureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+    ) {
+        it?.let {
+            FilePickerManager.emitResult(
+                Image(
+                    it,
+                    FileInfo.getFileProviderInfo(context, it)
+                )
+            )
+        }
+    }
+    val takePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+    ) { accepted ->
+        ComposeFileProvider.getUri().takeIf { accepted }?.let {
+            FilePickerManager.emitResult(
+                Image(
+                    it,
+                    FileInfo.getFileProviderInfo(context, it)
+                )
+            )
+        }
+    }
+    val saveFileLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("*/*")
+    ) { result ->
+        result?.let {
+            SaveFileDialogManager.emitResult(it)
+        }
+    }
+    CollectEvents(MainEventsBus.events) {
+        when (it) {
+            is MainEvent.PickFile -> {
+                filePickerLauncher.launch(arrayOf("*/*"))
+            }
+
+            is MainEvent.PickPicture -> {
+                pickPictureLauncher.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+            }
+
+            is MainEvent.TakePicture -> {
+                takePickerLauncher.launch(ComposeFileProvider.createImageUri(context))
+            }
+
+            is MainEvent.MainNavigate -> {
+                navController.navigate(it.route)
+            }
+
+            is MainEvent.MainPopBackStack -> {
+                navController.popBackStack()
+            }
+
+            MainEvent.RequestNewNote -> {
+                FilePickerManager.emitResult(Note())
+            }
+
+            is MainEvent.PickSavePath -> {
+                saveFileLauncher.launch(it.fileName)
+            }
+        }
+    }
+}
