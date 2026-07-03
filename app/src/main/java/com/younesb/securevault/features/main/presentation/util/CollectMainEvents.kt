@@ -1,5 +1,6 @@
 package com.younesb.securevault.features.main.presentation.util
 
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,6 +21,9 @@ fun CollectMainEvents(
         contract = ActivityResultContracts.OpenDocument()
     ) {
         it?.let {
+            val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            context.contentResolver.takePersistableUriPermission(it, takeFlags)
             FileInfo.getFileProviderInfo(context, it).let { info ->
                 FilePickerManager.emitResult(
                     if (info.mimeType?.startsWith("image/") == true)

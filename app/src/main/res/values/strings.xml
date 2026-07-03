@@ -24,7 +24,6 @@
     <string name="pins_do_not_match">PINs do not match</string>
     <string name="enter_your_pin">Enter your PIN</string>
     <string name="wrong_pin_try_again">Wrong PIN, try again!</string>
-    <string name="authentict">Authenticate</string>
     <string name="authenticate">Authenticate</string>
     <plurals name="remaining_attempts">
         <item quantity="one">%d attempt remaining</item>
@@ -149,4 +148,20 @@
     <string name="error_invalid_characters_doc_name">Invalid characters</string>
     <string name="error_too_long_doc_name">Name is too long</string>
     <string name="already_exists_doc_name">File with this name already exists</string>
+    <string name="biometric_authentication">Biometric authentication</string>
+    <string name="biometric_authentication_description">Use your fingerprint or face to quickly and securely access your vault.</string>
+    <string name="fallback_authentication">Fallback authentication</string>
+    <string name="fallback_authentication_description">Set up a PIN as a backup authentication method.</string>
+    <string name="auto_lock_and_timeout">Auto-lock and timeout</string>
+    <string name="auto_lock_and_timeout_description">Configure auto-lock settings to protect your vault when you\'re away.</string>
+    <string name="biometric_authentication_failure">Biometric authentication is not set up or failed to authenticate. Please set it up to enhance the security of your vault.</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="biometric_skip_description">Using biometric authentication makes your vault more secure, you can use PIN only (if you insist)</string>
+    <string name="use_pin_only">Use PIN Only</string>
+    <string name="file_not_deleted_title">This file wasn\'t deleted from your storage</string>
+    <string name="file_not_deleted_message">
+        The file was added to the vault, but it wasn\'t deleted from your storage. This might be due to insufficient permissions, Android 10+ restrictions, or the file being in a protected location (like Drive or External USB Storage).
+        \nYou can delete it manually to ensure it\'s only accessible through the vault or reselect the file through \"File\" option and not \"Gallery\".
+    </string>
+    <string name="unsupported_file_type">Unsupported file type</string>
 </resources>

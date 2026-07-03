@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.younesb.securevault.R
+import com.younesb.securevault.core.presentation.components.Dialog
 import com.younesb.securevault.core.presentation.components.ExpressiveButton
 import com.younesb.securevault.core.presentation.components.ExpressiveDropdownMenu
 import com.younesb.securevault.core.presentation.components.ExpressiveTextField
@@ -243,6 +245,28 @@ fun NewDocumentScreen(
             )
         }
     }
+    Dialog(
+        visible = uiState.fileNotDeletedDialog,
+        onDismissRequest = {
+            onAction(NewDocumentAction.DismissFileNotDeletedDialog)
+        },
+        icon = Icons.Rounded.Warning,
+        title = stringResource(R.string.file_not_deleted_title),
+        content = {
+            Text(
+                text = stringResource(R.string.file_not_deleted_message),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            ExpressiveButton(
+                text = stringResource(R.string.ok),
+                size = ButtonDefaults.MediumContainerHeight,
+                onClick = {
+                    onAction(NewDocumentAction.DismissFileNotDeletedDialog)
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    )
 }
 
 @Preview

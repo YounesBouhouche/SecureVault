@@ -2,6 +2,7 @@ package com.younesb.securevault.features.main.data.files_utils
 
 import android.content.Context
 import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.core.net.toFile
 import com.younesb.securevault.core.util.crypto.Crypto
 import kotlinx.coroutines.Dispatchers
@@ -70,6 +71,24 @@ class FilesManager(
             it.toFile().delete()
         }
     }
+
+    fun deleteFileFromContent(uri: Uri): Boolean =
+        uri.safeCall {
+            try {
+                DocumentsContract.deleteDocument(context.contentResolver, uri)
+            } catch (_: UnsupportedOperationException) {
+                try {
+                    val rowsDeleted = context.contentResolver.delete(uri, null, null)
+                    rowsDeleted > 0
+                } catch (fallbackEx: Exception) {
+                    fallbackEx.printStackTrace()
+                    false
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        }
 
     suspend fun deleteAllFiles(external: Boolean = false) {
         val dir = if (external) context.getExternalFilesDir(null) else context.filesDir

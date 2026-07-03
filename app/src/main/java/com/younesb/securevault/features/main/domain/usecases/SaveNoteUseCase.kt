@@ -1,5 +1,6 @@
 package com.younesb.securevault.features.main.domain.usecases
 
+import com.younesb.securevault.core.domain.utils.map
 import com.younesb.securevault.core.domain.utils.pipe
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
@@ -18,6 +19,6 @@ class SaveNoteUseCase(
             filesRepository.saveFile(content, doc.id)
                 .pipe {
                     documentsRepository.createDocument(doc.copy(size = it))
-                }
+                }.map { true }
         }
 }

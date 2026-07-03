@@ -7,6 +7,7 @@ import com.younesb.securevault.features.main.domain.models.TagDto
 
 data class NewDocumentUiState(
     val sheetVisible: Boolean = false,
+    val fileNotDeletedDialog: Boolean = false,
     val fileUri: Uri? = null,
     val type: DocumentType = DocumentType.FILE,
     val mimeType: String = "",

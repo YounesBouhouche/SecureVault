@@ -12,8 +12,8 @@ enum class ColorScheme(
     val lightScheme: androidx.compose.material3.ColorScheme,
     val darkScheme: androidx.compose.material3.ColorScheme,
 ) {
-    GREEN(R.string.green, GreenColors.lightScheme, GreenColors.darkScheme),
     BLUE(R.string.blue, BlueColors.lightScheme, BlueColors.darkScheme),
+    GREEN(R.string.green, GreenColors.lightScheme, GreenColors.darkScheme),
     RED(R.string.red, RedColors.lightScheme, RedColors.darkScheme),
     ORANGE(R.string.orange, OrangeColors.lightScheme, OrangeColors.darkScheme),
     PURPLE(R.string.purple, PurpleColors.lightScheme, PurpleColors.darkScheme),
