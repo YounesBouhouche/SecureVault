@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             val viewModel = koinViewModel<ThemeViewModel>()
             val themeMode by viewModel.themeMode.collectAsState()
             val extraDark by viewModel.extraDark.collectAsState()
-            val colorTheme by viewModel.colorTheme.collectAsState()
+            val colorTheme by viewModel.colorScheme.collectAsState()
             val dynamicColors by viewModel.dynamicColors.collectAsState()
             val navController = rememberNavController()
             CollectAuthEvents(navController, biometricPromptManager)

@@ -3,6 +3,7 @@ package com.younesb.securevault.core.presentation.theme
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.data.datastore.SettingsPreference
+import com.younesb.securevault.core.domain.models.preferences.ColorScheme
 import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.domain.repositories.PreferencesRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +15,7 @@ class ThemeViewModel(
 ): ViewModel() {
     val themeMode = SettingsPreference.ThemeMode.getState()
     val extraDark = SettingsPreference.ExtraDarkMode.getState()
-    val colorTheme = SettingsPreference.ColorSchemeMode.getState()
+    val colorScheme = SettingsPreference.ColorSchemeMode.getState()
     val dynamicColors = SettingsPreference.DynamicColor.getState()
 
     internal fun<T, R> SettingsPreference<T, R>.getState() =
@@ -36,5 +37,13 @@ class ThemeViewModel(
 
     fun setDynamicColors(value: Boolean) {
         SettingsPreference.DynamicColor.set(value)
+    }
+
+    fun setExtraDark(value: Boolean) {
+        SettingsPreference.ExtraDarkMode.set(value)
+    }
+
+    fun setColorScheme(value: ColorScheme) {
+        SettingsPreference.ColorSchemeMode.set(value)
     }
 }
