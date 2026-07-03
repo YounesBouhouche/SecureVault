@@ -1,6 +1,7 @@
 package com.younesb.securevault.features.main.domain.usecases
 
 import android.net.Uri
+import com.younesb.securevault.core.domain.utils.map
 import com.younesb.securevault.core.domain.utils.pipe
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
@@ -24,6 +25,9 @@ class SaveDocumentUseCase(
                     document.tags.forEach { tag ->
                         documentsRepository.addTagToDocument(doc.id, tag.id)
                     }
+                }
+                .pipe {
+                    filesRepository.deleteFileFromUri(sourceFile)
                 }
         }
 }

@@ -53,6 +53,11 @@ class FilesRepositoryImpl(
             filesManager.deleteFile(filesManager.getUri(name, external))
         }
 
+    override suspend fun deleteFileFromUri(uri: Uri): Result<Boolean, Exception> =
+        Result.run {
+            filesManager.deleteFileFromContent(uri)
+        }
+
     override suspend fun deleteAllFiles(): Result<Boolean, Exception> {
         try {
             filesManager.deleteAllFiles()

@@ -167,4 +167,9 @@
     <string name="are_you_sure">Êtes-vous sûr ?</string>
     <string name="biometric_skip_description">L\'authentification biométrique rend votre coffre-fort plus sécurisé. Vous pouvez utiliser uniquement le PIN (si vous insistez)</string>
     <string name="use_pin_only">Utiliser le PIN uniquement</string>
+    <string name="file_not_deleted_title">Ce fichier n\'a pas été supprimé de votre stockage</string>
+    <string name="file_not_deleted_message">
+        Le fichier a été ajouté à la xozne, mais il n\'a pas été supprimé de votre stockage. Cela peut être dû à des permissions insuffisantes, aux restrictions d\'Android 10+, ou au fait que le fichier se trouve dans un emplacement protégé (comme Drive ou un stockage USB externe).
+        \nVous pouvez le supprimer manuellement pour vous assurer qu\'il n\'est accessible que via la xozne, ou resélectionner le fichier via l\'option \"Fichier\" et non \"Galerie\".
+    </string>
 </resources>

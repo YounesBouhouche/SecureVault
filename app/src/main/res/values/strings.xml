@@ -158,4 +158,9 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="biometric_skip_description">Using biometric authentication makes your vault more secure, you can use PIN only (if you insist)</string>
     <string name="use_pin_only">Use PIN Only</string>
+    <string name="file_not_deleted_title">This file wasn\'t deleted from your storage</string>
+    <string name="file_not_deleted_message">
+        The file was added to the vault, but it wasn\'t deleted from your storage. This might be due to insufficient permissions, Android 10+ restrictions, or the file being in a protected location (like Drive or External USB Storage).
+        \nYou can delete it manually to ensure it\'s only accessible through the vault or reselect the file through \"File\" option and not \"Gallery\".
+    </string>
 </resources>

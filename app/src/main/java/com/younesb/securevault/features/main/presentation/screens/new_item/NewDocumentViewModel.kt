@@ -3,6 +3,7 @@ package com.younesb.securevault.features.main.presentation.screens.new_item
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.Result
+import com.younesb.securevault.core.domain.utils.onError
 import com.younesb.securevault.core.domain.utils.onSuccess
 import com.younesb.securevault.features.main.domain.models.DocumentDto
 import com.younesb.securevault.features.main.domain.models.DocumentType
@@ -117,10 +118,12 @@ class NewDocumentViewModel(
                             sourceFile = _uiState.value.fileUri ?: return@launch,
                             document = document
                         )
-                    }).onSuccess {
+                    }).onSuccess { fileDeleted ->
                         _uiState.update {
-                            it.copy(sheetVisible = false)
+                            it.copy(sheetVisible = false, fileNotDeletedDialog = !fileDeleted)
                         }
+                    }.onError {
+                        it.printStackTrace()
                     }
                 }
             }
@@ -145,6 +148,11 @@ class NewDocumentViewModel(
                         state.selectedTags - action.id
                     }
                     state.copy(selectedTags = updatedTags)
+                }
+            }
+            NewDocumentAction.DismissFileNotDeletedDialog -> {
+                _uiState.update { state ->
+                    state.copy(fileNotDeletedDialog = false)
                 }
             }
         }
