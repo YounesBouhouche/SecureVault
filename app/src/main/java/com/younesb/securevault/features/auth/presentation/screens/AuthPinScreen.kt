@@ -6,7 +6,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalGridApi
-import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,12 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Backspace
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Password
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,8 +33,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.younesb.securevault.R
-import com.younesb.securevault.core.presentation.components.ExpressiveButton
 import com.younesb.securevault.core.presentation.components.IconContainer
+import com.younesb.securevault.core.presentation.components.PinGrid
 import com.younesb.securevault.features.auth.presentation.components.PinTextRow
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -50,15 +45,6 @@ fun AuthPinScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,
 ) {
-    val numberColors = ButtonDefaults.filledTonalButtonColors()
-    val backSpaceColors = ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.errorContainer,
-        contentColor = MaterialTheme.colorScheme.error
-    )
-    val clearColors = ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-    )
     val authPinViewModel = koinViewModel<AuthPinViewModel>()
     val pin by authPinViewModel.pin.collectAsState()
     val wrongPin by authPinViewModel.wrongPin.collectAsState()
@@ -105,8 +91,8 @@ fun AuthPinScreen(
                     )
             ) {
                 Column(
-                    modifier = Modifier.padding(32.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                    modifier = Modifier.padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     AnimatedContent(textRes) {
                         Text(
@@ -118,7 +104,8 @@ fun AuthPinScreen(
                                 minFontSize = 10.sp,
                                 maxFontSize = 100.sp
                             ),
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(horizontal = 8.dp)
                         )
                     }
                     Text(
@@ -132,57 +119,14 @@ fun AuthPinScreen(
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Grid(
-                        config = {
-                            repeat(3) {
-                                column(1.fr)
-                            }
-                            repeat(4) {
-                                row(1.fr)
-                            }
-                            gap(8.dp)
-                        }
-                    ) {
-                        repeat(12) { index ->
-                            ExpressiveButton(
-                                onClick = {
-                                    when (index) {
-                                        in 0..8 -> authPinViewModel.addDigit((index + 1) % 10)
-                                        10 -> authPinViewModel.addDigit(0)
-                                        9 -> authPinViewModel.clearPin()
-                                        11 -> authPinViewModel.removeLastDigit()
-                                    }
-                                },
-                                enabled = !loading,
-                                modifier = Modifier.fillMaxSize(),
-                                size = ButtonDefaults.MediumContainerHeight,
-                                colors = when(index) {
-                                    9 -> clearColors
-                                    11 -> backSpaceColors
-                                    else -> numberColors
-                                },
-                                text = {
-                                    when (index) {
-                                        9 -> Icon(
-                                            Icons.Default.Clear,
-                                            null
-                                        )
-                                        11 -> Icon(
-                                            Icons.AutoMirrored.Default.Backspace,
-                                            null
-                                        )
-                                        else -> Text(
-                                            text = when (index) {
-                                                in 0..8 -> "${index + 1}"
-                                                else -> "0"
-                                            },
-                                            style = MaterialTheme.typography.titleMedium,
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    }
+                    PinGrid(
+                        addDigit = { authPinViewModel.addDigit(it) },
+                        removeLastDigit = { authPinViewModel.removeLastDigit() },
+                        clearPin = { authPinViewModel.clearPin() },
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        numbersContainerColor = MaterialTheme.colorScheme.surface,
+                        enabled = !loading
+                    )
                 }
             }
         }
