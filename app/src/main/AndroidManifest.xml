@@ -36,7 +36,7 @@
         </activity>
 
         <provider
-            android:authorities="com.younesb.securevault.debug.fileprovider;com.younesb.securevault.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true"
             android:name="androidx.core.content.FileProvider">
