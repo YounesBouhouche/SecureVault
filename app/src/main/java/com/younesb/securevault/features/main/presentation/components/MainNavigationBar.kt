@@ -39,17 +39,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.younesb.securevault.R
@@ -112,7 +113,7 @@ fun MainNavigationBar(
         }
         FabMenu(
             actions = NewItemType.entries,
-            icon = { it.icon },
+            icon = { ImageVector.vectorResource(it.icon) },
             text = { stringResource(it.textRes) },
             modifier = Modifier.align(Alignment.End),
             expanded = fabMenuExpanded,
@@ -192,8 +193,10 @@ fun MainNavigationBar(
                                         }
                                     ) { isSelected ->
                                         Icon(
-                                            if (isSelected) it.selectedIcon
-                                            else it.unselectedIcon,
+                                            ImageVector.vectorResource(
+                                                if (isSelected) it.selectedIcon
+                                                else it.unselectedIcon
+                                            ),
                                             null,
                                         )
                                     }

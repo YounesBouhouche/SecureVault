@@ -1,21 +1,14 @@
 package com.younesb.securevault.features.main.presentation.util
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.Note
-import androidx.compose.material.icons.rounded.AttachFile
-import androidx.compose.material.icons.rounded.CameraAlt
-import androidx.compose.material.icons.rounded.FolderOpen
-import androidx.compose.material.icons.rounded.PhotoLibrary
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.younesb.securevault.R
 
 enum class NewItemType(
-    val icon: ImageVector,
+    val icon: Int,
     val textRes: Int
 ) {
-    FILE(Icons.Rounded.AttachFile, R.string.file),
-    CAMERA(Icons.Rounded.CameraAlt, R.string.camera),
-    GALLERY(Icons.Rounded.PhotoLibrary, R.string.gallery),
-    NOTE(Icons.AutoMirrored.Rounded.Note, R.string.note),
-    FOLDER(Icons.Rounded.FolderOpen, R.string.folder)
+    FILE(R.drawable.file_filled, R.string.file),
+    CAMERA(R.drawable.photo_camera_filled, R.string.camera),
+    GALLERY(R.drawable.photo_prints_filled, R.string.gallery),
+    NOTE(R.drawable.note_stack_filled, R.string.note),
+    FOLDER(R.drawable.folder_open_filled, R.string.folder)
 }
