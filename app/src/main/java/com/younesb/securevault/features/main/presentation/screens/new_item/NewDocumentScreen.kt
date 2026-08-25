@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.younesb.securevault.R
 import com.younesb.securevault.core.presentation.components.Dialog
 import com.younesb.securevault.core.presentation.components.ExpressiveButton
-import com.younesb.securevault.core.presentation.components.ExpressiveDropdownMenu
+import com.younesb.securevault.core.presentation.components.ExpressiveExposedDropdownMenu
 import com.younesb.securevault.core.presentation.components.ExpressiveTextField
 import com.younesb.securevault.core.presentation.components.Image
 import com.younesb.securevault.features.main.domain.models.DocumentType
@@ -120,7 +120,7 @@ fun NewDocumentScreen(
                 },
                 enabled = uiState.folders.isNotEmpty()
             )
-            ExpressiveDropdownMenu(
+            ExpressiveExposedDropdownMenu(
                 modifier = Modifier.weight(1f),
                 options = uiState.folders,
                 selected = uiState.selectedFolder,

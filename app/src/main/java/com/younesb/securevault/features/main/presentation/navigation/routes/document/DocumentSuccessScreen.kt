@@ -85,7 +85,7 @@ import com.younesb.securevault.features.main.presentation.util.toReadableDateStr
 import okhttp3.internal.EMPTY_BYTE_ARRAY
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DocumentSuccessScreen(
     document: DocumentDto,

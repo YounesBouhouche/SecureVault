@@ -1,102 +1,116 @@
 package com.younesb.securevault.core.presentation.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.DropdownMenuGroup
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuAnchorType
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldLabelScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.util.fastForEachIndexed
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> ExpressiveDropdownMenu(
-    options: List<T>,
-    selected: Int?,
-    onSelectionChange: (Int) -> Unit,
+fun<T> ExpressiveDropdownMenu(
+    items: List<Pair<String?, List<T>>>,
+    checked: (T) -> Boolean,
+    onCheckedChange: (T, Boolean) -> Unit,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    text: (T?) -> String,
-    label: @Composable (TextFieldLabelScope.() -> Unit)? = null,
-    leadingIcon: @Composable (() -> Unit)? = null,
+    label: @Composable (T) -> String,
+    supportingText: @Composable ((T) -> String?)? = null,
+    leadingIcon: @Composable ((T) -> ImageVector?)? = null,
+    checkedLeadingIcon: @Composable ((T) -> ImageVector)? = null,
+    trailingIcon: @Composable ((T) -> ImageVector?)? = null,
+    checkedTrailingIcon: @Composable ((T) -> ImageVector?)? = null,
+    content: @Composable (() -> Unit),
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    val selectedOption = selected?.let { options.getOrNull(it) }
-    val textFieldState = rememberTextFieldState(text(selectedOption))
-
-    LaunchedEffect(selected) {
-        val newSelectedOption = selected?.let { options.getOrNull(it) }
-        textFieldState.setTextAndPlaceCursorAtEnd(text(newSelectedOption))
-    }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-        modifier = modifier,
-    ) {
-        ExpressiveTextField(
-            modifier = Modifier.menuAnchor(
-                ExposedDropdownMenuAnchorType.PrimaryNotEditable,
-                enabled = enabled
-            ).fillMaxWidth(),
-            state = textFieldState,
-            readOnly = true,
-            enabled = enabled,
-            lineLimits = TextFieldLineLimits.SingleLine,
-            label = label,
-            leadingIcon = leadingIcon,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            containerColor = MenuDefaults.groupStandardContainerColor,
-            shape = MenuDefaults.standaloneGroupShape,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            val optionCount = options.size
-            options.forEachIndexed { index, option ->
-                DropdownMenuItem(
-                    shapes = MenuDefaults.itemShape(index, optionCount),
-                    text = {
-                        Text(
-                            text = text(option),
-                            style = MaterialTheme.typography.bodyLarge
+    Box(modifier = modifier.wrapContentSize(Alignment.TopStart)) {
+        content()
+        DropdownMenuPopup(expanded = expanded, onDismissRequest = { onExpandedChange(false) }) {
+            items.fastForEachIndexed { groupIndex, (label, groupItems) ->
+                DropdownMenuGroup(
+                    shapes = MenuDefaults.groupShape(groupIndex, items.size),
+                ) {
+                    label?.let {
+                        MenuDefaults.DropdownMenuGroupLabel { Text(it) }
+                        HorizontalDivider(
+                            modifier = Modifier.padding(MenuDefaults.HorizontalDividerPadding)
                         )
-                           },
-                    selected = index == selected,
-                    onClick = {
-                        textFieldState.setTextAndPlaceCursorAtEnd(text(option))
-                        onSelectionChange(index)
-                        expanded = false
-                    },
-                    selectedLeadingIcon = {
-                        Icon(
-                            Icons.Filled.Check,
-                            modifier = Modifier.size(MenuDefaults.LeadingIconSize),
-                            contentDescription = null,
+                    }
+                    val groupItemCount = groupItems.size
+                    groupItems.fastForEachIndexed { itemIndex, item ->
+                        DropdownMenuItem(
+                            text = { Text(label(item)) },
+                            supportingText =
+                                supportingText?.invoke(item)?.let { supportingText ->
+                                    { Text(supportingText) }
+                                },
+                            shapes = MenuDefaults.itemShape(itemIndex, groupItemCount),
+                            leadingIcon =
+                                leadingIcon?.invoke(item)?.let { iconData ->
+                                    {
+                                        Icon(
+                                            iconData,
+                                            modifier = Modifier.size(MenuDefaults.LeadingIconSize),
+                                            contentDescription = null,
+                                        )
+                                    }
+                                },
+                            checkedLeadingIcon =
+                                checkedLeadingIcon?.invoke(item)?.let { icon ->
+                                    {
+                                        Icon(
+                                            imageVector = icon,
+                                            modifier = Modifier.size(MenuDefaults.LeadingIconSize),
+                                            contentDescription = null,
+                                        )
+                                    }
+                                },
+                            trailingContent =
+                                if (checked(item)) {
+                                    checkedTrailingIcon?.invoke(item)?.let { icon ->
+                                        {
+                                            Icon(
+                                                imageVector = icon,
+                                                modifier = Modifier.size(MenuDefaults.LeadingIconSize),
+                                                contentDescription = null,
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    trailingIcon?.invoke(item)?.let { icon ->
+                                        {
+                                            Icon(
+                                                imageVector = icon,
+                                                modifier = Modifier.size(MenuDefaults.LeadingIconSize),
+                                                contentDescription = null,
+                                            )
+                                        }
+                                    }
+                                },
+                            checked = checked(item),
+                            onCheckedChange = { onCheckedChange(item, it) },
                         )
-                    },
-                    enabled = enabled,
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                )
+                    }
+                }
+
+                if (groupIndex != items.size - 1) {
+                    Spacer(Modifier.height(MenuDefaults.GroupSpacing))
+                }
             }
         }
     }

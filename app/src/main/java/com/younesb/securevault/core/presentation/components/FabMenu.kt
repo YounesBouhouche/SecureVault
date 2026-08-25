@@ -3,6 +3,7 @@ package com.younesb.securevault.core.presentation.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
@@ -45,6 +46,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import com.younesb.securevault.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> FabMenu(
     actions: List<T>,

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.ZeroCornerSize
@@ -25,17 +24,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Tag
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,11 +44,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.younesb.mydesignsystem.presentation.components.ExpressiveIconButton
 import com.younesb.securevault.R
+import com.younesb.securevault.core.presentation.components.ExpressiveDropdownMenu
 import com.younesb.securevault.core.presentation.utils.expressiveListItemShape
 import com.younesb.securevault.features.main.presentation.components.DocumentItem
 import com.younesb.securevault.features.main.presentation.components.FolderItem
@@ -106,9 +101,24 @@ fun HomeScreen(
                         color = MaterialTheme.colorScheme.primary
                     )
                     if (tags.isNotEmpty()) {
-                        ExposedDropdownMenuBox(
-                            expanded,
-                            { expanded = it }
+                        ExpressiveDropdownMenu(
+                            expanded = expanded,
+                            onExpandedChange = { expanded = it },
+                            items = listOf(
+                                null to tags
+                            ),
+                            checked = {
+                                selectedTags.contains(it.id)
+                            },
+                            onCheckedChange = { tag, _ ->
+                                viewModel.toggleTagSelection(tag.id)
+                            },
+                            checkedLeadingIcon = {
+                                Icons.Default.Check
+                            },
+                            label = {
+                                it.name
+                            }
                         ) {
                             ExpressiveIconButton(
                                 icon = Icons.Default.Tag,
@@ -116,40 +126,6 @@ fun HomeScreen(
                                 colors = IconButtonDefaults.filledTonalIconButtonColors(),
                             ) {
                                 expanded = true
-                            }
-                            ExposedDropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false },
-                                containerColor = MenuDefaults.groupStandardContainerColor,
-                                shape = MenuDefaults.standaloneGroupShape,
-                                modifier = Modifier.width(200.dp)
-                            ) {
-                                val optionCount = tags.size
-                                tags.forEachIndexed { index, tag ->
-                                    DropdownMenuItem(
-                                        shapes = MenuDefaults.itemShape(index, optionCount),
-                                        text = {
-                                            Text(
-                                                tag.name,
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis
-                                            )
-                                        },
-                                        selected = tag.id in selectedTags,
-                                        onClick = {
-                                            viewModel.toggleTagSelection(tag.id)
-                                        },
-                                        selectedLeadingIcon = {
-                                            Icon(
-                                                Icons.Filled.Check,
-                                                modifier = Modifier.size(MenuDefaults.LeadingIconSize),
-                                                contentDescription = null,
-                                            )
-                                        },
-                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                    )
-                                }
                             }
                         }
                     }
