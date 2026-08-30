@@ -28,16 +28,14 @@ class MainActivity : AppCompatActivity() {
             val viewModel = koinViewModel<ThemeViewModel>()
             val themeMode by viewModel.themeMode.collectAsState()
             val extraDark by viewModel.extraDark.collectAsState()
-            val colorTheme by viewModel.colorScheme.collectAsState()
             val dynamicColors by viewModel.dynamicColors.collectAsState()
             val navController = rememberNavController()
             CollectAuthEvents(navController, biometricPromptManager)
-            CollectGlobalEvents()
+            CollectGlobalEvents(navController::navigate)
             SetSystemBarColors(themeMode)
             AppTheme(
                 themeMode = themeMode,
                 extraDark = extraDark,
-                colorTheme = colorTheme,
                 dynamicColors = dynamicColors
             ) {
                 Surface(Modifier.fillMaxSize()) {

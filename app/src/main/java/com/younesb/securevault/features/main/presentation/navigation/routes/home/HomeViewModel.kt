@@ -1,5 +1,6 @@
 package com.younesb.securevault.features.main.presentation.navigation.routes.home
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.onError
@@ -11,6 +12,7 @@ import com.younesb.securevault.features.main.domain.usecases.ObserveTagsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,6 +23,7 @@ class HomeViewModel(
     observeTagsUseCase: ObserveTagsUseCase,
     val deleteDocumentUseCase: DeleteDocumentUseCase
 ) : ViewModel() {
+    val searchFieldState = TextFieldState()
     private val _selectedTags = MutableStateFlow(emptySet<String>())
     private val _query = MutableStateFlow("")
     val selectedTags = _selectedTags.stateIn(
@@ -41,6 +44,13 @@ class HomeViewModel(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             emptyList()
+        )
+
+    val empty = _documents.map { it.isEmpty() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            false
         )
 
     private val _folders = observeFoldersUseCase()

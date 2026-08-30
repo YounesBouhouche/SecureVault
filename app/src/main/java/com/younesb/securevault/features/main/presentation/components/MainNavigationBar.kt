@@ -1,6 +1,5 @@
 package com.younesb.securevault.features.main.presentation.components
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -8,7 +7,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,18 +16,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Upload
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.animateFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,35 +37,26 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.younesb.securevault.R
 import com.younesb.securevault.core.presentation.components.FabMenu
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.navigation.MainRoutes
 import com.younesb.securevault.features.main.presentation.util.NewItemType
-import soup.compose.material.motion.animation.materialSharedAxisZ
 
 @Composable
 fun MainNavigationBar(
     route: MainNavRoutes?,
     modifier: Modifier = Modifier,
     visible: Boolean = true,
-    exportButtonVisible: Boolean = true,
     onNewItemAction: (NewItemType) -> Unit = { },
     navigate: (MainRoutes) -> Unit = { },
-    onExport: () -> Unit = { }
 ) {
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
-    val resources = LocalResources.current
     val fabVisible = visible and (route == MainNavRoutes.HOME)
     val density = LocalDensity.current
     var navbarWidth by remember {
@@ -79,43 +64,17 @@ fun MainNavigationBar(
     }
     val itemSize = navbarWidth / MainNavRoutes.entries.size
     val offset = itemSize * (route?.ordinal ?: 0)
-    val animatedOffset by animateDpAsState(offset)
+    val animatedOffset by animateDpAsState(offset, MaterialTheme.motionScheme.defaultSpatialSpec())
 
-    Column(
-        modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(bottom = 8.dp)
+    Box(
+        modifier.fillMaxWidth(),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        FloatingActionButton(
-            modifier =
-                Modifier
-                    .semantics {
-                        traversalIndex = -1f
-                        stateDescription =
-                            resources.getString(R.string.export)
-                        contentDescription =
-                            resources.getString(R.string.export)
-                    }
-                    .animateFloatingActionButton(
-                        visible = fabVisible and exportButtonVisible,
-                        alignment = Alignment.BottomEnd
-                    )
-                    .align(Alignment.End)
-                    .padding(16.dp),
-            onClick = onExport,
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Upload,
-                contentDescription = null,
-            )
-        }
         FabMenu(
             actions = NewItemType.entries,
             icon = { ImageVector.vectorResource(it.icon) },
             text = { stringResource(it.textRes) },
-            modifier = Modifier.align(Alignment.End),
+            modifier = Modifier.align(Alignment.BottomEnd).navigationBarsPadding().offset(y = (-72).dp),
             expanded = fabMenuExpanded,
             visible = fabVisible,
             onExpandedChange = { fabMenuExpanded = it }
@@ -127,19 +86,21 @@ fun MainNavigationBar(
             enter = slideInVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { it },
             exit = slideOutVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { it },
         ) {
-            HorizontalFloatingToolbar(
-                expanded = true,
-                contentPadding = PaddingValues(10.dp, 8.dp),
+            Surface(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 48.dp),
-                expandedShadowElevation = 4.dp,
+                    .padding(horizontal = 48.dp)
+                    .navigationBarsPadding()
+                    .padding(bottom = 8.dp),
+                shadowElevation = 4.dp,
+                color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = RoundedCornerShape(100)
             ) {
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .height(66.dp)
+                        .padding(PaddingValues(4.dp))
                         .onGloballyPositioned {
                             with(density) {
                                 navbarWidth = it.size.width.toDp()
@@ -152,7 +113,7 @@ fun MainNavigationBar(
                         }
                 ) {
                     Surface(
-                        color = MaterialTheme.colorScheme.primary.copy(.2f),
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .width(itemSize)
                             .fillMaxHeight()
@@ -166,7 +127,7 @@ fun MainNavigationBar(
                         MainNavRoutes.entries.forEach {
                             val selected = route == it
                             val color by animateColorAsState(
-                                if (selected) MaterialTheme.colorScheme.primary
+                                if (selected) MaterialTheme.colorScheme.onPrimary
                                 else MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Surface(
@@ -181,34 +142,23 @@ fun MainNavigationBar(
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.fillMaxSize(),
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        4.dp,
-                                        Alignment.CenterHorizontally
-                                    )
+                                    horizontalArrangement = Arrangement.Center
                                 ) {
-                                    AnimatedContent(
-                                        selected,
-                                        transitionSpec = {
-                                            materialSharedAxisZ(targetState)
-                                        }
-                                    ) { isSelected ->
-                                        Icon(
-                                            ImageVector.vectorResource(
-                                                if (isSelected) it.selectedIcon
-                                                else it.unselectedIcon
-                                            ),
-                                            null,
-                                        )
-                                    }
+                                    Icon(
+                                        ImageVector.vectorResource(it.icon),
+                                        null,
+                                        Modifier.size(24.dp)
+                                    )
                                     Text(
-                                        stringResource(it.label),
+                                        stringResource(it.label).uppercase(),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         modifier = Modifier.padding(start = 4.dp),
-                                        style = MaterialTheme.typography.labelMedium,
+                                        style = MaterialTheme.typography.labelLarge,
+                                        fontWeight = FontWeight.SemiBold,
                                         softWrap = false,
                                         autoSize = TextAutoSize.StepBased(
-                                            maxFontSize = MaterialTheme.typography.labelMedium.fontSize
+                                            maxFontSize = MaterialTheme.typography.labelLarge.fontSize
                                         )
                                     )
                                 }

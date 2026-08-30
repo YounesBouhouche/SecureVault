@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import com.younesb.securevault.core.domain.models.preferences.ColorScheme
 import com.younesb.securevault.core.domain.models.preferences.Language
 import com.younesb.securevault.core.domain.models.preferences.Theme
 import kotlinx.coroutines.Dispatchers
@@ -35,17 +34,6 @@ sealed class SettingsPreference<T, R>(
         false,
     )
 
-    data object ColorSchemeMode : SettingsPreference<String, ColorScheme>(
-        stringPreferencesKey("color_scheme"),
-        ColorScheme.BLUE,
-        {
-            ColorScheme.fromString(it)
-        },
-        {
-            it.name
-        },
-    )
-
     data object LanguagePref : SettingsPreference<String, Language>(
         stringPreferencesKey("language"),
         Language.SYSTEM,
@@ -59,7 +47,7 @@ sealed class SettingsPreference<T, R>(
 
     data object DynamicColor : SettingsPreference<Boolean, Boolean>(
         booleanPreferencesKey("dynamic_color"),
-        true,
+        false,
     )
 
     fun getDataFlow(dataStore: DataStore<Preferences>): Flow<R> =

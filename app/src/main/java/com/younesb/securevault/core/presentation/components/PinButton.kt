@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ButtonDefaults
@@ -28,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.younesb.securevault.R
 
 @Composable
-fun PinButton(
+fun RowScope.PinButton(
     text: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
@@ -40,7 +41,12 @@ fun PinButton(
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val width by animateFloatAsState(
-if (pressed) 160f else 100f
+if (pressed) 160f else 100f,
+        animationSpec = MaterialTheme.motionScheme.fastEffectsSpec()
+    )
+    val weight by animateFloatAsState(
+        if (pressed) 1.4f else 1f,
+        animationSpec = MaterialTheme.motionScheme.fastEffectsSpec()
     )
     val variableFontFamily by remember {
         derivedStateOf {
@@ -49,8 +55,7 @@ if (pressed) 160f else 100f
                     resId = R.font.gflex,
                     variationSettings = FontVariation.Settings(
                         FontVariation.width(width),
-                        FontVariation.Setting("ROND", 100f),
-                        FontVariation.weight(600)
+                        FontVariation.weight(400)
                     )
                 )
             )
@@ -60,21 +65,20 @@ if (pressed) 160f else 100f
         text = {
             ProvideTextStyle(
                 value = style.copy(
-                    fontFamily = variableFontFamily,
-                    color = contentColor
+                    fontFamily = variableFontFamily
                 ),
                 content = text
             )
         },
-        contentPadding = PaddingValues(0.dp),
+        contentPadding = PaddingValues(vertical = 20.dp),
         size = ButtonDefaults.MediumContainerHeight,
-        modifier = modifier,
+        modifier = modifier.weight(weight),
         enabled = enabled,
         interactionSource = interactionSource,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            contentColor = contentColor
+            contentColor = contentColor,
         )
     )
 }
@@ -89,7 +93,6 @@ private fun PinButtonPrev() {
                     text = {
                         Text(text = "$it")
                     },
-                    modifier = Modifier.weight(1f),
                     onClick = {}
                 )
             }

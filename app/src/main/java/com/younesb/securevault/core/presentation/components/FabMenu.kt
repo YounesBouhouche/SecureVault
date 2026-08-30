@@ -1,5 +1,6 @@
 package com.younesb.securevault.core.presentation.components
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -7,7 +8,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Scrim
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.material3.ToggleFloatingActionButtonDefaults
@@ -60,6 +63,9 @@ fun <T> FabMenu(
 ) {
     val resources = LocalResources.current
     val focusRequester = remember { FocusRequester() }
+    if (visible && expanded) {
+        Scrim(null, Modifier.fillMaxSize())
+    }
     FloatingActionButtonMenu(
         modifier = modifier,
         expanded = expanded,
@@ -168,6 +174,7 @@ fun <T> FabMenu(
                     onActionClick(item)
                     onExpandedChange(false)
                 },
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 icon = { Icon(icon(item), contentDescription = null) },
                 text = { Text(text = text(item)) },
             )

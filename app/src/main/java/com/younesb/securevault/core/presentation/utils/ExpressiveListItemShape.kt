@@ -1,9 +1,14 @@
 package com.younesb.securevault.core.presentation.utils
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 
 @Composable
 fun expressiveListItemShape(
@@ -13,6 +18,7 @@ fun expressiveListItemShape(
     smallShape: CornerBasedShape = MaterialTheme.shapes.extraSmall,
     selected: Boolean = false,
 ): CornerBasedShape {
+    val density = LocalDensity.current
     if (selected) {
         return RoundedCornerShape(100)
     }
@@ -33,9 +39,15 @@ fun expressiveListItemShape(
         else -> smallShape.bottomEnd
     }
     return RoundedCornerShape(
-        topStart = topStart,
-        topEnd = topEnd,
-        bottomStart = bottomStart,
-        bottomEnd = bottomEnd,
+        topStart = topStart.animated(density),
+        topEnd = topEnd.animated(density),
+        bottomStart = bottomStart.animated(density),
+        bottomEnd = bottomEnd.animated(density),
     )
 }
+
+@Composable
+internal fun CornerSize.animated(density: Density) = animateFloatAsState(
+    toPx(Size.Unspecified, density),
+    MaterialTheme.motionScheme.fastSpatialSpec()
+).value

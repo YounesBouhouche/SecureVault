@@ -96,7 +96,7 @@ fun ButtonsRow(
             val pressed by interactionSource.collectIsPressedAsState()
             val weight by animateFloatAsState(
                 if (pressed) expandedWeight else 1f,
-                MaterialTheme.motionScheme.defaultEffectsSpec()
+                MaterialTheme.motionScheme.fastSpatialSpec()
             )
             ExpressiveButton(
                 text = text(it),

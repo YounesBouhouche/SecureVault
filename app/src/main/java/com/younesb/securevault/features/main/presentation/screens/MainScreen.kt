@@ -38,25 +38,24 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     CollectMainEvents(navController = navController)
 
-    Box(modifier.fillMaxSize()) {
-        MainNavigationHost(navController = navController)
-        MainNavigationBar(
-            route = route,
-            modifier = Modifier.align(Alignment.BottomCenter),
-            navigate = {
-                navController.navigate(it) {
-                    launchSingleTop = true
-                    popUpTo(it) { inclusive = true }
-                }
-            },
-            onNewItemAction = {
-                viewModel.onAction(Action.ShowFilePicker(it))
-            },
-            visible = isParentRoute,
-            onExport = {
-                viewModel.onAction(Action.ShowExportSheet())
-            }
-        )
+    Surface(modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize()) {
+            MainNavigationHost(navController = navController)
+            MainNavigationBar(
+                route = route,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                navigate = {
+                    navController.navigate(it) {
+                        launchSingleTop = true
+                        popUpTo(it) { inclusive = true }
+                    }
+                },
+                onNewItemAction = {
+                    viewModel.onAction(Action.ShowFilePicker(it))
+                },
+                visible = isParentRoute,
+            )
+        }
     }
 
     NewDocumentSheet(

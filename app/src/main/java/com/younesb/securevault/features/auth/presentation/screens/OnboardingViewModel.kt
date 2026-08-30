@@ -1,17 +1,20 @@
 package com.younesb.securevault.features.auth.presentation.screens
 
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.animateTo
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.younesb.securevault.core.data.datastore.SettingsPreference
 import com.younesb.securevault.core.data.util.AuthManager
-import com.younesb.securevault.core.domain.models.preferences.Theme
 import com.younesb.securevault.core.domain.repositories.AuthRepository
-import com.younesb.securevault.core.domain.repositories.PreferencesRepository
 import com.younesb.securevault.core.util.Task
+import com.younesb.securevault.features.auth.presentation.components.DragValue
 import com.younesb.securevault.features.auth.presentation.navigation.AuthRoutes
 import com.younesb.securevault.features.auth.presentation.util.AuthEvent
 import com.younesb.securevault.features.auth.presentation.util.AuthEventsBus
+import com.younesb.securevault.features.auth.presentation.util.BiometricPromptManager
 import com.younesb.securevault.features.navigation.NavRoutes
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
@@ -20,16 +23,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    val preferencesRepository: PreferencesRepository,
     val authRepository: AuthRepository,
+    biometricPromptManager: BiometricPromptManager
 ) : ViewModel() {
-    private val _theme = preferencesRepository.get(SettingsPreference.ThemeMode)
-    val theme = _theme.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        SettingsPreference.ThemeMode.defaultValue
-    )
-
+    val draggableState = AnchoredDraggableState(initialValue = DragValue.Start)
     private val _remainingTime = MutableStateFlow(0L)
     val remainingTime = _remainingTime.stateIn(
         viewModelScope,
@@ -78,12 +75,66 @@ class OnboardingViewModel(
                 AuthEventsBus.sendEvent(AuthEvent.Navigate(NavRoutes.Main))
             else if (_authState.first() is AuthManager.AuthState.RequiresPin)
                 AuthEventsBus.sendEvent(AuthEvent.AuthNavigate(AuthRoutes.EnterPin))
+            CoroutineScope(AndroidUiDispatcher.Main).launch {
+                draggableState.animateTo(DragValue.Start)
+            }
         }
     }
 
-    fun setTheme(theme: Theme) {
+
+    val resultChannel = biometricPromptManager.resultChannel
+    val promptResult = biometricPromptManager.promptResults.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    fun showBiometricPrompt() {
+        println("Checking biometric prompt result: ${promptResult.value}")
+        when {
+            checkSuccessAndNavigate(promptResult.value) -> return
+            promptResult.value is BiometricPromptManager.BiometricResult.AuthenticationNotSet ->
+                sendEvent(AuthEvent.LaunchScreenLockSettings)
+            else -> sendEvent(
+                AuthEvent.ShowBiometricPrompt(
+                    title = "Biometric Authentication",
+                    description = "Please authenticate to set up biometric authentication for your vault.",
+                )
+            )
+        }
         viewModelScope.launch {
-            preferencesRepository.set(SettingsPreference.ThemeMode, theme)
+            checkSuccessAndNavigate(resultChannel.first())
+            CoroutineScope(AndroidUiDispatcher.Main).launch {
+                draggableState.animateTo(DragValue.Start)
+            }
+        }
+    }
+
+    private fun checkSuccessAndNavigate(result: BiometricPromptManager.BiometricResult?): Boolean {
+        return if (result is BiometricPromptManager.BiometricResult.AuthenticationSuccess) {
+            authRepository.updateSetupCredentialsBiometrics(true)
+            sendEvent(AuthEvent.AuthNavigate(AuthRoutes.SetupPin))
+            true
+        }
+        else false
+    }
+
+    fun skip() {
+        sendEvent(AuthEvent.AuthNavigate(AuthRoutes.SetupPin))
+    }
+
+    fun setup() {
+        when (authState.value) {
+            is AuthManager.AuthState.RequiresBiometric -> authenticateWithBiometrics()
+            is AuthManager.AuthState.NoCredentials -> showBiometricPrompt()
+            is AuthManager.AuthState.RequiresPin -> sendEvent(AuthEvent.AuthNavigate(AuthRoutes.EnterPin))
+            else -> {}
+        }
+    }
+
+    internal fun sendEvent(event: AuthEvent) {
+        viewModelScope.launch {
+            AuthEventsBus.sendEvent(event)
         }
     }
 }

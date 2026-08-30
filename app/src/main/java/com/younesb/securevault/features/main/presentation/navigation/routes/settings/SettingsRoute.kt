@@ -8,7 +8,6 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Restore
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,9 +42,9 @@ fun SettingsRoute(
     val viewModel = koinViewModel<SettingsViewModel>()
     val scope = rememberCoroutineScope()
     SettingsScreenWrapper(
-        icon = Icons.Default.Settings,
         modifier = modifier,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
+        title = stringResource(R.string.settings)
     ) {
         settingsLabel {
             stringResource(R.string.general)

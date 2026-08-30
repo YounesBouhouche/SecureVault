@@ -4,10 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
+import androidx.navigation.NavOptionsBuilder
 import com.younesb.securevault.core.presentation.events.CollectEvents
+import com.younesb.securevault.features.navigation.NavRoutes
 
 @Composable
-fun AppCompatActivity.CollectGlobalEvents() {
+fun AppCompatActivity.CollectGlobalEvents(
+    onNavigate: (route: NavRoutes, builder: NavOptionsBuilder.() -> Unit) -> Unit
+) {
     CollectEvents(GlobalEventsBus.events) { event ->
         when (event) {
             is GlobalEvent.SetLanguage -> setLanguage(event.language)
@@ -29,6 +33,10 @@ fun AppCompatActivity.CollectGlobalEvents() {
                         )
                     }
                 }
+            }
+
+            is GlobalEvent.Navigate -> {
+                onNavigate(event.destination, event.builder)
             }
         }
     }

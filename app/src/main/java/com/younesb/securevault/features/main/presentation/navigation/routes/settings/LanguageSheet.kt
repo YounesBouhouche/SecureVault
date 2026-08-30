@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.younesb.securevault.R
 import com.younesb.securevault.core.domain.models.preferences.Language
 import com.younesb.securevault.features.main.presentation.components.OptionsSheetWrapper
 import org.koin.compose.viewmodel.koinViewModel
@@ -23,6 +24,7 @@ fun LanguageSheet(
         OptionsSheetWrapper(
             options = Language.entries,
             option = language,
+            title = stringResource(R.string.choose_language),
             label = { stringResource(it.label) },
             onDismissRequest = {
                 it?.let {

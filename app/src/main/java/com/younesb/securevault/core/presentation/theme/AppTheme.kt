@@ -2,6 +2,8 @@ package com.younesb.securevault.core.presentation.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -9,17 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.materialkolor.DynamicMaterialTheme
+import com.materialkolor.DynamicMaterialExpressiveTheme
 import com.materialkolor.PaletteStyle
-import com.materialkolor.rememberDynamicColorScheme
-import com.younesb.securevault.core.domain.models.preferences.ColorScheme
+import com.materialkolor.dynamicColorScheme
+import com.materialkolor.dynamiccolor.ColorSpec
 import com.younesb.securevault.core.domain.models.preferences.Theme
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun AppTheme(
     themeMode: Theme = Theme.SYSTEM,
     extraDark: Boolean = false,
-    colorTheme: ColorScheme = ColorScheme.BLUE,
     dynamicColors: Boolean = true,
     primary: Color? = null,
     secondary: Color? = null,
@@ -33,10 +35,18 @@ internal fun AppTheme(
             Theme.DARK -> true
         }
     val dynamic = dynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val colorScheme =
+    val context = LocalContext.current
+    val colorScheme = remember(
+        primary,
+        secondary,
+        tertiary,
+        isDark,
+        extraDark,
+        dynamic
+    ) {
         when {
             primary != null ->
-                rememberDynamicColorScheme(
+                dynamicColorScheme(
                     primary = primary,
                     secondary = secondary,
                     tertiary = tertiary,
@@ -44,23 +54,30 @@ internal fun AppTheme(
                     isAmoled = extraDark,
                 )
             dynamic && isDark -> {
-                dynamicDarkColorScheme(LocalContext.current)
+                dynamicDarkColorScheme(context)
             }
             dynamic && !isDark -> {
-                dynamicLightColorScheme(LocalContext.current)
+                dynamicLightColorScheme(context)
             }
-            else -> colorTheme.scheme(isDark)
+            isDark -> SecureVaultDarkColorScheme
+            else -> SecureVaultLightColorScheme
         }
-    DynamicMaterialTheme(
+    }
+    DynamicMaterialExpressiveTheme(
         primary = colorScheme.primary,
         secondary = colorScheme.secondary,
         tertiary = colorScheme.tertiary,
         error = colorScheme.error,
+        neutral = colorScheme.surface,
+        neutralVariant = colorScheme.surfaceVariant,
         style = PaletteStyle.Expressive,
+        specVersion = ColorSpec.SpecVersion.SPEC_2021,
         animate = true,
+        motionScheme = MotionScheme.expressive(),
         animationSpec = remember {
             MotionScheme.expressive().defaultEffectsSpec()
         },
+        shapes = MaterialTheme.shapes,
         isDark = isDark,
         isAmoled = extraDark,
         typography = remember { AppTypography },

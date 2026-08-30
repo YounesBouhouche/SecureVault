@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.CheckableDropdownMenuItem
 import androidx.compose.material3.DropdownMenuGroup
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -53,7 +53,7 @@ fun<T> ExpressiveDropdownMenu(
                     }
                     val groupItemCount = groupItems.size
                     groupItems.fastForEachIndexed { itemIndex, item ->
-                        DropdownMenuItem(
+                        CheckableDropdownMenuItem(
                             text = { Text(label(item)) },
                             supportingText =
                                 supportingText?.invoke(item)?.let { supportingText ->

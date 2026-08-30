@@ -164,4 +164,17 @@
         \nYou can delete it manually to ensure it\'s only accessible through the vault or reselect the file through \"File\" option and not \"Gallery\".
     </string>
     <string name="unsupported_file_type">Unsupported file type</string>
+    <string name="release_to_start">Release to start</string>
+    <string name="already_set">Already set!</string>
+    <string name="opt_in">Opt in</string>
+    <string name="skip">Skip</string>
+    <string name="slide_to_unlock">Slide to unlock</string>
+    <string name="type_to_search">Type to search</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="categories">Categories</string>
+    <string name="status">Status</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="pinned_files">Pinned Files</string>
+    <string name="extra_dark">Extra Dark theme</string>
+    <string name="no_files_placeholder">Your files will appear right here</string>
 </resources>

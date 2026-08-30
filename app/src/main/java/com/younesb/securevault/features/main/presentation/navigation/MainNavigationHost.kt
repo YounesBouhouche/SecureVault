@@ -2,9 +2,6 @@ package com.younesb.securevault.features.main.presentation.navigation
 
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,9 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.younesb.securevault.features.main.presentation.navigation.routes.home.HomeScreen
 import com.younesb.securevault.features.main.presentation.navigation.routes.document.DocumentRoute
 import com.younesb.securevault.features.main.presentation.navigation.routes.folder.FolderScreen
+import com.younesb.securevault.features.main.presentation.navigation.routes.home.HomeScreen
 import com.younesb.securevault.features.main.presentation.navigation.routes.settings.SettingsRoute
 import soup.compose.material.motion.animation.materialSharedAxisYIn
 import soup.compose.material.motion.animation.materialSharedAxisYOut
@@ -37,12 +34,22 @@ fun MainNavigationHost(
             exitTransition = {
                 materialSharedAxisYOut(forward = false, slideDistance = slideDistance)
             },
+            popEnterTransition = {
+                materialSharedAxisYIn(forward = true, slideDistance = slideDistance)
+            },
+            popExitTransition = {
+                materialSharedAxisYOut(forward = false, slideDistance = slideDistance)
+            },
+            predictivePopEnterTransition = {
+                materialSharedAxisYIn(forward = true, slideDistance = slideDistance)
+            },
+            predictivePopExitTransition = {
+                materialSharedAxisYOut(forward = false, slideDistance = slideDistance)
+            },
             modifier = modifier
         ) {
             composable<MainRoutes.Home> {
                 HomeScreen(
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this,
                     onFolderClick = { id ->
                         navController.navigate(MainRoutes.Folder(folderId = id))
                     },

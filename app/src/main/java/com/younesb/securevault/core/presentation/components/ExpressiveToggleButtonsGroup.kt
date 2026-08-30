@@ -35,7 +35,7 @@ fun ExpressiveButtonsGroup(
     icons: (index: Int, checked: Boolean) -> ImageVector?,
     onCheckedChange: (index: Int, checked: Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    colors: ToggleButtonColors = ToggleButtonDefaults.toggleButtonColors(),
+    colors: ToggleButtonColors = ToggleButtonDefaults.colors(),
     alwaysShowLabel: Boolean = true,
     height: Dp = ButtonDefaults.MediumContainerHeight
 ) {

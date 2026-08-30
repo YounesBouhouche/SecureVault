@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.younesb.securevault.R
@@ -44,7 +45,7 @@ import com.younesb.securevault.core.presentation.components.Image
 import com.younesb.securevault.core.presentation.utils.GlobalEvent
 import com.younesb.securevault.core.presentation.utils.GlobalEventsBus
 import com.younesb.securevault.core.presentation.utils.getAppVersion
-import com.younesb.securevault.core.presentation.components.AnimatedAppLogo
+import com.younesb.securevault.core.presentation.theme.TitleFont
 import com.younesb.securevault.features.main.presentation.components.TitleText
 import kotlinx.coroutines.launch
 
@@ -78,10 +79,17 @@ fun AboutSheet(
             ) {
                 TitleText(stringResource(R.string.about), Modifier.padding(bottom = 12.dp))
                 InfoCard(
-                    title = stringResource(R.string.app_name),
+                    title = stringResource(R.string.app_name).uppercase(),
                     text = stringResource(R.string.app_description),
                     leadingIcon = {
-                        AnimatedAppLogo(Modifier.size(120.dp))
+                        Image(
+                            model = null,
+                            icon = ImageVector.vectorResource(R.drawable.app_logo),
+                            modifier = Modifier.size(80.dp),
+                            shape = MaterialShapes.PixelCircle.toShape(),
+                            background = MaterialTheme.colorScheme.surfaceContainerLow,
+                            iconTint = MaterialTheme.colorScheme.primary,
+                        )
                     }
                 ) {
                     item {
@@ -103,9 +111,8 @@ fun AboutSheet(
                         Image(
                             model = null,
                             icon = Icons.Default.Person,
-//                            contentDescription = stringResource(R.string.developer_name),
-                            modifier = Modifier.size(120.dp),
-                            shape = MaterialShapes.Cookie12Sided.toShape(),
+                            modifier = Modifier.size(80.dp),
+                            shape = MaterialShapes.PixelCircle.toShape(),
                             background = MaterialTheme.colorScheme.secondaryContainer,
                             iconTint = MaterialTheme.colorScheme.secondary,
                         )
@@ -161,7 +168,7 @@ internal fun InfoCard(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Row(
-                Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                Modifier.fillMaxWidth().padding(horizontal = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -172,7 +179,9 @@ internal fun InfoCard(
                 ) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.headlineLarge,
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            fontFamily = TitleFont
+                        ),
                         softWrap = false,
                         autoSize = TextAutoSize.StepBased(
                             minFontSize = 10.sp,
