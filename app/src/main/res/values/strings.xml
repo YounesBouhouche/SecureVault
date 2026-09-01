@@ -177,4 +177,6 @@
     <string name="pinned_files">Pinned Files</string>
     <string name="extra_dark">Extra Dark theme</string>
     <string name="no_files_placeholder">Your files will appear right here</string>
+    <string name="recording">Recording</string>
+    <string name="new_item">New Item</string>
 </resources>

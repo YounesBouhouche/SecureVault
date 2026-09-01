@@ -43,7 +43,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.younesb.securevault.core.presentation.components.FabMenu
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.navigation.MainRoutes
 import com.younesb.securevault.features.main.presentation.util.NewItemType
@@ -74,7 +73,7 @@ fun MainNavigationBar(
             actions = NewItemType.entries,
             icon = { ImageVector.vectorResource(it.icon) },
             text = { stringResource(it.textRes) },
-            modifier = Modifier.align(Alignment.BottomEnd).navigationBarsPadding().offset(y = (-72).dp),
+            modifier = Modifier.align(Alignment.BottomEnd).navigationBarsPadding(),
             expanded = fabMenuExpanded,
             visible = fabVisible,
             onExpandedChange = { fabMenuExpanded = it }
@@ -82,7 +81,7 @@ fun MainNavigationBar(
             onNewItemAction(it)
         }
         AnimatedVisibility(
-            visible = visible,
+            visible = visible && !fabMenuExpanded,
             enter = slideInVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { it },
             exit = slideOutVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { it },
         ) {

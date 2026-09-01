@@ -37,6 +37,9 @@ class MainViewModel(
                             NewItemType.GALLERY -> MainEvent.PickPicture
                             NewItemType.CAMERA -> MainEvent.TakePicture
                             NewItemType.NOTE -> MainEvent.RequestNewNote
+                            else -> {
+                                throw IllegalArgumentException("Invalid type: ${action.type}")
+                            }
                         }
                     )
                 }

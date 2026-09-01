@@ -29,7 +29,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +71,7 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize().blur(100.dp),
+                modifier = Modifier.fillMaxSize().blur(if (empty) 100.dp else 0.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
                 contentPadding = PaddingValues(vertical = 16.dp) + WindowInsets.navigationBars.add(
                     WindowInsets(bottom = 200.dp)
