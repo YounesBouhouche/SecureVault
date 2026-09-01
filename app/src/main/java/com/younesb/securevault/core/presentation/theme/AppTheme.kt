@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import com.materialkolor.DynamicMaterialExpressiveTheme
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
@@ -36,6 +37,11 @@ internal fun AppTheme(
         }
     val dynamic = dynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val context = LocalContext.current
+    val locale = LocalLocale.current.platformLocale
+    val font = when (locale.language) {
+        "ar" -> AppArabicFont
+        else -> AppFont
+    }
     val colorScheme = remember(
         primary,
         secondary,
@@ -80,7 +86,7 @@ internal fun AppTheme(
         shapes = MaterialTheme.shapes,
         isDark = isDark,
         isAmoled = extraDark,
-        typography = remember { AppTypography },
+        typography = remember(font) { appTypography(font) },
         content = content,
     )
 }

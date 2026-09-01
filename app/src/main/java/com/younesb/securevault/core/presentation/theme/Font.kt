@@ -49,6 +49,30 @@ val AppFont = FontFamily(
     ),
 )
 
+@OptIn(ExperimentalTextApi::class)
+val AppArabicFont = FontFamily(
+    Font(
+        resId = R.font.tajarib_light,
+        weight = FontWeight.Light,
+    ),
+    Font(
+        resId = R.font.tajarib_regular,
+        weight = FontWeight.Normal,
+    ),
+    Font(
+        resId = R.font.tajarib_medium,
+        weight = FontWeight.Medium,
+    ),
+    Font(
+        resId = R.font.tajarib_bold,
+        weight = FontWeight.Bold,
+    ),
+    Font(
+        resId = R.font.tajarib_black,
+        weight = FontWeight.Black,
+    ),
+)
+
 val MonoFont = FontFamily(
     Font(
         resId = R.font.roboto_mono,
@@ -87,107 +111,107 @@ val MonoFont = FontFamily(
     ),
 )
 
-val AppTypography = Typography(
+fun appTypography(fontFamily: FontFamily) = Typography(
     displayLarge = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 48.sp,
         lineHeight = 56.sp,
         letterSpacing = 0.sp
     ),
     displayMedium = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 36.sp,
         lineHeight = 44.sp,
         letterSpacing = 0.sp
     ),
     displaySmall = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 30.sp,
         lineHeight = 38.sp,
         letterSpacing = 0.sp
     ),
     headlineLarge = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 32.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 28.sp,
         lineHeight = 36.sp,
         letterSpacing = 0.sp
     ),
     headlineSmall = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
     bodyLarge = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp
     ),
     bodySmall = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp
     ),
     labelLarge = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = AppFont,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 16.sp,
