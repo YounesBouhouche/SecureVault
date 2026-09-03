@@ -1,6 +1,5 @@
 package com.younesb.securevault.features.main.presentation.screens
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.younesb.securevault.core.domain.utils.Result
@@ -15,8 +14,8 @@ import com.younesb.securevault.features.main.domain.usecases.CreateFolderUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveDocumentUseCase
 import com.younesb.securevault.features.main.domain.usecases.SaveNoteUseCase
 import com.younesb.securevault.features.main.presentation.NewDocument
-import com.younesb.securevault.features.main.presentation.components.new_doc.NewDocState
 import com.younesb.securevault.features.main.presentation.components.new_doc.DocNameError
+import com.younesb.securevault.features.main.presentation.components.new_doc.NewDocState
 import com.younesb.securevault.features.main.presentation.util.FileInfo
 import com.younesb.securevault.features.main.presentation.util.FilePickerManager
 import com.younesb.securevault.features.main.presentation.util.MainEvent
@@ -37,7 +36,6 @@ class MainViewModel(
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
-    private var newDocUri: Uri? = null
     private var newDocInfo: FileInfo? = null
 
     init {
@@ -54,13 +52,12 @@ class MainViewModel(
                 }
                 val name = newDoc.info?.name ?: fileUri.lastPathSegment ?: ""
                 val info = newDoc.info?.copy(name = name)
-                newDocUri = fileUri
                 newDocInfo = info
                 if (_uiState.value.newDocState is NewDocState.Expanded) {
                     _uiState.update { state ->
                         state.copy(
                             newDocState = when (newDoc) {
-                                is NewDocument.File -> NewDocState.File(name)
+                                is NewDocument.File -> NewDocState.File(fileUri, name)
                                 is NewDocument.Image -> NewDocState.Photo(fileUri, name)
                             },
                             newDocName = name
@@ -134,7 +131,8 @@ class MainViewModel(
                         }
                         return@launch
                     }
-                    val docType = when(_uiState.value.newDocState) {
+                    val state = _uiState.value.newDocState
+                    val docType = when(state) {
                         NewDocState.Note -> DocumentType.NOTE
                         is NewDocState.Photo -> DocumentType.IMAGE
                         else -> DocumentType.FILE
@@ -145,7 +143,7 @@ class MainViewModel(
                         type = docType,
                         mimeType = newDocInfo?.mimeType ?: ""
                     )
-                    (when (_uiState.value.newDocState) {
+                    (when (state) {
                         NewDocState.Note -> {
                             saveNoteUseCase(
                                 content = action.description,
@@ -155,12 +153,19 @@ class MainViewModel(
                         NewDocState.Folder -> {
                             createFolderUseCase(name = action.name)
                         }
-                        else -> {
+                        is NewDocState.File -> {
                             saveDocumentUseCase(
-                                sourceFile = newDocUri ?: return@launch,
+                                sourceFile = state.uri,
                                 document = document
                             )
                         }
+                        is NewDocState.Photo -> {
+                            saveDocumentUseCase(
+                                sourceFile = state.uri,
+                                document = document
+                            )
+                        }
+                        else -> return@launch
                     }).onSuccess { fileDeleted ->
                         _uiState.update {
                             it.copy(newDocState = NewDocState.Collapsed)

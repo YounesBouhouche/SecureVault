@@ -184,4 +184,9 @@
     <string name="next">Next</string>
     <string name="retake">Retake</string>
     <string name="picture">Picture</string>
+    <string name="start">Start</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="resume">Resume</string>
+    <string name="recording_sheet_hint">Hit \"Start\" to start recording</string>
 </resources>

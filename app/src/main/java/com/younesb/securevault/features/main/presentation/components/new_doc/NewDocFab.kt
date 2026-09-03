@@ -89,7 +89,14 @@ fun NewDocFab(
                             }
                         }
                         NewItemType.RECORDING -> {
-                            RecordingSheet(modifier = Modifier.sheet(animationSpec))
+                            RecordingSheet(
+                                modifier = Modifier.sheet(animationSpec),
+                                onClose = {
+                                    onStateChange(Expanded)
+                                }
+                            ) {
+                                onStateChange(File(it, it.lastPathSegment ?: ""))
+                            }
                         }
                         else -> {}
                     }

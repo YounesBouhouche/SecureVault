@@ -8,7 +8,7 @@ sealed class NewDocState {
     data object Expanded: NewDocState()
     data class New(val type: NewItemType): NewDocState()
     data class Photo(val uri: Uri, val name: String): NewDocState()
-    data class File(val name: String): NewDocState()
+    data class File(val uri: Uri, val name: String): NewDocState()
     data object Folder: NewDocState()
     data object Note: NewDocState()
 }
