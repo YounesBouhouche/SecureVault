@@ -21,7 +21,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.materialkolor.ktx.harmonize
 import com.younesb.securevault.R
-import com.younesb.securevault.core.presentation.utils.expressiveGridItemShape
 import com.younesb.securevault.features.main.presentation.components.TitleText
 import com.younesb.securevault.features.main.presentation.util.NewItemType
 
