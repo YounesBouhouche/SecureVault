@@ -1,9 +1,10 @@
 package com.younesb.securevault.features.main.domain.usecases
 
+import com.younesb.securevault.core.domain.utils.map
 import com.younesb.securevault.features.main.domain.repository.DocumentsRepository
 
 class CreateFolderUseCase(
     val documentsRepository: DocumentsRepository
 ) {
-    suspend operator fun invoke(name: String) = documentsRepository.createFolder(name)
+    suspend operator fun invoke(name: String) = documentsRepository.createFolder(name).map { true }
 }

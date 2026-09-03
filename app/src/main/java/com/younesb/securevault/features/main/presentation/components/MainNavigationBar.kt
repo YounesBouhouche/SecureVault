@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,19 +42,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.younesb.securevault.features.main.presentation.components.new_doc.NewDocFab
+import com.younesb.securevault.features.main.presentation.components.new_doc.NewDocState
 import com.younesb.securevault.features.main.presentation.navigation.MainNavRoutes
 import com.younesb.securevault.features.main.presentation.navigation.MainRoutes
-import com.younesb.securevault.features.main.presentation.util.NewItemType
 
 @Composable
 fun MainNavigationBar(
+    newDocState: NewDocState,
+    onStateChange: (NewDocState) -> Unit,
+    onConfirm: (name: String, description: String) -> Unit,
     route: MainNavRoutes?,
     modifier: Modifier = Modifier,
     visible: Boolean = true,
-    onNewItemAction: (NewItemType) -> Unit = { },
     navigate: (MainRoutes) -> Unit = { },
 ) {
-    var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    val expanded = newDocState != NewDocState.Collapsed
     val fabVisible = visible and (route == MainNavRoutes.HOME)
     val density = LocalDensity.current
     var navbarWidth by remember {
@@ -63,25 +65,24 @@ fun MainNavigationBar(
     }
     val itemSize = navbarWidth / MainNavRoutes.entries.size
     val offset = itemSize * (route?.ordinal ?: 0)
-    val animatedOffset by animateDpAsState(offset, MaterialTheme.motionScheme.defaultSpatialSpec())
+    val animatedOffset by animateDpAsState(
+        targetValue = offset,
+        animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()
+    )
 
     Box(
         modifier.fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
     ) {
-        FabMenu(
-            actions = NewItemType.entries,
-            icon = { ImageVector.vectorResource(it.icon) },
-            text = { stringResource(it.textRes) },
+        NewDocFab(
             modifier = Modifier.align(Alignment.BottomEnd).navigationBarsPadding(),
-            expanded = fabMenuExpanded,
+            state = newDocState,
             visible = fabVisible,
-            onExpandedChange = { fabMenuExpanded = it }
-        ) {
-            onNewItemAction(it)
-        }
+            onStateChange = onStateChange,
+            onConfirm = onConfirm
+        )
         AnimatedVisibility(
-            visible = visible && !fabMenuExpanded,
+            visible = visible && !expanded,
             enter = slideInVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { it },
             exit = slideOutVertically(animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()) { it },
         ) {

@@ -1,4 +1,4 @@
-package com.younesb.securevault.features.main.presentation.screens.new_item
+package com.younesb.securevault.features.main.presentation.components.new_doc
 
 import com.younesb.securevault.R
 

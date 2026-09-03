@@ -1,14 +1,12 @@
 package com.younesb.securevault.features.main.presentation.screens
 
-import com.younesb.securevault.features.main.presentation.util.NewItemType
+import com.younesb.securevault.features.main.presentation.components.new_doc.NewDocState
 
 sealed interface Action {
-    data class ShowFilePicker(val type: NewItemType): Action
-    data object ShowNewFolderDialog: Action
-    data object HideNewFolderDialog: Action
-    data class CreateFolder(val name: String): Action
-    data object ShowNewTagDialog: Action
-    data object HideNewTagDialog: Action
-    data class CreateTag(val name: String): Action
     data class ShowExportSheet(val ids: List<String>? = null): Action
+    data class UpdateNewDocState(val newDocState: NewDocState): Action
+    data class CreateNewDoc(
+        val name: String,
+        val description: String
+    ): Action
 }

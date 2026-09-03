@@ -33,7 +33,6 @@ import com.younesb.securevault.features.main.presentation.navigation.routes.fold
 import com.younesb.securevault.features.main.presentation.navigation.routes.home.HomeViewModel
 import com.younesb.securevault.features.main.presentation.navigation.routes.settings.SettingsViewModel
 import com.younesb.securevault.features.main.presentation.screens.MainViewModel
-import com.younesb.securevault.features.main.presentation.screens.new_item.NewDocumentViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel
@@ -52,7 +51,6 @@ val mainModule = module {
 
     viewModelOf(::MainViewModel)
     viewModelOf(::ExportViewModel)
-    viewModelOf(::NewDocumentViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SettingsViewModel)
     viewModel {
