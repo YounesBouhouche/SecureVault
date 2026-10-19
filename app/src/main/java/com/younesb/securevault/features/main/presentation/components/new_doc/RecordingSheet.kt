@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,7 +33,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.younesb.securevault.R
 import com.younesb.securevault.core.presentation.components.ButtonsRow
-import com.younesb.securevault.core.presentation.components.ExpressiveButton
 import kotlinx.collections.immutable.toImmutableList
 import java.io.File
 
@@ -80,29 +78,29 @@ fun RecordingSheet(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedContent(hasPermission) { permitted ->
-                if (permitted) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .clip(MaterialTheme.shapes.large)
-                                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.large)
+                        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AnimatedContent(hasPermission) { permited ->
+                        if (permited) {
                             AnimatedContent(state.status == AudioRecorderStatus.Idle) {
                                 if (it) {
-                                        Text(
-                                            text = stringResource(R.string.recording_sheet_hint),
-                                            modifier = Modifier.fillMaxWidth(),
-                                            textAlign = TextAlign.Center,
-                                            style = MaterialTheme.typography.bodyLarge,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
+                                    Text(
+                                        text = stringResource(R.string.recording_sheet_hint),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
                                 } else {
                                     LiveWaveform(
                                         amplitudes = state.amplitudes.toImmutableList(),
@@ -111,7 +109,21 @@ fun RecordingSheet(
                                     )
                                 }
                             }
+                        } else {
+                            Text(
+                                text = stringResource(R.string.request_permission),
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
+                    }
+                }
+                AnimatedContent(
+                    targetState = hasPermission,
+                ) { permitted ->
+                    if (permitted) {
                         AnimatedContent(
                             targetState = state.status,
                             contentKey = {
@@ -187,13 +199,23 @@ fun RecordingSheet(
                                 }
                             }
                         }
-                    }
-                } else {
-                    ExpressiveButton(
-                        stringResource(R.string.request_permission),
-                        size = ButtonDefaults.MediumContainerHeight
-                    ) {
-                        permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                    } else {
+                        ButtonsRow(
+                            count = 2,
+                            icon = { null },
+                            outlined = { it == 0 },
+                            text = {
+                                when(it) {
+                                    0 -> stringResource(R.string.cancel)
+                                    else -> stringResource(R.string.request_permission)
+                                }
+                            }
+                        ) {
+                            when(it) {
+                                0 -> onClose()
+                                else -> permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                            }
+                        }
                     }
                 }
             }
